@@ -25,7 +25,7 @@ const infoSections = [
           <li>Identify your local county/city planning department.</li>
           <li>Visit their official website (search for &quot;[Your County Name] building permits&quot;).</li>
           <li>Use their property search tool.</li>
-          <li>Look for &#39;building permits&#39; or &#39;code enforcement records&#39;.</li>
+          <li>Look for &apos;building permits&apos; or &apos;code enforcement records&apos;.</li>
         </ol>
         <p className="text-blue-600 text-sm">We&apos;ll provide curated links here in the future!</p>
       </>
@@ -147,9 +147,9 @@ const PermitPages: React.FC<{ address: string }> = ({ address }) => {
       <p className="mb-2 text-blue-800 font-semibold">How to find building permits:</p>
       <ol className="list-decimal list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
         <li>Identify your local county/city planning department.</li>
-        <li>Visit their official website (search for "[Your County Name] building permits").</li>
+        <li>Visit their official website (search for &quot;[Your County Name] building permits&quot;).</li>
         <li>Use their property search tool.</li>
-        <li>Look for 'building permits' or 'code enforcement records'.</li>
+        <li>Look for &apos;building permits&apos; or &apos;code enforcement records&apos;.</li>
       </ol>
       {links.length > 0 && (
         <div className="mb-2">
