@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
+import type { Icon } from "leaflet";
 
 interface PropertyMapProps {
   lat?: number;
@@ -34,7 +35,7 @@ const Popup = dynamic(
 
 // Custom Marker component that handles icon setup
 const CustomMarker: React.FC<{ position: [number, number]; address?: string }> = ({ position, address }) => {
-  const [icon, setIcon] = useState<any>(null);
+  const [icon, setIcon] = useState<Icon | null>(null);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
