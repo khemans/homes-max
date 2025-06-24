@@ -46,7 +46,6 @@ const CustomMarker: React.FC<{ position: [number, number]; address?: string }> =
     if (!isClient) return;
     import("leaflet").then((L) => {
       // Classic map pin with even horizontal RE/MAX bands using clipPath
-      const version = Date.now();
       const pinSVG = `
         <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
