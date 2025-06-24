@@ -106,6 +106,66 @@ interface MLSResult {
   mlsId: string;
 }
 
+// Utility: map city/county keywords to permit search URLs
+const permitLinks: { [key: string]: { name: string; url: string }[] } = {
+  "san francisco": [
+    { name: "SF DBI Permit Search", url: "https://sfdbi.org/permits" },
+    { name: "SF Planning Department", url: "https://sfplanning.org/permits" },
+  ],
+  "oakland": [
+    { name: "Oakland Permit Center", url: "https://aca.accela.com/oakland" },
+  ],
+  "los angeles": [
+    { name: "LA Building & Safety", url: "https://www.ladbs.org/services/online-services/permit-search" },
+  ],
+  // Add more as needed
+};
+
+// Helper to guess city/county from address
+function getPermitLinks(address: string) {
+  const lower = address.toLowerCase();
+  for (const key in permitLinks) {
+    if (lower.includes(key)) return permitLinks[key];
+  }
+  return [];
+}
+
+// Permit record type
+interface PermitRecord {
+  type: string;
+  year: number;
+  status: string;
+  permitId: string;
+}
+
+// Dynamic Permit Pages component (simplified - no permit data display)
+const PermitPages: React.FC<{ address: string }> = ({ address }) => {
+  const links = getPermitLinks(address);
+
+  return (
+    <div>
+      <p className="mb-2 text-blue-800 font-semibold">How to find building permits:</p>
+      <ol className="list-decimal list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
+        <li>Identify your local county/city planning department.</li>
+        <li>Visit their official website (search for "[Your County Name] building permits").</li>
+        <li>Use their property search tool.</li>
+        <li>Look for 'building permits' or 'code enforcement records'.</li>
+      </ol>
+      {links.length > 0 && (
+        <div className="mb-2">
+          <p className="text-blue-800 font-semibold mb-1">Quick Links for your area:</p>
+          <ul className="list-disc list-inside text-blue-700">
+            {links.map(link => (
+              <li key={link.url}><a href={link.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-600 hover:text-blue-800">{link.name}</a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className="text-blue-600 text-sm mt-2">Always verify permit records with your local government for the most up-to-date information.</p>
+    </div>
+  );
+};
+
 const PropertyDetailsClient: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -121,6 +181,12 @@ const PropertyDetailsClient: React.FC = () => {
   const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
   const [mlsLoading, setMlsLoading] = useState(false);
   const [search, setSearch] = useState(query || "");
+  
+  // Permit integration (mock)
+  const [permits, setPermits] = useState<PermitRecord[]>([]);
+  const [permitsLoading, setPermitsLoading] = useState(false);
+  const [permitsError, setPermitsError] = useState("");
+
   useEffect(() => {
     if (address) {
       setMlsLoading(true);
@@ -128,8 +194,18 @@ const PropertyDetailsClient: React.FC = () => {
         .then(res => res.json())
         .then(data => setMlsResults(data.results || []))
         .finally(() => setMlsLoading(false));
+      
+      // Also fetch permit data
+      setPermitsLoading(true);
+      setPermitsError("");
+      fetch(`/api/permits?address=${encodeURIComponent(address)}`)
+        .then(res => res.json())
+        .then(data => setPermits(data.permits || []))
+        .catch(() => setPermitsError("Could not fetch permit data."))
+        .finally(() => setPermitsLoading(false));
     } else {
       setMlsResults([]);
+      setPermits([]);
     }
   }, [address]);
 
@@ -213,7 +289,7 @@ const PropertyDetailsClient: React.FC = () => {
           <PropertyMap lat={coords?.lat} lng={coords?.lng} address={address} />
         )}
       </div>
-      {/* Combined property details and MLS results */}
+      {/* Combined property details, MLS results, and permits */}
       <div className="bg-white rounded-2xl shadow-lg p-8 max-w-2xl w-full text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-900 mb-4">Property Details</h1>
         {address && (
@@ -255,6 +331,50 @@ const PropertyDetailsClient: React.FC = () => {
             <div className="text-blue-700">No MLS results found for this address.</div>
           </div>
         )}
+        {/* Permit Results */}
+        {permitsLoading && (
+          <div className="flex flex-col items-center justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-600 border-solid mb-2"></div>
+            <div className="text-blue-600 font-medium">Loading permit data&hellip;</div>
+          </div>
+        )}
+        {!permitsLoading && permitsError && (
+          <div className="bg-red-100 rounded-xl shadow p-6 mt-8 text-red-900">
+            <h2 className="text-xl font-bold mb-4">Permit Records</h2>
+            <div className="text-red-700">{permitsError}</div>
+          </div>
+        )}
+        {!permitsLoading && !permitsError && permits.length > 0 && (
+          <div className="bg-green-100 rounded-xl shadow p-6 mt-8 text-green-900">
+            <h2 className="text-xl font-bold mb-4">Recent Permits for this Property</h2>
+            <table className="w-full text-left border mt-2 bg-white">
+              <thead>
+                <tr className="bg-green-50">
+                  <th className="px-2 py-1">Type</th>
+                  <th className="px-2 py-1">Year</th>
+                  <th className="px-2 py-1">Status</th>
+                  <th className="px-2 py-1">Permit ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                {permits.map((p) => (
+                  <tr key={p.permitId} className="border-t">
+                    <td className="px-2 py-1">{p.type}</td>
+                    <td className="px-2 py-1">{p.year}</td>
+                    <td className="px-2 py-1">{p.status}</td>
+                    <td className="px-2 py-1">{p.permitId}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {!permitsLoading && !permitsError && address && permits.length === 0 && (
+          <div className="bg-green-100 rounded-xl shadow p-6 mt-8 text-green-900">
+            <h2 className="text-xl font-bold mb-4">Permit Records</h2>
+            <div className="text-green-700">No permit records found for this address.</div>
+          </div>
+        )}
       </div>
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
         {relevantSections.map((section) => (
@@ -262,7 +382,13 @@ const PropertyDetailsClient: React.FC = () => {
             <div className="text-3xl mt-1">{section.icon}</div>
             <div>
               <h2 className="text-xl font-semibold text-blue-800 mb-2">{section.title}</h2>
-              <div className="text-blue-700 text-base">{section.content}</div>
+              <div className="text-blue-700 text-base">
+                {section.title === "Permit Pages" ? (
+                  <PermitPages address={address} />
+                ) : (
+                  section.content
+                )}
+              </div>
             </div>
           </div>
         ))}
