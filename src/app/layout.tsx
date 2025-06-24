@@ -28,6 +28,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <footer className="w-full bg-blue-900 text-white mt-16 py-8 px-4 text-center flex flex-col items-center gap-4">
+          <div className="max-w-2xl mx-auto text-sm">
+            <strong>Disclaimer:</strong> The information provided by Your Home's Diary is for educational and guidance purposes only. It is not legal advice. Always verify details with official sources and consult a legal professional for specific concerns.
+          </div>
+          <div className="flex flex-wrap gap-6 justify-center mt-2 text-blue-200 text-sm">
+            <a href="#" className="hover:underline">Contact</a>
+            <a href="#" className="hover:underline">Privacy Policy</a>
+            <a href="#" className="hover:underline">Terms of Service</a>
+          </div>
+        </footer>
       </body>
     </html>
   );
