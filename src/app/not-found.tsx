@@ -6,7 +6,7 @@ function NotFoundContent() {
   return (
     <div style={{ textAlign: "center", marginTop: 40 }}>
       <h1>404 - Page Not Found</h1>
-      <p>Sorry, we couldn't find that page.</p>
+      <p>Sorry, we couldn&apos;t find that page.</p>
     </div>
   );
 }

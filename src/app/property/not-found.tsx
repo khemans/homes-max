@@ -5,7 +5,7 @@ function PropertyNotFoundContent() {
   return (
     <div style={{ textAlign: "center", marginTop: 40 }}>
       <h1>Property Not Found</h1>
-      <p>Sorry, we couldn't find that property.</p>
+      <p>Sorry, we couldn&apos;t find that property.</p>
     </div>
   );
 }
