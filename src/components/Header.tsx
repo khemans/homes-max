@@ -1,12 +1,20 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const [search, setSearch] = React.useState("");
+  const searchParams = useSearchParams();
+  // Get the query param from the URL if present
+  const urlQuery = searchParams.get("query") || "";
+  const [search, setSearch] = React.useState(urlQuery);
+
+  // Keep the search bar in sync with the URL query param
+  React.useEffect(() => {
+    setSearch(urlQuery);
+  }, [urlQuery]);
 
   // Only show search bar if not on the home page
   const showSearch = pathname !== "/";
@@ -14,8 +22,20 @@ const Header: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
-      router.push(`/property?query=${encodeURIComponent(search)}`);
-      setSearch("");
+      // Determine if this is a specific address or generic search
+      const query = search.trim();
+      
+      // Check if it looks like a specific address (contains numbers and street terms)
+      const hasNumbers = /\d/.test(query);
+      const hasStreetTerms = /\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|lane|ln|way|plaza|pkwy|parkway)\b/i.test(query);
+      
+      if (hasNumbers && hasStreetTerms) {
+        // Specific address - go to property details page
+        router.push(`/property?query=${encodeURIComponent(query)}`);
+      } else {
+        // Generic search - go to search results page
+        router.push(`/search?query=${encodeURIComponent(query)}`);
+      }
     }
   };
 
@@ -24,7 +44,13 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
           <Link href="/" className="flex items-center space-x-3">
-            <div className="text-2xl">🏠</div>
+            <div className="text-2xl">
+              <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 4C7 16 4 28 16 44C28 28 25 16 16 4Z" fill="#fff" stroke="#222" strokeWidth="1.5"/>
+                <path d="M8 18Q16 14 24 18Q22 10 16 4Q10 10 8 18Z" fill="#e31837"/>
+                <path d="M8 18Q16 22 24 18Q24 28 16 44Q8 28 8 18Z" fill="#005ba6"/>
+              </svg>
+            </div>
             <div>
               <h1 className="text-xl font-bold">Your Home&apos;s Diary</h1>
               <p className="text-blue-200 text-sm">Uncover its past stories</p>

@@ -92,6 +92,17 @@ function getMockCoords(address: string) {
   const lower = address.toLowerCase();
   if (lower.includes("123 main st")) return { lat: 37.779, lng: -122.4194 };
   if (lower.includes("456 oak ave")) return { lat: 37.781, lng: -122.417 };
+  // Denver metro area coordinates
+  if (lower.includes("1234 larimer st")) return { lat: 39.7505, lng: -104.9963 };
+  if (lower.includes("5678 colfax ave")) return { lat: 39.7402, lng: -104.9847 };
+  if (lower.includes("9012 broadway")) return { lat: 39.7213, lng: -104.9877 };
+  if (lower.includes("3456 speer blvd")) return { lat: 39.7325, lng: -105.0087 };
+  if (lower.includes("7890 alameda ave")) return { lat: 39.7156, lng: -104.9876 };
+  if (lower.includes("2345 colorado blvd")) return { lat: 39.7234, lng: -104.9456 };
+  if (lower.includes("6789 evans ave")) return { lat: 39.6789, lng: -104.9876 };
+  if (lower.includes("1122 hampden ave")) return { lat: 39.6543, lng: -104.9876 };
+  if (lower.includes("3344 mississippi ave")) return { lat: 39.7234, lng: -104.9234 };
+  if (lower.includes("5566 yale ave")) return { lat: 39.7123, lng: -104.9345 };
   return null;
 }
 

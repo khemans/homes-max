@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 
 interface PropertyMapProps {
@@ -11,26 +11,69 @@ interface PropertyMapProps {
 
 const DEFAULT_POSITION = { lat: 37.7749, lng: -122.4194 }; // San Francisco as fallback
 
+// Dynamically import react-leaflet components to avoid SSR issues
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+const Popup = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Popup),
+  { ssr: false }
+);
+
 // Custom Marker component that handles icon setup
 const CustomMarker: React.FC<{ position: [number, number]; address?: string }> = ({ position, address }) => {
-  const [icon, setIcon] = useState<L.Icon | null>(null);
+  const [icon, setIcon] = useState<any>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isClient) return;
     import("leaflet").then((L) => {
+      // Classic map pin with RE/MAX colors: red top, white middle, blue bottom, dark blue wedge
+      const version = Date.now();
+      const pinSVG = `
+        <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- v${version} -->
+          <ellipse cx="16" cy="45" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
+          <path d="M16 4C7 16 4 28 16 44C28 28 25 16 16 4Z" fill="#fff" stroke="#222" stroke-width="1.5"/>
+          <path d="M16 4C7 16 4 20 16 20C28 20 25 16 16 4Z" fill="#e31837"/>
+          <path d="M16 44C28 28 28 28 16 32C4 28 4 28 16 44Z" fill="#005ba6"/>
+          <path d="M16 44C19 39 19 39 16 38C13 39 13 39 16 44Z" fill="#003366"/>
+        </svg>
+      `;
       const customIcon = new L.default.Icon({
-        iconUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjUgMEM1LjU5NiAwIDAgNS41OTYgMCAxMi41QzAgMTkuNDA0IDUuNTk2IDI1IDEyLjUgMjVDMTkuNDA0IDI1IDI1IDE5LjQwNCAyNSAxMi41QzI1IDUuNTk2IDE5LjQwNCAwIDEyLjUgMFoiIGZpbGw9IiMyNjc4RjMiLz4KPHBhdGggZD0iTTEyLjUgNkM4LjM2NCA2IDUgOS4zNjQgNSAxMy41QzUgMTcuNjM2IDguMzY0IDIxIDEyLjUgMjFDMTYuNjM2IDIxIDIwIDE3LjYzNiAyMCAxMy41QzIwIDkuMzY0IDE2LjYzNiA2IDEyLjUgNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCA0MSA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAuNSIgY3k9IjIwLjUiIHI9IjE4IiBmaWxsPSJibGFjayIgZmlsbC1vcGFjaXR5PSIwLjIiLz4KPC9zdmc+Cg==",
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 41],
+        iconUrl: `data:image/svg+xml;base64,${btoa(pinSVG)}`,
+        iconSize: [32, 48],
+        iconAnchor: [16, 48],
+        popupAnchor: [0, -48],
+        shadowUrl: `data:image/svg+xml;base64,${btoa(`
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="20" cy="38" rx="12" ry="2" fill="rgba(0,0,0,0.4)"/>
+          </svg>
+        `)}`,
+        shadowSize: [40, 40],
+        shadowAnchor: [16, 40],
       });
       setIcon(customIcon);
     });
-  }, []);
+  }, [isClient]);
 
-  if (!icon) return null;
+  if (!isClient || !icon) return null;
 
   return (
     <Marker position={position} icon={icon}>
@@ -40,11 +83,33 @@ const CustomMarker: React.FC<{ position: [number, number]; address?: string }> =
 };
 
 const PropertyMap: React.FC<PropertyMapProps> = ({ lat, lng, address }) => {
+  const [isClient, setIsClient] = useState(false);
   const position = lat && lng ? { lat, lng } : DEFAULT_POSITION;
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <div className="w-full h-72 rounded-xl overflow-hidden shadow mb-8 z-0 bg-gray-200 flex items-center justify-center">
+        <div className="text-gray-500">Loading map...</div>
+      </div>
+    );
+  }
+
+  // Create a unique key based on coordinates to force re-render when location changes
+  const mapKey = `${lat}-${lng}-${address}`;
 
   return (
     <div className="w-full h-72 rounded-xl overflow-hidden shadow mb-8 z-0" style={{ zIndex: 0 }}>
-      <MapContainer center={position} zoom={15} scrollWheelZoom={false} style={{ height: "100%", width: "100%", zIndex: 0 }}>
+      <MapContainer 
+        key={mapKey}
+        center={position} 
+        zoom={15} 
+        scrollWheelZoom={false} 
+        style={{ height: "100%", width: "100%", zIndex: 0 }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -9,7 +9,20 @@ const HeroSection: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
-      router.push(`/property?query=${encodeURIComponent(search)}`);
+      // Determine if this is a specific address or generic search
+      const query = search.trim();
+      
+      // Check if it looks like a specific address (contains numbers and street terms)
+      const hasNumbers = /\d/.test(query);
+      const hasStreetTerms = /\b(st|street|ave|avenue|blvd|boulevard|rd|road|dr|drive|lane|ln|way|plaza|pkwy|parkway)\b/i.test(query);
+      
+      if (hasNumbers && hasStreetTerms) {
+        // Specific address - go to property details page
+        router.push(`/property?query=${encodeURIComponent(query)}`);
+      } else {
+        // Generic search - go to search results page
+        router.push(`/search?query=${encodeURIComponent(query)}`);
+      }
     }
   };
 
