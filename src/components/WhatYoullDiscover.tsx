@@ -11,7 +11,7 @@ const features = [
     icon: "🔑",
     title: "Property Rights Chapter",
     description:
-      "Simple explanations of mineral, water, air, and easement rights—plus how to look them up in your deed.",
+      "Simple explanations of mineral, water, air, and easement rights&mdash;plus how to look them up in your deed.",
   },
   {
     icon: "💬",
