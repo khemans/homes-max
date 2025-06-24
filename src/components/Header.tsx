@@ -46,9 +46,11 @@ const Header: React.FC = () => {
           <Link href="/" className="flex items-center space-x-3">
             <div className="text-2xl">
               <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 4C7 16 4 28 16 44C28 28 25 16 16 4Z" fill="#fff" stroke="#222" strokeWidth="1.5"/>
-                <path d="M8 18Q16 14 24 18Q22 10 16 4Q10 10 8 18Z" fill="#e31837"/>
-                <path d="M8 18Q16 22 24 18Q24 28 16 44Q8 28 8 18Z" fill="#005ba6"/>
+                <ellipse cx="16" cy="45" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
+                <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" fill="#fff" stroke="#222" strokeWidth="1.5"/>
+                <path d="M16 4C10 4 4 10 4 13C4 13 16 13 16 13C16 13 28 13 28 13C28 10 22 4 16 4Z" fill="#e31837"/>
+                <path d="M16 44C28 32 28 28 16 32C4 28 4 32 16 44Z" fill="#005ba6"/>
+                <path d="M16 44C19 39 19 39 16 38C13 39 13 39 16 44Z" fill="#003366"/>
               </svg>
             </div>
             <div>
