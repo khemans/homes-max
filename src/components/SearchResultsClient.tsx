@@ -212,11 +212,19 @@ const SearchResultsClient: React.FC = () => {
           <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
             <div className="text-4xl mb-4 flex justify-center">
               <svg width="48" height="72" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="pinClip">
+                    <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" />
+                  </clipPath>
+                </defs>
                 <ellipse cx="16" cy="45" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-                <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" fill="#fff" stroke="#222" strokeWidth="2"/>
-                <path d="M16 4C10 4 4 10 4 13C4 13 16 13 16 13C16 13 28 13 28 13C28 10 22 4 16 4Z" fill="#e31837"/>
-                <path d="M16 44C28 32 28 28 16 32C4 28 4 32 16 44Z" fill="#005ba6"/>
-                <path d="M16 44C19 39 19 39 16 38C13 39 13 39 16 44Z" fill="#003366"/>
+                <g clipPath="url(#pinClip)">
+                  <rect x="4" y="4" width="24" height="14" fill="#e31837" />
+                  <rect x="4" y="18" width="24" height="14" fill="#fff" />
+                  <rect x="4" y="32" width="24" height="12" fill="#005ba6" />
+                  <polygon points="16,38 19,44 13,44" fill="#003366" />
+                </g>
+                <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" fill="none" stroke="#222" strokeWidth="2"/>
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-blue-900 mb-4">No Properties Found</h2>
