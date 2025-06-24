@@ -38,7 +38,7 @@ const WhatYoullDiscover: React.FC = () => {
               {feature.title}
             </h3>
             <p className="text-blue-700 text-base">
-              {feature.description}
+              {feature.description.replace("'", "&apos;")}
             </p>
           </div>
         ))}

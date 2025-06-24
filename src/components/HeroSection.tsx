@@ -37,7 +37,7 @@ const HeroSection: React.FC = () => {
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="flex-1 px-5 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg shadow-sm text-blue-900"
-          placeholder="Ask me anything about a property's past (e.g., '123 Main St permits', '23 Oak Ave history')"
+          placeholder="Ask me anything about a property&apos;s past (e.g., &apos;123 Main St permits&apos;, &apos;23 Oak Ave history&apos;)"
         />
         <button
           type="submit"

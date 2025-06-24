@@ -14,11 +14,11 @@ const infoSections = [
         <p className="mb-2 text-blue-800 font-semibold">How to find building permits:</p>
         <ol className="list-decimal list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
           <li>Identify your local county/city planning department.</li>
-          <li>Visit their official website (search for "[Your County Name] building permits").</li>
+          <li>Visit their official website (search for &quot;[Your County Name] building permits&quot;).</li>
           <li>Use their property search tool.</li>
-          <li>Look for 'building permits' or 'code enforcement records'.</li>
+          <li>Look for &#39;building permits&#39; or &#39;code enforcement records&#39;.</li>
         </ol>
-        <p className="text-blue-600 text-sm">We'll provide curated links here in the future!</p>
+        <p className="text-blue-600 text-sm">We&apos;ll provide curated links here in the future!</p>
       </>
     ),
   },
@@ -49,7 +49,7 @@ const infoSections = [
         <ul className="list-disc list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
           <li>Disclosure laws vary by state (e.g., deaths on property).</li>
           <li>Agents must answer truthfully if asked directly.</li>
-          <li>"Your Home's Diary" does not access private records.</li>
+          <li>&quot;Your Home&apos;s Diary&quot; does not access private records.</li>
         </ul>
         <p className="text-blue-600 text-sm">Always consult your agent and local laws for specifics.</p>
       </>
@@ -86,6 +86,17 @@ function getMockCoords(address: string) {
   return null;
 }
 
+// Define MLS result type
+interface MLSResult {
+  address: string;
+  price: string;
+  beds: number;
+  baths: number;
+  sqft: number;
+  status: string;
+  mlsId: string;
+}
+
 const PropertyDetails: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -98,7 +109,7 @@ const PropertyDetails: React.FC = () => {
     : infoSections;
 
   // MLS integration (mock)
-  const [mlsResults, setMlsResults] = useState<any[]>([]);
+  const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
   const [mlsLoading, setMlsLoading] = useState(false);
   const [search, setSearch] = useState(query || "");
   useEffect(() => {
@@ -171,7 +182,7 @@ const PropertyDetails: React.FC = () => {
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="flex-1 px-5 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg shadow-sm text-blue-900"
-          placeholder="Search for another property (e.g., '123 Main St permits')"
+          placeholder="Search for another property (e.g., &apos;123 Main St permits&apos;)"
         />
         <button
           type="submit"
@@ -212,7 +223,7 @@ const PropertyDetails: React.FC = () => {
         {mlsLoading && (
           <div className="flex flex-col items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-600 border-solid mb-2"></div>
-            <div className="text-blue-600 font-medium">Loading MLS results…</div>
+            <div className="text-blue-600 font-medium">Loading MLS results&hellip;</div>
           </div>
         )}
         {!mlsLoading && mlsResults.length > 0 && (
