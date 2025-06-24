@@ -17,11 +17,19 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ lat, lng, address }) => {
   useEffect(() => {
     // Fix default marker icon issue in Leaflet with Webpack - only run on client
     import("leaflet").then((L) => {
-      L.default.Icon.Default.mergeOptions({
-        iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+      // Create a custom icon that doesn't rely on external files
+      const customIcon = new L.default.Icon({
+        iconUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCAyNSA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyLjUgMEM1LjU5NiAwIDAgNS41OTYgMCAxMi41QzAgMTkuNDA0IDUuNTk2IDI1IDEyLjUgMjVDMTkuNDA0IDI1IDI1IDE5LjQwNCAyNSAxMi41QzI1IDUuNTk2IDE5LjQwNCAwIDEyLjUgMFoiIGZpbGw9IiMyNjc4RjMiLz4KPHBhdGggZD0iTTEyLjUgNkM4LjM2NCA2IDUgOS4zNjQgNSAxMy41QzUgMTcuNjM2IDguMzY0IDIxIDEyLjUgMjFDMTYuNjM2IDIxIDIwIDE3LjYzNiAyMCAxMy41QzIwIDkuMzY0IDE2LjYzNiA2IDEyLjUgNloiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowUrl: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDEiIGhlaWdodD0iNDEiIHZpZXdCb3g9IjAgMCA0MSA0MSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAuNSIgY3k9IjIwLjUiIHI9IjE4IiBmaWxsPSJibGFjayIgZmlsbC1vcGFjaXR5PSIwLjIiLz4KPC9zdmc+Cg==",
+        shadowSize: [41, 41],
+        shadowAnchor: [12, 41],
       });
+      
+      // Override the default icon
+      L.default.Marker.prototype.options.icon = customIcon;
     });
   }, []);
 
