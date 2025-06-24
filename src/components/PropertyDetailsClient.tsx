@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
 // Dynamically import PropertyMap with SSR disabled to avoid window reference issues
@@ -168,7 +168,6 @@ const PermitPages: React.FC<{ address: string }> = ({ address }) => {
 
 const PropertyDetailsClient: React.FC = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const query = searchParams.get("query");
   const { address, keywords } = parseQuery(query);
 
@@ -180,7 +179,6 @@ const PropertyDetailsClient: React.FC = () => {
   // MLS integration (mock)
   const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
   const [mlsLoading, setMlsLoading] = useState(false);
-  const [search, setSearch] = useState(query || "");
   
   // Permit integration (mock)
   const [permits, setPermits] = useState<PermitRecord[]>([]);
@@ -208,13 +206,6 @@ const PropertyDetailsClient: React.FC = () => {
       setPermits([]);
     }
   }, [address]);
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (search.trim()) {
-      router.push(`/property?query=${encodeURIComponent(search)}`);
-    }
-  };
 
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [geoLoading, setGeoLoading] = useState(false);
@@ -259,23 +250,7 @@ const PropertyDetailsClient: React.FC = () => {
   }, [address]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-blue-50 py-16 px-4">
-      {/* Search bar at the top */}
-      <form className="w-full max-w-xl mx-auto flex flex-col sm:flex-row gap-3 mb-8" onSubmit={handleSearchSubmit}>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="flex-1 px-5 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg shadow-sm text-blue-900"
-          placeholder="Search for another property (e.g., &apos;123 Main St permits&apos;)"
-        />
-        <button
-          type="submit"
-          className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold text-lg shadow-md hover:bg-blue-700 transition-colors"
-        >
-          Search
-        </button>
-      </form>
+    <main className="min-h-screen flex flex-col items-center justify-center bg-blue-50 py-8 px-4">
       {/* Map above property details */}
       <div className="max-w-2xl w-full mb-8">
         {geoLoading ? (

@@ -43,8 +43,8 @@ const PropertyMap: React.FC<PropertyMapProps> = ({ lat, lng, address }) => {
   const position = lat && lng ? { lat, lng } : DEFAULT_POSITION;
 
   return (
-    <div className="w-full h-72 rounded-xl overflow-hidden shadow mb-8">
-      <MapContainer center={position} zoom={15} scrollWheelZoom={false} style={{ height: "100%", width: "100%" }}>
+    <div className="w-full h-72 rounded-xl overflow-hidden shadow mb-8 z-0" style={{ zIndex: 0 }}>
+      <MapContainer center={position} zoom={15} scrollWheelZoom={false} style={{ height: "100%", width: "100%", zIndex: 0 }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

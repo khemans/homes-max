@@ -14,7 +14,7 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-b from-blue-50 to-white px-4 py-16 text-center">
+    <section className="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-b from-blue-50 to-white px-4 py-12 text-center">
       {/* Illustration Placeholder */}
       <div className="mb-6">
         <div className="w-32 h-32 mx-auto bg-blue-100 rounded-full flex items-center justify-center shadow-md">
