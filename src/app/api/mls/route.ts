@@ -5,6 +5,9 @@ const mockMLSData = [
   // Original properties
   {
     address: "123 Main St",
+    city: "Denver",
+    state: "CO",
+    zip: "80202",
     price: "$500,000",
     beds: 3,
     baths: 2,
@@ -14,6 +17,9 @@ const mockMLSData = [
   },
   {
     address: "456 Oak Ave",
+    city: "Aurora",
+    state: "CO",
+    zip: "80012",
     price: "$750,000",
     beds: 4,
     baths: 3,
@@ -24,6 +30,9 @@ const mockMLSData = [
   // Denver metro area properties
   {
     address: "1234 Larimer St",
+    city: "Denver",
+    state: "CO",
+    zip: "80202",
     price: "$425,000",
     beds: 2,
     baths: 2,
@@ -33,6 +42,9 @@ const mockMLSData = [
   },
   {
     address: "5678 Colfax Ave",
+    city: "Lakewood",
+    state: "CO",
+    zip: "80214",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -42,6 +54,9 @@ const mockMLSData = [
   },
   {
     address: "9012 Broadway",
+    city: "Englewood",
+    state: "CO",
+    zip: "80113",
     price: "$890,000",
     beds: 4,
     baths: 3,
@@ -51,6 +66,9 @@ const mockMLSData = [
   },
   {
     address: "3456 Speer Blvd",
+    city: "Denver",
+    state: "CO",
+    zip: "80211",
     price: "$550,000",
     beds: 2,
     baths: 2,
@@ -60,6 +78,9 @@ const mockMLSData = [
   },
   {
     address: "7890 Alameda Ave",
+    city: "Lakewood",
+    state: "CO",
+    zip: "80226",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -69,6 +90,9 @@ const mockMLSData = [
   },
   {
     address: "2345 Colorado Blvd",
+    city: "Denver",
+    state: "CO",
+    zip: "80207",
     price: "$625,000",
     beds: 3,
     baths: 2,
@@ -78,6 +102,9 @@ const mockMLSData = [
   },
   {
     address: "6789 Evans Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80222",
     price: "$475,000",
     beds: 2,
     baths: 1,
@@ -87,6 +114,9 @@ const mockMLSData = [
   },
   {
     address: "1122 Hampden Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80231",
     price: "$825,000",
     beds: 4,
     baths: 3,
@@ -96,6 +126,9 @@ const mockMLSData = [
   },
   {
     address: "3344 Mississippi Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$575,000",
     beds: 3,
     baths: 2,
@@ -105,6 +138,9 @@ const mockMLSData = [
   },
   {
     address: "5566 Yale Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80204",
     price: "$695,000",
     beds: 3,
     baths: 2,
@@ -114,6 +150,9 @@ const mockMLSData = [
   },
   {
     address: "7788 Iliff Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$525,000",
     beds: 2,
     baths: 2,
@@ -123,6 +162,9 @@ const mockMLSData = [
   },
   {
     address: "9900 Parker Rd",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$775,000",
     beds: 4,
     baths: 3,
@@ -132,6 +174,9 @@ const mockMLSData = [
   },
   {
     address: "1111 Arapahoe Rd",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$925,000",
     beds: 4,
     baths: 3,
@@ -141,6 +186,9 @@ const mockMLSData = [
   },
   {
     address: "2222 Belleview Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$625,000",
     beds: 3,
     baths: 2,
@@ -150,6 +198,9 @@ const mockMLSData = [
   },
   {
     address: "3333 Dartmouth Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -159,6 +210,9 @@ const mockMLSData = [
   },
   {
     address: "4444 Evans Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$475,000",
     beds: 2,
     baths: 1,
@@ -168,6 +222,9 @@ const mockMLSData = [
   },
   {
     address: "5555 Florida Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -177,6 +234,9 @@ const mockMLSData = [
   },
   {
     address: "6666 Girard Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$825,000",
     beds: 4,
     baths: 3,
@@ -186,6 +246,9 @@ const mockMLSData = [
   },
   {
     address: "7777 Holly St",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$575,000",
     beds: 3,
     baths: 2,
@@ -195,6 +258,9 @@ const mockMLSData = [
   },
   {
     address: "8888 Jewell Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -204,6 +270,9 @@ const mockMLSData = [
   },
   {
     address: "9999 Kentucky Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$525,000",
     beds: 2,
     baths: 2,
@@ -213,6 +282,9 @@ const mockMLSData = [
   },
   {
     address: "1111 Leetsdale Dr",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$875,000",
     beds: 4,
     baths: 3,
@@ -222,6 +294,9 @@ const mockMLSData = [
   },
   {
     address: "2222 Monaco Pkwy",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$625,000",
     beds: 3,
     baths: 2,
@@ -231,6 +306,9 @@ const mockMLSData = [
   },
   {
     address: "3333 Oneida St",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$475,000",
     beds: 2,
     baths: 1,
@@ -240,6 +318,9 @@ const mockMLSData = [
   },
   {
     address: "4444 Quebec St",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$775,000",
     beds: 4,
     baths: 3,
@@ -249,6 +330,9 @@ const mockMLSData = [
   },
   {
     address: "5555 Rampart Way",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$925,000",
     beds: 4,
     baths: 3,
@@ -258,6 +342,9 @@ const mockMLSData = [
   },
   {
     address: "6666 Sheridan Blvd",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -267,6 +354,9 @@ const mockMLSData = [
   },
   {
     address: "7777 Tamarac Dr",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$575,000",
     beds: 3,
     baths: 2,
@@ -276,6 +366,9 @@ const mockMLSData = [
   },
   {
     address: "8888 Union Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -285,6 +378,9 @@ const mockMLSData = [
   },
   {
     address: "9999 Wadsworth Blvd",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$825,000",
     beds: 4,
     baths: 3,
@@ -294,6 +390,9 @@ const mockMLSData = [
   },
   {
     address: "1111 Zuni St",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$525,000",
     beds: 2,
     baths: 2,
@@ -303,6 +402,9 @@ const mockMLSData = [
   },
   {
     address: "2222 1st Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -312,6 +414,9 @@ const mockMLSData = [
   },
   {
     address: "3333 2nd Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$775,000",
     beds: 4,
     baths: 3,
@@ -321,6 +426,9 @@ const mockMLSData = [
   },
   {
     address: "4444 3rd Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$475,000",
     beds: 2,
     baths: 1,
@@ -330,6 +438,9 @@ const mockMLSData = [
   },
   {
     address: "5555 4th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$625,000",
     beds: 3,
     baths: 2,
@@ -339,6 +450,9 @@ const mockMLSData = [
   },
   {
     address: "6666 5th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$875,000",
     beds: 4,
     baths: 3,
@@ -348,6 +462,9 @@ const mockMLSData = [
   },
   {
     address: "7777 6th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -357,6 +474,9 @@ const mockMLSData = [
   },
   {
     address: "8888 7th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$575,000",
     beds: 3,
     baths: 2,
@@ -366,6 +486,9 @@ const mockMLSData = [
   },
   {
     address: "9999 8th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$825,000",
     beds: 4,
     baths: 3,
@@ -375,6 +498,9 @@ const mockMLSData = [
   },
   {
     address: "1111 9th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -384,6 +510,9 @@ const mockMLSData = [
   },
   {
     address: "2222 10th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$525,000",
     beds: 2,
     baths: 2,
@@ -393,6 +522,9 @@ const mockMLSData = [
   },
   {
     address: "3333 11th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$775,000",
     beds: 4,
     baths: 3,
@@ -402,6 +534,9 @@ const mockMLSData = [
   },
   {
     address: "4444 12th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$925,000",
     beds: 4,
     baths: 3,
@@ -411,6 +546,9 @@ const mockMLSData = [
   },
   {
     address: "5555 13th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$625,000",
     beds: 3,
     baths: 2,
@@ -420,6 +558,9 @@ const mockMLSData = [
   },
   {
     address: "6666 14th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -429,6 +570,9 @@ const mockMLSData = [
   },
   {
     address: "7777 15th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$475,000",
     beds: 2,
     baths: 1,
@@ -438,6 +582,9 @@ const mockMLSData = [
   },
   {
     address: "8888 16th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$675,000",
     beds: 3,
     baths: 2,
@@ -447,6 +594,9 @@ const mockMLSData = [
   },
   {
     address: "9999 17th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$825,000",
     beds: 4,
     baths: 3,
@@ -456,6 +606,9 @@ const mockMLSData = [
   },
   {
     address: "1111 18th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$575,000",
     beds: 3,
     baths: 2,
@@ -465,6 +618,9 @@ const mockMLSData = [
   },
   {
     address: "2222 19th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$725,000",
     beds: 3,
     baths: 2,
@@ -474,6 +630,9 @@ const mockMLSData = [
   },
   {
     address: "3333 20th Ave",
+    city: "Denver",
+    state: "CO",
+    zip: "80205",
     price: "$875,000",
     beds: 4,
     baths: 3,
@@ -492,9 +651,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ results: mockMLSData });
   }
 
-  // Simulate search by address
+  // Simulate search by address (now checks all address fields)
   const result = mockMLSData.filter((item) =>
-    item.address.toLowerCase().includes(address)
+    `${item.address}, ${item.city}, ${item.state} ${item.zip}`.toLowerCase().includes(address)
   );
 
   return NextResponse.json({ results: result });

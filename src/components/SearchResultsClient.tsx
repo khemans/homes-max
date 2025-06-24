@@ -5,6 +5,9 @@ import Link from "next/link";
 
 interface MLSResult {
   address: string;
+  city: string;
+  state: string;
+  zip: string;
   price: string;
   beds: number;
   baths: number;
@@ -154,11 +157,11 @@ const SearchResultsClient: React.FC = () => {
               <div
                 key={property.mlsId}
                 className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer border-2 border-transparent hover:border-blue-200"
-                onClick={() => handlePropertyClick(property.address)}
+                onClick={() => handlePropertyClick(`${property.address}, ${property.city}, ${property.state} ${property.zip}`)}
               >
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                    {property.address}
+                    {property.address}, {property.city}, {property.state} {property.zip}
                   </h3>
                   <div className="text-2xl font-bold text-blue-600 mb-3">
                     {property.price}
@@ -196,7 +199,7 @@ const SearchResultsClient: React.FC = () => {
                     className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
                     onClick={(e) => {
                       e.stopPropagation();
-                      handlePropertyClick(property.address);
+                      handlePropertyClick(`${property.address}, ${property.city}, ${property.state} ${property.zip}`);
                     }}
                   >
                     View Details

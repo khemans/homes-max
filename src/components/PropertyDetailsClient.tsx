@@ -109,6 +109,9 @@ function getMockCoords(address: string) {
 // Define MLS result type
 interface MLSResult {
   address: string;
+  city: string;
+  state: string;
+  zip: string;
   price: string;
   beds: number;
   baths: number;
@@ -272,7 +275,7 @@ const PropertyDetailsClient: React.FC = () => {
         ) : geoError ? (
           <div className="bg-red-100 text-red-700 rounded-xl shadow p-6 mb-8">{geoError}</div>
         ) : (
-          <PropertyMap lat={coords?.lat} lng={coords?.lng} address={address} />
+          <PropertyMap lat={coords?.lat} lng={coords?.lng} address={mlsResults[0] ? `${mlsResults[0].address}, ${mlsResults[0].city}, ${mlsResults[0].state} ${mlsResults[0].zip}` : address} />
         )}
       </div>
       {/* Combined property details, MLS results, and permits */}
@@ -302,7 +305,7 @@ const PropertyDetailsClient: React.FC = () => {
             <h2 className="text-xl font-bold mb-4">MLS Results</h2>
             {mlsResults.map((item) => (
               <div key={item.mlsId} className="mb-4">
-                <div className="font-semibold">{item.address}</div>
+                <div className="font-semibold">{item.address}, {item.city}, {item.state} {item.zip}</div>
                 <div>Price: {item.price}</div>
                 <div>Beds: {item.beds} | Baths: {item.baths} | Sqft: {item.sqft}</div>
                 <div>Status: {item.status}</div>
