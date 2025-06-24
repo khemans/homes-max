@@ -24,7 +24,7 @@ const HeroSection: React.FC = () => {
       </div>
       {/* Headline */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4">
-        Your Home's Diary: <span className="text-blue-600">Uncover its past stories.</span>
+        Your Home&apos;s Diary: <span className="text-blue-600">Uncover its past stories.</span>
       </h1>
       {/* Sub-headline */}
       <p className="text-lg md:text-xl text-blue-800 mb-8 max-w-2xl mx-auto">
