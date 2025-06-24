@@ -1,7 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import PropertyMap from "./PropertyMap";
+import dynamic from "next/dynamic";
+
+// Dynamically import PropertyMap with SSR disabled to avoid window reference issues
+const PropertyMap = dynamic(() => import("./PropertyMap"), { 
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-72 rounded-xl overflow-hidden shadow mb-8 bg-gray-100 flex items-center justify-center">
+      <div className="text-gray-600">Loading map...</div>
+    </div>
+  )
+});
 
 const infoSections = [
   {
