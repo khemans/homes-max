@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
-import dynamic from "next/dynamic";
-
-const PropertyDetailsClient = dynamic(() => import("../../components/PropertyDetailsClient"), { ssr: false });
+import PropertyDetailsClient from "../../components/PropertyDetailsClient";
 
 export default function PropertyPage() {
   return (

@@ -1,8 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
-const PropertyMap = dynamic(() => import("./PropertyMap"), { ssr: false });
+import PropertyMap from "./PropertyMap";
 
 const infoSections = [
   {
