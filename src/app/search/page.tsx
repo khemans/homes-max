@@ -1,7 +1,11 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import SearchResultsClient from "../../components/SearchResultsClient";
 
 export default function SearchPage() {
-  return <SearchResultsClient />;
+  return (
+    <Suspense>
+      <SearchResultsClient />
+    </Suspense>
+  );
 } 
