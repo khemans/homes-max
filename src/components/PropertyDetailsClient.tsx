@@ -292,7 +292,7 @@ const PropertyDetailsClient: React.FC = () => {
     setGeoError("");
     fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`, {
       headers: {
-        'User-Agent': 'your-homes-diary-app/1.0 (your@email.com)'
+        'User-Agent': 'homes-max-app/1.0 (your@email.com)'
       }
     })
       .then(res => res.json())
