@@ -465,16 +465,16 @@ const PropertyDetailsClient: React.FC = () => {
                 <div className="text-red-500 italic">No flood risk data available.</div>
               )}
             </div>
-            {/* CoreLogic Mock Data */}
+            {/* CoreLogic Mock Data - Risk Scores and Report */}
             {riskLoading ? null : coreLogic ? (
               <div className="mt-2 text-left">
-                <h3 className="text-xl font-semibold text-red-800 mb-2">CoreLogic Risk Scores</h3>
+                <h3 className="text-xl font-semibold text-red-800 mb-2">CoreLogic Risk Details</h3>
                 <div>Wildfire Risk Score: <span className="font-semibold">{coreLogic.wildfireRiskScore}</span></div>
                 <div>Flood Risk Score: <span className="font-semibold">{coreLogic.floodRiskScore}</span></div>
                 <div>Earthquake Risk Score: <span className="font-semibold">{coreLogic.earthquakeRiskScore}</span></div>
                 <div>CoreLogic Property ID: <span className="font-mono">{coreLogic.coreLogicPropertyId}</span></div>
                 {coreLogic.reportUrl && (
-                  <div>Report: <a href={coreLogic.reportUrl} target="_blank" rel="noopener noreferrer" className="underline text-blue-700">View CoreLogic Report</a></div>
+                  <div>CoreLogic Report: <a href={coreLogic.reportUrl} target="_blank" rel="noopener noreferrer" className="underline text-blue-700">View CoreLogic Report</a></div>
                 )}
               </div>
             ) : null}

@@ -16,6 +16,24 @@ interface MLSResult {
   mlsId: string;
 }
 
+// Add a helper to normalize search queries for state abbreviations and human-friendly terms
+function normalizeSearchQuery(query: string): string {
+  const stateMap: Record<string, string> = {
+    'ca': 'california',
+    'ma': 'massachusetts',
+    'fl': 'florida',
+    'la': 'louisiana',
+  };
+  let normalized = query.trim().toLowerCase();
+  // Replace state abbreviations with full names
+  Object.entries(stateMap).forEach(([abbr, full]) => {
+    const regex = new RegExp(`\\b${abbr}\\b`, 'gi');
+    normalized = normalized.replace(regex, full);
+  });
+  // Add more normalization as needed (e.g., remove punctuation, etc.)
+  return normalized;
+}
+
 const SearchResultsClient: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -38,8 +56,9 @@ const SearchResultsClient: React.FC = () => {
       .then(res => res.json())
       .then(data => {
         const allProperties = data.results || [];
+        const normalizedQuery = normalizeSearchQuery(query);
         const filteredResults = allProperties.filter((property: MLSResult) => {
-          const searchLower = query.toLowerCase();
+          const searchLower = normalizedQuery;
           const addressLower = property.address.toLowerCase();
 
           // If the query is 'denver', return all Denver metro properties (exclude the original two)
