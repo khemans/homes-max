@@ -16,14 +16,16 @@ interface MLSResult {
   mlsId: string;
 }
 
+// State abbreviation to full name map (shared)
+const stateMap: Record<string, string> = {
+  'ca': 'california',
+  'ma': 'massachusetts',
+  'fl': 'florida',
+  'la': 'louisiana',
+};
+
 // Add a helper to normalize search queries for state abbreviations and human-friendly terms
 function normalizeSearchQuery(query: string): string {
-  const stateMap: Record<string, string> = {
-    'ca': 'california',
-    'ma': 'massachusetts',
-    'fl': 'florida',
-    'la': 'louisiana',
-  };
   let normalized = query.trim().toLowerCase();
   // Replace state abbreviations with full names
   Object.entries(stateMap).forEach(([abbr, full]) => {
@@ -32,6 +34,19 @@ function normalizeSearchQuery(query: string): string {
   });
   // Add more normalization as needed (e.g., remove punctuation, etc.)
   return normalized;
+}
+
+function getStateAbbreviationOrFull(query: string): string[] {
+  const q = query.trim().toLowerCase();
+  const abbr = Object.keys(stateMap).find((abbr) => abbr === q);
+  const full = Object.values(stateMap).find((full) => full === q);
+  if (abbr) return [abbr.toUpperCase()];
+  if (full) {
+    // Find the abbreviation for the full name
+    const abbrKey = Object.entries(stateMap).find(([, v]) => v === full)?.[0];
+    return abbrKey ? [abbrKey.toUpperCase()] : [];
+  }
+  return [];
 }
 
 const SearchResultsClient: React.FC = () => {
@@ -57,9 +72,15 @@ const SearchResultsClient: React.FC = () => {
       .then(data => {
         const allProperties = data.results || [];
         const normalizedQuery = normalizeSearchQuery(query);
+        const stateMatches = getStateAbbreviationOrFull(normalizedQuery);
         const filteredResults = allProperties.filter((property: MLSResult) => {
           const searchLower = normalizedQuery;
           const addressLower = property.address.toLowerCase();
+
+          // State abbreviation/full name search
+          if (stateMatches.length > 0) {
+            return stateMatches.includes(property.state.toUpperCase());
+          }
 
           // If the query is 'denver', return all Denver metro properties (exclude the original two)
           if (searchLower === "denver") {
