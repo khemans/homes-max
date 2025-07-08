@@ -205,10 +205,33 @@ const mockRiskData: Record<string, RiskData> = {
   },
 };
 
+// Helper to build a robust key: 'address, city, state' all lowercased and trimmed
+function buildRiskKey(address: string, city: string, state: string): string {
+  return `${address}, ${city}, ${state}`.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const address = (searchParams.get('address') || '').toLowerCase();
-  const data = mockRiskData[address] || {
+  // Try to get address, city, and state from query params
+  const address = (searchParams.get('address') || '').toLowerCase().trim();
+  const city = (searchParams.get('city') || '').toLowerCase().trim();
+  const state = (searchParams.get('state') || '').toLowerCase().trim();
+
+  let key = '';
+  if (address && city && state) {
+    key = buildRiskKey(address, city, state);
+  } else if (address) {
+    // Try to parse city and state from address string if not provided
+    // e.g., '1001 sunset blvd, los angeles, ca 90026'
+    const match = address.match(/^(.*?),\s*([^,]+),\s*([a-z]{2})/i);
+    if (match) {
+      key = buildRiskKey(match[1], match[2], match[3]);
+    } else {
+      key = address;
+    }
+  }
+
+  const data = mockRiskData[key] || {
     insuranceClaims: [],
     fireRisk: { score: 0, lastInspection: '', notes: '' },
     floodRisk: { zone: '', riskLevel: '', lastFlood: null },
