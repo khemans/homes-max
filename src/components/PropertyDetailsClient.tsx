@@ -223,6 +223,15 @@ const PropertyDetailsClient: React.FC = () => {
   const [floodRisk, setFloodRisk] = useState<FloodRisk | null>(null);
   const [riskLoading, setRiskLoading] = useState(false);
 
+  // Add state for coreLogic
+  const [coreLogic, setCoreLogic] = useState<{
+    coreLogicPropertyId: string;
+    wildfireRiskScore: number;
+    floodRiskScore: number;
+    earthquakeRiskScore: number;
+    reportUrl: string;
+  } | null>(null);
+
   useEffect(() => {
     if (address) {
       setMlsLoading(true);
@@ -248,6 +257,7 @@ const PropertyDetailsClient: React.FC = () => {
           setInsuranceClaims(data.insuranceClaims);
           setFireRisk(data.fireRisk);
           setFloodRisk(data.floodRisk);
+          setCoreLogic(data.coreLogic || null);
         })
         .finally(() => setRiskLoading(false));
     } else {
@@ -256,6 +266,7 @@ const PropertyDetailsClient: React.FC = () => {
       setInsuranceClaims(null);
       setFireRisk(null);
       setFloodRisk(null);
+      setCoreLogic(null);
     }
   }, [address]);
 
@@ -440,7 +451,7 @@ const PropertyDetailsClient: React.FC = () => {
               )}
             </div>
             {/* Flood Risk */}
-            <div className="mb-2 text-left">
+            <div className="mb-4 text-left">
               <h3 className="text-xl font-semibold text-red-800 mb-2">Flood Risk</h3>
               {riskLoading ? (
                 <div className="text-red-600">Loading flood risk data...</div>
@@ -454,6 +465,19 @@ const PropertyDetailsClient: React.FC = () => {
                 <div className="text-red-500 italic">No flood risk data available.</div>
               )}
             </div>
+            {/* CoreLogic Mock Data */}
+            {riskLoading ? null : coreLogic ? (
+              <div className="mt-2 text-left">
+                <h3 className="text-xl font-semibold text-red-800 mb-2">CoreLogic Risk Scores</h3>
+                <div>Wildfire Risk Score: <span className="font-semibold">{coreLogic.wildfireRiskScore}</span></div>
+                <div>Flood Risk Score: <span className="font-semibold">{coreLogic.floodRiskScore}</span></div>
+                <div>Earthquake Risk Score: <span className="font-semibold">{coreLogic.earthquakeRiskScore}</span></div>
+                <div>CoreLogic Property ID: <span className="font-mono">{coreLogic.coreLogicPropertyId}</span></div>
+                {coreLogic.reportUrl && (
+                  <div>Report: <a href={coreLogic.reportUrl} target="_blank" rel="noopener noreferrer" className="underline text-blue-700">View CoreLogic Report</a></div>
+                )}
+              </div>
+            ) : null}
           </div>
           {/* Footnote below the box */}
           <div className="mb-4">
