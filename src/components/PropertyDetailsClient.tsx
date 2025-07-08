@@ -422,35 +422,42 @@ const PropertyDetailsClient: React.FC = () => {
               <div className="text-red-500 italic">No insurance claims data available.</div>
             )}
           </div>
-          {/* Fire Risk */}
-          <div className="mb-6 text-left">
-            <h3 className="text-xl font-semibold text-red-800 mb-2">Fire Risk Assessment</h3>
-            {riskLoading ? (
-              <div className="text-red-600">Loading fire risk data...</div>
-            ) : fireRisk ? (
-              <div>
-                <div>Risk Score: <span className="font-semibold">{fireRisk.score}</span></div>
-                <div>Last Inspection: {fireRisk.lastInspection}</div>
-                <div>Notes: {fireRisk.notes}</div>
-              </div>
-            ) : (
-              <div className="text-red-500 italic">No fire risk data available.</div>
-            )}
+          {/* Fire and Flood Risk Box */}
+          <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-xl">
+            {/* Fire Risk */}
+            <div className="mb-6 text-left">
+              <h3 className="text-xl font-semibold text-red-800 mb-2">Fire Risk Assessment</h3>
+              {riskLoading ? (
+                <div className="text-red-600">Loading fire risk data...</div>
+              ) : fireRisk ? (
+                <div>
+                  <div>Risk Score: <span className="font-semibold">{fireRisk.score}</span></div>
+                  <div>Last Inspection: {fireRisk.lastInspection}</div>
+                  <div>Notes: {fireRisk.notes}</div>
+                </div>
+              ) : (
+                <div className="text-red-500 italic">No fire risk data available.</div>
+              )}
+            </div>
+            {/* Flood Risk */}
+            <div className="mb-2 text-left">
+              <h3 className="text-xl font-semibold text-red-800 mb-2">Flood Risk</h3>
+              {riskLoading ? (
+                <div className="text-red-600">Loading flood risk data...</div>
+              ) : floodRisk ? (
+                <div>
+                  <div>Flood Zone: <span className="font-semibold">{floodRisk.zone}</span></div>
+                  <div>Risk Level: {floodRisk.riskLevel}</div>
+                  <div>Last Flood: {floodRisk.lastFlood ? floodRisk.lastFlood : 'No recorded flood events.'}</div>
+                </div>
+              ) : (
+                <div className="text-red-500 italic">No flood risk data available.</div>
+              )}
+            </div>
           </div>
-          {/* Flood Risk */}
-          <div className="mb-6 text-left">
-            <h3 className="text-xl font-semibold text-red-800 mb-2">Flood Risk</h3>
-            {riskLoading ? (
-              <div className="text-red-600">Loading flood risk data...</div>
-            ) : floodRisk ? (
-              <div>
-                <div>Flood Zone: <span className="font-semibold">{floodRisk.zone}</span></div>
-                <div>Risk Level: {floodRisk.riskLevel}</div>
-                <div>Last Flood: {floodRisk.lastFlood ? floodRisk.lastFlood : 'No recorded flood events.'}</div>
-              </div>
-            ) : (
-              <div className="text-red-500 italic">No flood risk data available.</div>
-            )}
+          {/* Footnote below the box */}
+          <div className="mb-4">
+            <span className="text-xs italic text-gray-600">This data can be obtained from <a href="https://store.corelogic.com/search" target="_blank" rel="noopener noreferrer" className="underline">@https://store.corelogic.com/search</a></span>
           </div>
         </div>
         {/* --- End Risk Data Section --- */}
