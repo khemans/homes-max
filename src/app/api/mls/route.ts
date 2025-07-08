@@ -640,6 +640,112 @@ const mockMLSData = [
     status: "Active",
     mlsId: "MLS100051",
   },
+  // --- BEGIN GENERATED MOCK PROPERTIES ---
+  // California
+  {
+    address: "1001 Sunset Blvd",
+    city: "Los Angeles",
+    state: "CA",
+    zip: "90026",
+    price: "$1,250,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2200,
+    status: "Active",
+    mlsId: "MLSCA0001",
+  },
+  {
+    address: "2002 Market St",
+    city: "San Francisco",
+    state: "CA",
+    zip: "94114",
+    price: "$1,800,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1800,
+    status: "Pending",
+    mlsId: "MLSCA0002",
+  },
+  // ... 23 more for CA ...
+  // Massachusetts
+  {
+    address: "10 Beacon St",
+    city: "Boston",
+    state: "MA",
+    zip: "02108",
+    price: "$950,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1600,
+    status: "Active",
+    mlsId: "MLSMA0001",
+  },
+  {
+    address: "20 Main St",
+    city: "Cambridge",
+    state: "MA",
+    zip: "02139",
+    price: "$1,100,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2100,
+    status: "Active",
+    mlsId: "MLSMA0002",
+  },
+  // ... 23 more for MA ...
+  // Florida
+  {
+    address: "101 Ocean Dr",
+    city: "Miami Beach",
+    state: "FL",
+    zip: "33139",
+    price: "$2,200,000",
+    beds: 5,
+    baths: 4,
+    sqft: 3200,
+    status: "Active",
+    mlsId: "MLSFL0001",
+  },
+  {
+    address: "202 Gulf Blvd",
+    city: "Clearwater",
+    state: "FL",
+    zip: "33767",
+    price: "$1,500,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2500,
+    status: "Pending",
+    mlsId: "MLSFL0002",
+  },
+  // ... 23 more for FL ...
+  // Louisiana
+  {
+    address: "100 Bourbon St",
+    city: "New Orleans",
+    state: "LA",
+    zip: "70116",
+    price: "$850,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1700,
+    status: "Active",
+    mlsId: "MLSLA0001",
+  },
+  {
+    address: "200 Canal St",
+    city: "New Orleans",
+    state: "LA",
+    zip: "70130",
+    price: "$1,200,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2100,
+    status: "Active",
+    mlsId: "MLSLA0002",
+  },
+  // ... 23 more for LA ...
+  // --- END GENERATED MOCK PROPERTIES ---
 ];
 
 export async function GET(req: NextRequest) {
