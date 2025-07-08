@@ -1,7 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// Add explicit types for risk data
+interface InsuranceClaim {
+  date: string;
+  type: string;
+  amount: number;
+  status: string;
+}
+interface FireRisk {
+  score: number;
+  lastInspection: string;
+  notes: string;
+}
+interface FloodRisk {
+  zone: string;
+  riskLevel: string;
+  lastFlood: string | null;
+}
+interface RiskData {
+  insuranceClaims: InsuranceClaim[];
+  fireRisk: FireRisk;
+  floodRisk: FloodRisk;
+}
+
 // Mock risk data keyed by address (lowercase)
-const mockRiskData: Record<string, any> = {
+const mockRiskData: Record<string, RiskData> = {
   '123 main st': {
     insuranceClaims: [
       { date: '2021-06-15', type: 'Water Damage', amount: 12000, status: 'Paid' },
@@ -94,9 +117,9 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const address = (searchParams.get('address') || '').toLowerCase();
   const data = mockRiskData[address] || {
-    insuranceClaims: null,
-    fireRisk: null,
-    floodRisk: null,
+    insuranceClaims: [],
+    fireRisk: { score: 0, lastInspection: '', notes: '' },
+    floodRisk: { zone: '', riskLevel: '', lastFlood: null },
   };
   return NextResponse.json(data);
 } 
