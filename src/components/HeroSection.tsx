@@ -32,12 +32,12 @@ const HeroSection: React.FC = () => {
       <div className="mb-6">
         <div className="w-32 h-32 mx-auto bg-blue-100 rounded-full flex items-center justify-center shadow-md">
           {/* Replace with SVG/illustration later */}
-          <span className="text-5xl" role="img" aria-label="Home Diary">🏡📖</span>
+          <span className="text-5xl" role="img" aria-label="Homes Max">🏡📖</span>
         </div>
       </div>
       {/* Headline */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4">
-        Your Home&apos;s Diary: <span className="text-blue-600">Uncover its past stories.</span>
+        Homes\Max: <span className="text-blue-600">Getting the MAX on your home before you buy.</span>
       </h1>
       {/* Sub-headline */}
       <p className="text-lg md:text-xl text-blue-800 mb-8 max-w-2xl mx-auto">

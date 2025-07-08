@@ -256,3 +256,62 @@ your-homes-diary/
 ---
 
 **This PRD reflects the current state of "Your Home's Diary" as a fully functional MVP deployed on Vercel. The application successfully delivers on its core promise of providing accessible property history information with a friendly, trustworthy user experience.** 
+
+---
+
+If your deployed product is still showing the old branding ("Your Home's Diary"), here are the most common reasons and how to fix them:
+
+---
+
+### 1. **Build Artifacts Not Updated**
+- If you deployed without rebuilding after the rebrand, the old static files may still be served.
+- **Solution:**  
+  Run a clean build locally before deploying:
+  ```sh
+  rm -rf .next
+  npm run build
+  npm run start  # or your deploy command
+  ```
+  Then redeploy.
+
+---
+
+### 2. **Deployment Source Directory**
+- Make sure you are deploying from the updated `homes-max` directory, not the old `your-homes-diary` directory.
+
+---
+
+### 3. **Stale CDN/Cache**
+- Sometimes, Vercel/Netlify or your hosting provider caches old assets.
+- **Solution:**  
+  - Trigger a cache purge or redeploy with cache invalidation.
+  - On Vercel, you can use the "Redeploy" button and select "Clear cache and redeploy".
+
+---
+
+### 4. **Missed References**
+- Some files (especially in `.next`, `public`, or static export folders) may still reference the old name.
+- **Solution:**  
+  - Make sure to delete `.next` and any static export folders before building.
+  - Double-check all UI and config files for missed references.
+
+---
+
+### 5. **Environment Variables or Config**
+- If your deployment uses environment variables or config files that reference the old name, update those as well.
+
+---
+
+## **What to Do Next**
+1. Run the following commands in your project root:
+   ```sh
+   rm -rf .next
+   npm run build
+   # (or yarn build, pnpm build, etc.)
+   ```
+2. Redeploy your app using your normal deployment process.
+3. If using Vercel/Netlify, trigger a cache purge or "Clear cache and redeploy".
+
+---
+
+If you want, I can propose the exact terminal commands for you to run, or help you check for any missed references in your codebase. Let me know how you’d like to proceed! 

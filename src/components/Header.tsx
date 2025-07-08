@@ -62,7 +62,7 @@ const Header: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold">Your Home&apos;s Diary</h1>
+              <h1 className="text-xl font-bold">Homes\Max</h1>
               <p className="text-blue-200 text-sm">Uncover its past stories</p>
             </div>
           </Link>
