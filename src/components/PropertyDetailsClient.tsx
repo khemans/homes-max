@@ -152,6 +152,24 @@ interface PermitRecord {
   permitId: string;
 }
 
+// Add types for risk data
+interface InsuranceClaim {
+  date: string;
+  type: string;
+  amount: number;
+  status: string;
+}
+interface FireRisk {
+  score: number;
+  lastInspection: string;
+  notes: string;
+}
+interface FloodRisk {
+  zone: string;
+  riskLevel: string;
+  lastFlood: string | null;
+}
+
 // Dynamic Permit Pages component (simplified - no permit data display)
 const PermitPages: React.FC<{ address: string }> = ({ address }) => {
   const links = getPermitLinks(address);
@@ -199,6 +217,12 @@ const PropertyDetailsClient: React.FC = () => {
   const [permitsLoading, setPermitsLoading] = useState(false);
   const [permitsError, setPermitsError] = useState("");
 
+  // Add state for risk data
+  const [insuranceClaims, setInsuranceClaims] = useState<InsuranceClaim[] | null>(null);
+  const [fireRisk, setFireRisk] = useState<FireRisk | null>(null);
+  const [floodRisk, setFloodRisk] = useState<FloodRisk | null>(null);
+  const [riskLoading, setRiskLoading] = useState(false);
+
   useEffect(() => {
     if (address) {
       setMlsLoading(true);
@@ -215,9 +239,23 @@ const PropertyDetailsClient: React.FC = () => {
         .then(data => setPermits(data.permits || []))
         .catch(() => setPermitsError("Could not fetch permit data."))
         .finally(() => setPermitsLoading(false));
+
+      // Fetch risk data
+      setRiskLoading(true);
+      fetch(`/api/risk?address=${encodeURIComponent(address)}`)
+        .then(res => res.json())
+        .then(data => {
+          setInsuranceClaims(data.insuranceClaims);
+          setFireRisk(data.fireRisk);
+          setFloodRisk(data.floodRisk);
+        })
+        .finally(() => setRiskLoading(false));
     } else {
       setMlsResults([]);
       setPermits([]);
+      setInsuranceClaims(null);
+      setFireRisk(null);
+      setFloodRisk(null);
     }
   }, [address]);
 
@@ -360,10 +398,62 @@ const PropertyDetailsClient: React.FC = () => {
         )}
         {!permitsLoading && !permitsError && address && permits.length === 0 && (
           <div className="bg-green-100 rounded-xl shadow p-6 mt-8 text-green-900">
-            <h2 className="text-xl font-bold mb-4">Permit Records</h2>
+            <h2 className="text-xl font-bold mb-4">Recent Permits for this Property</h2>
             <div className="text-green-700">No permit records found for this address.</div>
           </div>
         )}
+        {/* --- Risk Data Section (now below permits, styled red) --- */}
+        <div className="bg-red-100 rounded-xl shadow p-6 mt-8 text-red-900">
+          <h2 className="text-2xl font-bold mb-4">Risk & Insurance Data</h2>
+          {/* Insurance Claims */}
+          <div className="mb-6 text-left">
+            <h3 className="text-xl font-semibold text-red-800 mb-2">Insurance Claims</h3>
+            {riskLoading ? (
+              <div className="text-red-600">Loading insurance claims...</div>
+            ) : insuranceClaims && insuranceClaims.length > 0 ? (
+              <ul className="list-disc list-inside">
+                {insuranceClaims.map((claim, idx) => (
+                  <li key={idx} className="mb-1">
+                    <span className="font-semibold">{claim.type}</span> claim on {claim.date} for ${claim.amount.toLocaleString()} (<span className="text-red-700">{claim.status}</span>)
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="text-red-500 italic">No insurance claims data available.</div>
+            )}
+          </div>
+          {/* Fire Risk */}
+          <div className="mb-6 text-left">
+            <h3 className="text-xl font-semibold text-red-800 mb-2">Fire Risk Assessment</h3>
+            {riskLoading ? (
+              <div className="text-red-600">Loading fire risk data...</div>
+            ) : fireRisk ? (
+              <div>
+                <div>Risk Score: <span className="font-semibold">{fireRisk.score}</span></div>
+                <div>Last Inspection: {fireRisk.lastInspection}</div>
+                <div>Notes: {fireRisk.notes}</div>
+              </div>
+            ) : (
+              <div className="text-red-500 italic">No fire risk data available.</div>
+            )}
+          </div>
+          {/* Flood Risk */}
+          <div className="mb-6 text-left">
+            <h3 className="text-xl font-semibold text-red-800 mb-2">Flood Risk</h3>
+            {riskLoading ? (
+              <div className="text-red-600">Loading flood risk data...</div>
+            ) : floodRisk ? (
+              <div>
+                <div>Flood Zone: <span className="font-semibold">{floodRisk.zone}</span></div>
+                <div>Risk Level: {floodRisk.riskLevel}</div>
+                <div>Last Flood: {floodRisk.lastFlood ? floodRisk.lastFlood : 'No recorded flood events.'}</div>
+              </div>
+            ) : (
+              <div className="text-red-500 italic">No flood risk data available.</div>
+            )}
+          </div>
+        </div>
+        {/* --- End Risk Data Section --- */}
       </div>
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
         {relevantSections.map((section) => (
