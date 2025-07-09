@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const features = [
   {
@@ -35,7 +36,7 @@ const WhatYoullDiscover: React.FC = () => {
     <section className="remax-section remax-section-light">
       <div className="remax-container">
         <div className="text-center mb-12">
-          <h2 className="remax-heading-2 mb-4">What You'll Discover</h2>
+          <h2 className="remax-heading-2 mb-4">What You&apos;ll Discover</h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
             Get comprehensive insights into any property before you make your decision
           </p>
@@ -57,9 +58,9 @@ const WhatYoullDiscover: React.FC = () => {
         
         {/* Call to Action */}
         <div className="text-center mt-12">
-          <a href="/search" className="remax-btn-primary text-lg px-8 py-4">
+          <Link href="/search" className="remax-btn-primary text-lg px-8 py-4">
             Start Your Property Search
-          </a>
+          </Link>
         </div>
       </div>
     </section>

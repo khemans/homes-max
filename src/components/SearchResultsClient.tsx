@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import PropertyMap from './PropertyMap';
 
 interface MLSResult {
@@ -59,7 +60,7 @@ const SearchResultsClient: React.FC = () => {
           <div className="remax-card text-center py-16">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid mb-6 mx-auto"></div>
             <h2 className="remax-heading-3 mb-2">Searching Properties</h2>
-            <p className="remax-text-body text-gray-600">Finding the best matches for "{query}"...</p>
+            <p className="remax-text-body text-gray-600">Finding the best matches for &quot;{query}&quot;...</p>
           </div>
         </div>
       </main>
@@ -118,12 +119,12 @@ const SearchResultsClient: React.FC = () => {
               Try adjusting your search terms or browse our featured properties.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/search" className="remax-btn-primary">
+              <Link href="/search" className="remax-btn-primary">
                 New Search
-              </a>
-              <a href="/" className="remax-btn-outline">
+              </Link>
+              <Link href="/" className="remax-btn-outline">
                 Browse All Properties
-              </a>
+              </Link>
             </div>
           </div>
         ) : (
@@ -174,7 +175,7 @@ const SearchResultsClient: React.FC = () => {
 
                     {property.salesPitch && (
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold mb-2 text-blue-800">Realtor's Insight:</h4>
+                        <h4 className="font-semibold mb-2 text-blue-800">Realtor&apos;s Insight:</h4>
                         <p className="remax-text-body">{property.salesPitch}</p>
                       </div>
                     )}

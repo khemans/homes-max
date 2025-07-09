@@ -498,7 +498,7 @@ const PropertyDetailsClient: React.FC = () => {
                       </div>
                       {item.salesPitch && (
                         <div className="mt-4 p-4 bg-white border border-blue-200 rounded-lg">
-                          <h4 className="font-semibold mb-2 text-blue-800">Realtor's Sales Pitch:</h4>
+                          <h4 className="font-semibold mb-2 text-blue-800">Realtor&apos;s Sales Pitch:</h4>
                           <p className="remax-text-body">{item.salesPitch}</p>
                         </div>
                       )}

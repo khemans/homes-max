@@ -83,7 +83,7 @@ const MyPropertiesPage = () => {
               </div>
               <h2 className="remax-heading-3 mb-4">No Saved Properties Yet</h2>
               <p className="remax-text-body text-gray-600 mb-8 max-w-md mx-auto">
-                Start searching for properties and save the ones you're interested in. They'll appear here for easy access.
+                Start searching for properties and save the ones you&apos;re interested in. They&apos;ll appear here for easy access.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="/search" className="remax-btn-primary">
