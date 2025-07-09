@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import { resources, categories, getResourcesByCategory } from "@/data/resources";
+import { categories, getResourcesByCategory } from "@/data/resources";
 
 const ResourcesPage = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("All");

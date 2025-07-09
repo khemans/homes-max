@@ -27,7 +27,7 @@ interface AVMData {
 }
 
 // Helper to generate mock AVM data (reused from PropertyDetailsClient)
-function generateMockAVMData(address: string): AVMData {
+function generateMockAVMData(): AVMData {
   const baseValue = 450000 + Math.floor(Math.random() * 300000); // Random base value between 450k-750k
   const confidenceLevel = 75 + Math.floor(Math.random() * 20); // 75-95% confidence
   const rangeFactor = 0.1; // 10% range around estimate
@@ -87,7 +87,7 @@ const AVMPage = () => {
     
     // Simulate API call
     setTimeout(() => {
-      setAvmData(generateMockAVMData(address));
+      setAvmData(generateMockAVMData());
       setLoading(false);
     }, 2000);
   };
