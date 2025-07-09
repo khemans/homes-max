@@ -1,54 +1,12 @@
 'use client';
 
 import React from "react";
-
-const resources = [
-  { 
-    name: "CoreLogic Property Risk Reports", 
-    url: "https://store.corelogic.com/search",
-    description: "Comprehensive property risk assessments including flood, fire, and earthquake data",
-    category: "Risk Assessment"
-  },
-  { 
-    name: "Building Permit Research Guide", 
-    url: "#",
-    description: "Step-by-step guide to researching building permits and code compliance",
-    category: "Permits"
-  },
-  { 
-    name: "Property Rights Handbook", 
-    url: "#",
-    description: "Understanding mineral rights, easements, and property boundaries",
-    category: "Legal"
-  },
-  { 
-    name: "Home Insurance Claims Database", 
-    url: "#",
-    description: "Research historical insurance claims for any property",
-    category: "Insurance"
-  },
-  { 
-    name: "MLS Data Access", 
-    url: "#",
-    description: "Access to comprehensive Multiple Listing Service data",
-    category: "Market Data"
-  },
-  { 
-    name: "Environmental Risk Assessment", 
-    url: "#",
-    description: "Environmental hazards and contamination reports",
-    category: "Risk Assessment"
-  }
-];
-
-const categories = ["All", "Risk Assessment", "Permits", "Legal", "Insurance", "Market Data"];
+import { resources, categories, getResourcesByCategory } from "@/data/resources";
 
 const ResourcesPage = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("All");
   
-  const filteredResources = selectedCategory === "All" 
-    ? resources 
-    : resources.filter(r => r.category === selectedCategory);
+  const filteredResources = getResourcesByCategory(selectedCategory);
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
@@ -108,6 +66,11 @@ const ResourcesPage = () => {
                         }`}>
                           {resource.category}
                         </span>
+                        {resource.isActive && (
+                          <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Active
+                          </span>
+                        )}
                       </div>
                       <h3 className="remax-heading-3 text-lg mb-2">{resource.name}</h3>
                       <p className="remax-text-body text-gray-600 mb-4">{resource.description}</p>

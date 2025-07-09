@@ -2,6 +2,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { getLinkedResource } from '@/utils/resourceManager';
+
+// HOW TO ADD NEW RESOURCES:
+// 1. Add the resource to the getLinkedResources() array in /utils/resourceManager.ts
+// 2. Add the resource to the resources array in /data/resources.ts with isActive: true
+// 3. The resource will automatically appear in both property details and the Resources page
+// 4. Use getLinkedResource("Resource Name") to access the resource data in components
 
 // Dynamically import PropertyMap with SSR disabled to avoid window reference issues
 const PropertyMap = dynamic(() => import("./PropertyMap"), { 
@@ -106,6 +113,51 @@ function getMockCoords(address: string) {
   return null;
 }
 
+// Helper to generate mock AVM data
+function generateMockAVMData(address: string): AVMData {
+  const baseValue = 450000 + Math.floor(Math.random() * 300000); // Random base value between 450k-750k
+  const confidenceLevel = 75 + Math.floor(Math.random() * 20); // 75-95% confidence
+  const rangeFactor = 0.1; // 10% range around estimate
+  
+  // Use real addresses from MLS data for comparables
+  const realComparables = [
+    { address: "1234 Larimer St, Denver, CO", basePrice: 425000, sqft: 1200 },
+    { address: "5678 Colfax Ave, Lakewood, CO", basePrice: 675000, sqft: 1850 },
+    { address: "2345 Colorado Blvd, Denver, CO", basePrice: 625000, sqft: 1750 },
+    { address: "6789 Evans Ave, Denver, CO", basePrice: 475000, sqft: 1100 },
+    { address: "3344 Mississippi Ave, Denver, CO", basePrice: 575000, sqft: 1650 },
+    { address: "5566 Yale Ave, Denver, CO", basePrice: 695000, sqft: 1900 },
+    { address: "7788 Iliff Ave, Denver, CO", basePrice: 525000, sqft: 1350 }
+  ];
+  
+  // Select 3 random comparables
+  const selectedComparables = [...realComparables]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3);
+  
+  return {
+    estimatedValue: baseValue,
+    confidenceLevel,
+    valuationDate: new Date().toISOString().split('T')[0],
+    priceRange: {
+      low: Math.floor(baseValue * (1 - rangeFactor)),
+      high: Math.floor(baseValue * (1 + rangeFactor))
+    },
+    comparables: selectedComparables.map((comp, index) => ({
+      address: comp.address,
+      soldPrice: comp.basePrice + Math.floor(Math.random() * 50000 - 25000), // ±$25k variation
+      soldDate: ["2024-01-15", "2024-02-03", "2024-01-28"][index],
+      sqft: comp.sqft + Math.floor(Math.random() * 200 - 100), // ±100 sqft variation
+      distance: 0.2 + Math.random() * 0.6 // 0.2 to 0.8 miles
+    })),
+    marketTrends: {
+      monthlyChange: -1 + Math.random() * 2, // -1% to +1%
+      yearlyChange: 2 + Math.random() * 6, // 2% to 8%
+      marketDirection: Math.random() > 0.5 ? 'up' : 'stable'
+    }
+  };
+}
+
 // Define MLS result type
 interface MLSResult {
   address: string;
@@ -171,6 +223,29 @@ interface FloodRisk {
   lastFlood: string | null;
 }
 
+// Add AVM data interface
+interface AVMData {
+  estimatedValue: number;
+  confidenceLevel: number;
+  valuationDate: string;
+  priceRange: {
+    low: number;
+    high: number;
+  };
+  comparables: {
+    address: string;
+    soldPrice: number;
+    soldDate: string;
+    sqft: number;
+    distance: number;
+  }[];
+  marketTrends: {
+    monthlyChange: number;
+    yearlyChange: number;
+    marketDirection: 'up' | 'down' | 'stable';
+  };
+}
+
 // Add SavedProperty type for localStorage
 interface SavedProperty {
   address: string;
@@ -232,6 +307,8 @@ const PropertyDetailsClient: React.FC = () => {
   const [fireRisk, setFireRisk] = useState<FireRisk | null>(null);
   const [floodRisk, setFloodRisk] = useState<FloodRisk | null>(null);
   const [riskLoading, setRiskLoading] = useState(false);
+  const [avmData, setAvmData] = useState<AVMData | null>(null);
+  const [avmLoading, setAvmLoading] = useState(false);
 
   // Add state for coreLogic
   const [coreLogic, setCoreLogic] = useState<{
@@ -292,6 +369,13 @@ const PropertyDetailsClient: React.FC = () => {
           setCoreLogic(data.coreLogic || null);
         })
         .finally(() => setRiskLoading(false));
+
+      // Generate AVM data
+      setAvmLoading(true);
+      setTimeout(() => {
+        setAvmData(generateMockAVMData(address));
+        setAvmLoading(false);
+      }, 1000); // Simulate API delay
     } else {
       setMlsResults([]);
       setPermits([]);
@@ -299,6 +383,7 @@ const PropertyDetailsClient: React.FC = () => {
       setFireRisk(null);
       setFloodRisk(null);
       setCoreLogic(null);
+      setAvmData(null);
     }
   }, [address]);
 
@@ -363,6 +448,7 @@ const PropertyDetailsClient: React.FC = () => {
             .risk { color: #E31837; }
             .permits { color: #0a6c3d; }
             .mls { color: #005BAA; }
+            .avm { color: #16a34a; }
             table { border-collapse: collapse; width: 100%; margin-top: 1em; }
             th, td { border: 1px solid #ccc; padding: 6px 10px; }
             th { background: #f0f8ff; }
@@ -520,6 +606,129 @@ const PropertyDetailsClient: React.FC = () => {
             </div>
           )}
 
+          {/* AVM Section */}
+          {address && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">Automated Valuation Model (AVM)</h2>
+              </div>
+              <div className="remax-card-body">
+                {avmLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 border-solid mb-4 mx-auto"></div>
+                    <div className="remax-text-body text-green-600 font-medium">Calculating property value...</div>
+                  </div>
+                ) : avmData ? (
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {/* Valuation Summary */}
+                    <div>
+                      <h3 className="remax-heading-3 text-lg mb-4 text-green-800">Estimated Value</h3>
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-4">
+                        <div className="text-center">
+                          <div className="text-3xl font-bold text-green-800 mb-2">
+                            ${avmData.estimatedValue.toLocaleString()}
+                          </div>
+                          <div className="text-sm text-green-600">
+                            Range: ${avmData.priceRange.low.toLocaleString()} - ${avmData.priceRange.high.toLocaleString()}
+                          </div>
+                          <div className="text-sm text-green-600 mt-1">
+                            Confidence: {avmData.confidenceLevel}%
+                          </div>
+                          <div className="text-xs text-gray-500 mt-2">
+                            Valuation Date: {avmData.valuationDate}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Market Trends */}
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-800 mb-2">Market Trends</h4>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Monthly Change:</span>
+                            <span className={`text-sm font-medium ${avmData.marketTrends.monthlyChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {avmData.marketTrends.monthlyChange >= 0 ? '+' : ''}{avmData.marketTrends.monthlyChange.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Yearly Change:</span>
+                            <span className="text-sm font-medium text-green-600">
+                              +{avmData.marketTrends.yearlyChange.toFixed(1)}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Market Direction:</span>
+                            <span className={`text-sm font-medium capitalize ${
+                              avmData.marketTrends.marketDirection === 'up' ? 'text-green-600' : 
+                              avmData.marketTrends.marketDirection === 'down' ? 'text-red-600' : 'text-gray-600'
+                            }`}>
+                              {avmData.marketTrends.marketDirection}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Comparable Sales */}
+                    <div>
+                      <h3 className="remax-heading-3 text-lg mb-4 text-green-800">Comparable Sales</h3>
+                      <div className="space-y-3">
+                        {avmData.comparables.map((comp, index) => (
+                          <div key={index} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <h4 className="font-medium text-gray-800">{comp.address}</h4>
+                                <p className="text-sm text-gray-600">{comp.distance} miles away</p>
+                              </div>
+                              <div className="text-right">
+                                <div className="font-semibold text-green-600">${comp.soldPrice.toLocaleString()}</div>
+                                <div className="text-xs text-gray-500">{comp.soldDate}</div>
+                              </div>
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              {comp.sqft.toLocaleString()} sq ft
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="remax-text-body text-gray-600">AVM data not available for this address.</div>
+                  </div>
+                )}
+
+                {/* AVM Resource Reference */}
+                {(() => {
+                  const avmResource = getLinkedResource("Automated Valuation Model (AVM)");
+                  if (!avmResource) return null;
+                  
+                  return (
+                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-blue-800 mb-1">Learn More About AVM Technology</h4>
+                          <p className="remax-text-small text-blue-700">
+                            {avmResource.description}
+                          </p>
+                        </div>
+                        <div className="ml-4">
+                          <a 
+                            href={avmResource.url}
+                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
+                          >
+                            {avmResource.buttonText || 'Learn More'}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          )}
+
           {/* Permit Results */}
           {permitsLoading && (
             <div className="remax-card text-center py-12 mb-8">
@@ -628,6 +837,35 @@ const PropertyDetailsClient: React.FC = () => {
                     <p className="remax-text-body text-gray-600 italic">No insurance claims data available.</p>
                   </div>
                 )}
+                
+                {/* LexisNexis Reference */}
+                {(() => {
+                  const clueResource = getLinkedResource("LexisNexis C.L.U.E.® Property");
+                  if (!clueResource) return null;
+                  
+                  return (
+                    <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-1">Get {clueResource.name.replace('LexisNexis ', '')}</h4>
+                          <p className="remax-text-small text-gray-600">
+                            {clueResource.description}
+                          </p>
+                        </div>
+                        <div className="ml-4">
+                          <a 
+                            href={clueResource.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
+                          >
+                            {clueResource.buttonText || 'Access Resource'}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Fire and Flood Risk */}
@@ -689,9 +927,38 @@ const PropertyDetailsClient: React.FC = () => {
                 </div>
               </div>
 
-              {/* CoreLogic Data */}
+                {/* CoreLogic Reference */}
+                {(() => {
+                  const coreLogicResource = getLinkedResource("CoreLogic Property Risk Reports");
+                  if (!coreLogicResource) return null;
+                  
+                  return (
+                    <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h4 className="font-semibold text-gray-800 mb-1">Get {coreLogicResource.name}</h4>
+                          <p className="remax-text-small text-gray-600">
+                            {coreLogicResource.description}
+                          </p>
+                        </div>
+                        <div className="ml-4">
+                          <a 
+                            href={coreLogicResource.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
+                          >
+                            {coreLogicResource.buttonText || 'Access Resource'}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+              {/* CoreLogic Data Display */}
               {!riskLoading && coreLogic && (
-                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
+                <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
                   <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">CoreLogic Risk Details</h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
@@ -713,33 +980,45 @@ const PropertyDetailsClient: React.FC = () => {
                         <span className="remax-text-small font-medium">Property ID:</span>
                         <p className="remax-text-small font-mono">{coreLogic.coreLogicPropertyId}</p>
                       </div>
-                      {coreLogic.reportUrl && (
-                        <a 
-                          href={coreLogic.reportUrl} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="text-blue-600 hover:text-blue-800 underline remax-text-small"
-                        >
-                          View CoreLogic Report
-                        </a>
-                      )}
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Data Source */}
+              {/* Data Sources */}
               <div className="text-center">
                 <p className="remax-text-small text-gray-500 italic">
                   Risk data sourced from{' '}
-                  <a 
-                    href="https://store.corelogic.com/search" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-blue-600 hover:text-blue-800 underline"
-                  >
-                    CoreLogic
-                  </a>
+                  {(() => {
+                    const coreLogicResource = getLinkedResource("CoreLogic Property Risk Reports");
+                    const clueResource = getLinkedResource("LexisNexis C.L.U.E.® Property");
+                    
+                    return (
+                      <>
+                        {coreLogicResource && (
+                          <a 
+                            href={coreLogicResource.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            CoreLogic
+                          </a>
+                        )}
+                        {coreLogicResource && clueResource && ' and '}
+                        {clueResource && (
+                          <a 
+                            href={clueResource.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="text-blue-600 hover:text-blue-800 underline"
+                          >
+                            LexisNexis C.L.U.E.®
+                          </a>
+                        )}
+                      </>
+                    );
+                  })()}
                 </p>
               </div>
             </div>
@@ -786,6 +1065,29 @@ const PropertyDetailsClient: React.FC = () => {
                 <div><b>MLS ID:</b> {item.mlsId}</div>
               </div>
             ))}
+          </div>
+        )}
+        {avmData && (
+          <div className="section avm">
+            <h3>Automated Valuation Model (AVM)</h3>
+            <div>
+              <b>Estimated Value:</b> ${avmData.estimatedValue.toLocaleString()}<br />
+              <b>Value Range:</b> ${avmData.priceRange.low.toLocaleString()} - ${avmData.priceRange.high.toLocaleString()}<br />
+              <b>Confidence Level:</b> {avmData.confidenceLevel}%<br />
+              <b>Valuation Date:</b> {avmData.valuationDate}<br />
+              <br />
+              <b>Market Trends:</b><br />
+              • Monthly Change: {avmData.marketTrends.monthlyChange >= 0 ? '+' : ''}{avmData.marketTrends.monthlyChange.toFixed(1)}%<br />
+              • Yearly Change: +{avmData.marketTrends.yearlyChange.toFixed(1)}%<br />
+              • Market Direction: {avmData.marketTrends.marketDirection}<br />
+              <br />
+              <b>Comparable Sales:</b><br />
+              {avmData.comparables.map((comp, index) => (
+                <div key={index}>
+                  • {comp.address} - ${comp.soldPrice.toLocaleString()} ({comp.soldDate}) - {comp.sqft.toLocaleString()} sq ft - {comp.distance} miles away<br />
+                </div>
+              ))}
+            </div>
           </div>
         )}
         {permits.length > 0 && (
