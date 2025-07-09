@@ -1,10 +1,11 @@
-"use client";
-import React from "react";
-import { useRouter } from "next/navigation";
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
 
 const HeroSection: React.FC = () => {
+  const [search, setSearch] = React.useState('');
   const router = useRouter();
-  const [search, setSearch] = React.useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,38 +28,77 @@ const HeroSection: React.FC = () => {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-[60vh] bg-gradient-to-b from-blue-50 to-white px-4 py-12 text-center">
-      {/* Illustration Placeholder */}
-      <div className="mb-6">
-        <div className="w-32 h-32 mx-auto bg-blue-100 rounded-full flex items-center justify-center shadow-md">
-          {/* Replace with SVG/illustration later */}
-          <span className="text-5xl" role="img" aria-label="House MAX">🏡📖</span>
+    <section className="remax-section bg-gradient-to-b from-gray-50 to-white">
+      <div className="remax-container text-center">
+        {/* Hero Content */}
+        <div className="max-w-4xl mx-auto">
+          {/* Main Headline */}
+          <h1 className="remax-heading-1 mb-6">
+            Find Your Dream Home with{' '}
+            <span style={{ color: '#003DA5' }}>HOUSE/</span>
+            <span style={{ color: '#DC1C2E' }}>MAX</span>
+          </h1>
+          
+          {/* Subheadline */}
+          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Get the MAX on your home before you buy. Research property history, permits, and risk data with confidence.
+          </p>
+
+          {/* Search Form */}
+          <div className="max-w-2xl mx-auto mb-12">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  className="remax-input text-lg h-14"
+                  placeholder="Enter an address or search properties..."
+                />
+              </div>
+              <button
+                type="submit"
+                className="remax-btn-primary text-lg h-14 px-8 whitespace-nowrap"
+              >
+                Search Properties
+              </button>
+            </form>
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="remax-heading-3 text-lg mb-2">Trusted Data</h3>
+              <p className="remax-text-small">Access comprehensive property history and risk information from reliable sources.</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 className="remax-heading-3 text-lg mb-2">Instant Results</h3>
+              <p className="remax-text-small">Get detailed property insights and reports in seconds, not days.</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 className="remax-heading-3 text-lg mb-2">Secure & Private</h3>
+              <p className="remax-text-small">Your searches and saved properties are protected with enterprise-grade security.</p>
+            </div>
+          </div>
         </div>
       </div>
-      {/* Headline */}
-      <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4">
-        <span style={{ color: '#005BAA' }}>HOUSE/</span><span style={{ color: '#E31837' }}>MAX</span>: <span className="text-blue-600">Getting the MAX on your home before you buy.</span>
-      </h1>
-      {/* Sub-headline */}
-      <p className="text-lg md:text-xl text-blue-800 mb-8 max-w-2xl mx-auto">
-        Your friendly guide to permits, property rights, and peace of mind.
-      </p>
-      {/* Search Bar & CTA */}
-      <form className="w-full max-w-xl mx-auto flex flex-col sm:flex-row gap-3" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="flex-1 px-5 py-3 rounded-lg border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg shadow-sm text-blue-900"
-          placeholder="Ask me anything about a property&apos;s past (e.g., &apos;123 Main St permits&apos;, &apos;23 Oak Ave history&apos;)"
-        />
-        <button
-          type="submit"
-          className="px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold text-lg shadow-md hover:bg-blue-700 transition-colors"
-        >
-          Uncover Story
-        </button>
-      </form>
     </section>
   );
 };

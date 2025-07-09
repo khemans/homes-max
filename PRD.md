@@ -1,50 +1,54 @@
-# Product Requirements Document: Your Home's Diary
+# Product Requirements Document: HOUSE/MAX
 
-**Version:** 2.0  
+**Version:** 3.0  
 **Date:** December 2024  
 **Author:** AI Assistant (with User Collaboration)  
-**Product Name:** Your Home's Diary  
-**Current Status:** MVP Deployed on Vercel
+**Product Name:** HOUSE/MAX  
+**Current Status:** MVP Deployed on Vercel with RE/MAX Professional Design
 
 ---
 
 ## 1. Introduction
 
-"Your Home's Diary" is a Next.js web application that demystifies property history for homebuyers. By offering clear guidance on how to research past permits, property rights (mineral, water, etc.), and sensitive disclosures (like deaths on property), the application empowers users with knowledge in an approachable and reassuring manner. The core "vibe" is one of friendly discovery and transparent guidance, built with modern web technologies for rapid development and excellent user experience.
+"HOUSE/MAX" is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
 
-**Current Implementation:** Fully functional MVP deployed on Vercel with search functionality, interactive maps, and dynamic content generation.
+**Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, and comprehensive property data.
 
 ---
 
 ## 2. Goals & Objectives
 
 **Primary Goal:**  
-Empower homebuyers with accessible information about property history and legal rights, fostering confidence and reducing anxiety during the home-buying process.
+Empower homebuyers with comprehensive property insights and risk assessments, providing the MAX on their home before they buy.
 
 **Key Objectives:**
-- Provide clear, actionable guidance on researching property permits.
-- Educate users on various property rights (mineral, water, air, easements) and how to find this information.
-- Offer responsible and informative context regarding sensitive property disclosures (e.g., deaths).
-- Maintain a light-hearted, trustworthy, and visually appealing user experience.
-- Utilize modern web technologies for efficient development and iteration.
+- Provide comprehensive property history and risk assessment data
+- Offer professional-grade property research tools and resources
+- Deliver expert guidance on permits, property rights, and legal considerations
+- Maintain a professional, trustworthy user experience with RE/MAX design standards
+- Utilize modern web technologies for efficient development and superior performance
 
 ---
 
 ## 3. Target Audience
 
 - Prospective Homebuyers (first-time and experienced)
-- Real Estate Agents (as a supplementary tool for client education)
-- Individuals interested in property history and local records.
+- Real Estate Agents and Professionals
+- Property Investors and Researchers
+- Insurance Professionals
+- Legal Professionals working in real estate
 
 ---
 
 ## 4. User Stories (Implemented)
 
-- ✅ As a homebuyer, I want to quickly find information about a property's history by simply typing its address.
-- ✅ As a homebuyer, I want to understand what "mineral rights" or "water rights" mean without needing a law degree.
-- ✅ As a homebuyer, I want to know how to research past building permits on a property.
-- ✅ As a homebuyer, I want to understand the facts and legal context around sensitive disclosures, like deaths on a property, in a respectful way.
-- ✅ As a homebuyer, I want the website to feel friendly, easy to use, and reassuring, not overwhelming or scary.
+- ✅ As a homebuyer, I want to access comprehensive property data including risk assessments and permit history
+- ✅ As a homebuyer, I want to understand property rights, easements, and legal considerations in clear terms
+- ✅ As a homebuyer, I want to research building permits and code compliance records
+- ✅ As a homebuyer, I want to save properties for future reference and comparison
+- ✅ As a homebuyer, I want to generate printable property reports for my records
+- ✅ As a real estate professional, I want access to comprehensive property data to better serve my clients
+- ✅ As a user, I want a professional, trustworthy platform that instills confidence
 
 ---
 
@@ -52,266 +56,252 @@ Empower homebuyers with accessible information about property history and legal 
 
 ### 5.1. Home Page / Entry Point ✅
 
-- **Design:** Light-hearted, clean, visually appealing with Tailwind CSS styling.
+- **Design:** Professional RE/MAX-inspired design with clean, modern aesthetics
 - **Hero Section:**
-  - Headline: "Your Home's Diary: Uncover its past stories."
-  - Sub-headline: "Your friendly guide to permits, property rights, and peace of mind."
-  - Search Bar (Prominent): Large, central input field with natural language support.
-    - Placeholder Text: "Ask me anything about a property's past (e.g., '123 Main St permits', '23 Oak Ave history')"
-    - Input Type: Supports natural language queries, parsed to extract address and keywords.
-  - Call to Action Button: "Uncover Story"
-  - Illustration: Modern, clean design with Tailwind styling.
+  - Headline: "Find Your Dream Home with HOUSE/MAX"
+  - Sub-headline: "Get the MAX on your home before you buy. Research property history, permits, and risk data with confidence."
+  - Professional Search Bar: Large, prominent input field for property searches
+  - Trust Indicators: Three professional feature highlights with icons
 - **"What You'll Discover" Section:**
-  - Three distinct, visually appealing sections: "Permit Pages," "Property Rights Chapter," "Sensitive Stories & Disclosures."
-  - Each with relevant icons and brief, reassuring descriptions.
+  - Three professional feature cards: "Permit History," "Risk Assessment," "Property Rights"
+  - Professional icons and clear descriptions
+  - Call-to-action button for property search
 
-### 5.2. Search Results / Property Details Page ✅
+### 5.2. Property Details Page ✅
 
-- **Logic:** Upon submitting a query, the system parses the address and keywords to provide structured guidance.
-- **Structure:**
-  - **Property Identified:** Displays the identified address prominently.
-  - **Interactive Map:** Leaflet map centered on the searched address with a marker.
-  - **Information Sections (Dynamically Displayed based on query keywords):**
-    - **"Permit Pages" Section:** Friendly introduction to permits with actionable guidance.
-    - **"Property Rights Chapter" Section:** Simple, jargon-free definitions of property rights.
-    - **"Sensitive Stories & Disclosures" Section:** Respectful, informative context about sensitive disclosures.
-  - **Loading States:** Proper loading indicators during data fetching.
-  - **Error Handling:** Graceful error handling for invalid addresses or API failures.
+- **Professional Layout:** Clean card-based design with RE/MAX styling
+- **Comprehensive Data Display:**
+  - **Property Information:** Address, MLS data, and basic property details
+  - **Interactive Map:** Leaflet map with custom RE/MAX balloon markers
+  - **MLS Results:** Professional property listings with realtor insights
+  - **Permit Records:** Comprehensive building permit history with status indicators
+  - **Risk Assessment:** Detailed risk analysis including:
+    - Insurance claims history
+    - Fire risk assessment
+    - Flood risk evaluation
+    - CoreLogic risk scores
+- **User Actions:** Save property functionality and printable report generation
 
-### 5.3. Technical Features ✅
+### 5.3. Search Results Page ✅
 
-- **Address Parsing:** Natural language processing to extract addresses from user queries.
-- **Geocoding:** Real-time address validation and geocoding via Nominatim API.
-- **Interactive Maps:** Leaflet maps with react-leaflet integration.
-- **Mock MLS Data:** API route providing sample property data for demonstration.
-- **Responsive Design:** Fully functional on desktop, tablet, and mobile devices.
+- **Professional Grid Layout:** Clean property cards with comprehensive information
+- **Advanced Filtering:** Search results with professional presentation
+- **Interactive Map Integration:** Property locations with markers
+- **Property Cards:** Professional design with pricing, specifications, and realtor insights
+
+### 5.4. Secondary Pages ✅
+
+**About Page:**
+- Professional mission and vision presentation
+- Comprehensive service offerings
+- Trust-building content with professional design
+
+**Resources Page:**
+- Categorized resource library
+- Professional external links to industry tools
+- Filterable resource categories
+
+**My Properties Page:**
+- Saved property management
+- Professional property cards with management actions
+- Empty state with clear call-to-actions
+
+### 5.5. Navigation & Layout ✅
+
+- **Professional Header:** Clean white design with RE/MAX branding
+- **Mobile-Responsive Navigation:** Hamburger menu for mobile devices
+- **Professional Footer:** Comprehensive site information and legal disclaimers
+- **Consistent Branding:** RE/MAX colors and typography throughout
 
 ---
 
-## 6. Technical Architecture (Implemented)
+## 6. Design System (Implemented)
 
-### 6.1. Technology Stack
+### 6.1. RE/MAX Brand Implementation ✅
+
+- **Brand Colors:**
+  - RE/MAX Red: `#DC1C2E` (primary actions, accents)
+  - RE/MAX Blue: `#003DA5` (headings, secondary elements)
+  - Professional grays and whites for backgrounds
+- **Typography:** Inter font family with professional weight hierarchy
+- **Logo Integration:** Custom RE/MAX balloon SVG with brand colors
+
+### 6.2. Professional CSS Framework ✅
+
+- **Component Classes:**
+  - `.remax-heading-1/2/3` for consistent typography hierarchy
+  - `.remax-btn-primary/secondary/outline` for professional buttons
+  - `.remax-card` with professional shadows and hover effects
+  - `.remax-input` for form styling
+  - `.remax-container` for consistent layouts
+- **Interactive Elements:** Hover effects, transitions, and professional animations
+- **Responsive Design:** Mobile-first approach with professional breakpoints
+
+---
+
+## 7. Technical Architecture (Implemented)
+
+### 7.1. Technology Stack
 
 - **Frontend Framework:** Next.js 14 with App Router
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS
-- **Maps:** Leaflet with react-leaflet
+- **Styling:** Tailwind CSS with custom RE/MAX design system
+- **Typography:** Inter font family
+- **Maps:** Leaflet with react-leaflet and custom markers
 - **Geocoding:** Nominatim API
 - **Deployment:** Vercel
 - **Version Control:** Git with GitHub
 
-### 6.2. Project Structure
+### 7.2. Enhanced Project Structure
 
 ```
-your-homes-diary/
+house-max/
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx (Home page)
-│   │   ├── property/page.tsx (Property results page)
-│   │   ├── api/mls/route.ts (Mock MLS API)
-│   │   └── layout.tsx (Root layout)
+│   │   ├── about/page.tsx (About page)
+│   │   ├── resources/page.tsx (Resources page)
+│   │   ├── my-properties/page.tsx (Saved properties)
+│   │   ├── search/page.tsx (Search results)
+│   │   ├── property/page.tsx (Property details)
+│   │   ├── api/mls/route.ts (MLS API)
+│   │   ├── globals.css (RE/MAX design system)
+│   │   └── layout.tsx (Root layout with professional footer)
 │   ├── components/
-│   │   ├── HeroSection.tsx
-│   │   ├── PropertyDetailsClient.tsx
-│   │   ├── PropertyMap.tsx
-│   │   └── WhatYoullDiscover.tsx
+│   │   ├── Header.tsx (Professional navigation)
+│   │   ├── HeroSection.tsx (Professional hero with trust indicators)
+│   │   ├── PropertyDetailsClient.tsx (Comprehensive property data)
+│   │   ├── SearchResultsClient.tsx (Professional search results)
+│   │   ├── PropertyMap.tsx (Custom RE/MAX markers)
+│   │   └── WhatYoullDiscover.tsx (Professional feature cards)
 │   └── types/
-│       └── property.ts
-├── public/ (Static assets)
+│       └── property.ts (TypeScript interfaces)
+├── public/ (Static assets including RE/MAX branding)
 └── package.json
 ```
 
-### 6.3. Key Components
+### 7.3. Enhanced Components
 
-- **HeroSection:** Home page hero with search functionality
-- **PropertyDetailsClient:** Client-side component handling search params, maps, and UI
-- **PropertyMap:** Interactive Leaflet map component
-- **WhatYoullDiscover:** Informational cards about the service
+- **Header:** Professional navigation with RE/MAX branding and mobile responsiveness
+- **PropertyDetailsClient:** Comprehensive property data with risk assessments and professional styling
+- **SearchResultsClient:** Professional search results with filtering and map integration
+- **PropertyMap:** Custom RE/MAX balloon markers with professional popup design
 
-### 6.4. API Routes
+### 7.4. API Routes
 
-- **`/api/mls`:** Mock MLS data endpoint returning sample property information
-
----
-
-## 7. User Experience (UX) & Design (Implemented)
-
-- **Aesthetics:** Clean, modern design with Tailwind CSS
-- **Tone:** Friendly, approachable, empathetic, knowledgeable
-- **Navigation:** Intuitive and straightforward
-- **Readability:** Clear fonts, appropriate line spacing, concise paragraphs
-- **Visual Elements:** Consistent use of icons and styling to reinforce the "vibe"
-- **Responsive:** Fully functional across all device sizes
+- **`/api/mls`:** Enhanced MLS data endpoint with comprehensive property information
+- **Risk Data Integration:** Mock risk assessment data with realistic property insights
 
 ---
 
-## 8. Current Implementation Status
+## 8. User Experience (UX) & Design (Enhanced)
 
-### ✅ Completed Features
-
-1. **Home Page**
-   - Hero section with search functionality
-   - "What You'll Discover" informational cards
-   - Responsive design with Tailwind CSS
-
-2. **Property Search Page**
-   - Natural language query parsing
-   - Address extraction and validation
-   - Dynamic content generation based on keywords
-   - Interactive Leaflet maps with geocoding
-   - Mock MLS data integration
-
-3. **Technical Infrastructure**
-   - Next.js 14 with App Router
-   - TypeScript implementation
-   - ESLint configuration
-   - Vercel deployment
-   - Git version control
-
-4. **User Experience**
-   - Loading states and error handling
-   - Responsive design
-   - Client-side navigation
-   - Server-side rendering optimization
-
-### 🔄 In Progress / Future Enhancements
-
-- User Accounts: Allow users to save properties, track research
-- "My Diary" Feature: Personalized dashboards for saved properties
-- Integration with Real Public APIs: Direct pulls for permit data
-- AI/LLM Integration: Summarization of property documents
-- Community Forum/Q&A: User-generated content
-- Enhanced Geolocation: Local government link suggestions
+- **Professional Aesthetics:** RE/MAX-inspired design with trust-building elements
+- **Brand Consistency:** Consistent use of RE/MAX colors, typography, and styling
+- **Navigation:** Intuitive professional navigation with clear information hierarchy
+- **Accessibility:** Professional contrast ratios and semantic HTML structure
+- **Performance:** Optimized loading states and error handling
+- **Mobile Experience:** Fully responsive design with professional mobile interactions
 
 ---
 
-## 9. Success Metrics
+## 9. Current Implementation Status
 
-- **User Engagement:** Number of unique visitors, time spent on site
-- **Search Volume:** Number of property searches performed
-- **Content Engagement:** Views on guidance sections
-- **Technical Performance:** Page load times, API response times
-- **User Feedback:** Qualitative feedback on helpfulness and clarity
+### ✅ Completed Features (Version 3.0)
+
+1. **Professional Design System**
+   - Complete RE/MAX brand implementation
+   - Professional CSS framework with reusable components
+   - Consistent typography and color schemes
+   - Professional interactive elements and animations
+
+2. **Enhanced Home Page**
+   - Professional hero section with trust indicators
+   - RE/MAX branding integration
+   - Professional feature cards
+   - Clear call-to-action elements
+
+3. **Comprehensive Property Details**
+   - Professional layout with card-based design
+   - Risk assessment integration
+   - Permit history with status indicators
+   - MLS data with realtor insights
+   - Save functionality and printable reports
+
+4. **Professional Navigation**
+   - Clean header design with RE/MAX branding
+   - Mobile-responsive navigation
+   - Professional footer with comprehensive information
+
+5. **Secondary Pages**
+   - Professional About page with mission/vision
+   - Resources page with categorized tools
+   - My Properties page with saved property management
+
+6. **Enhanced User Experience**
+   - Professional loading states
+   - Error handling with professional messaging
+   - Responsive design across all breakpoints
+   - Trust-building design elements
+
+### 🔄 Future Enhancements
+
+- Real-time data integration with property APIs
+- Advanced risk assessment algorithms
+- User account system with enhanced property tracking
+- Professional reporting and document generation
+- Integration with real estate professional tools
+- Advanced search and filtering capabilities
 
 ---
 
-## 10. Deployment & Infrastructure
+## 10. Success Metrics
+
+- **User Trust:** Professional appearance metrics and user confidence surveys
+- **Engagement:** Property searches, saved properties, and report generations
+- **Professional Adoption:** Usage by real estate professionals
+- **Technical Performance:** Page load times and user experience metrics
+- **Brand Recognition:** Association with professional real estate services
+
+---
+
+## 11. Deployment & Infrastructure
 
 ### Current Deployment
-- **Platform:** Vercel
-- **Domain:** [Your Vercel domain]
-- **Build Process:** Automated from GitHub repository
-- **Environment:** Production-ready with proper error handling
+- **Platform:** Vercel with optimized Next.js deployment
+- **Domain:** Professional domain setup
+- **Performance:** Optimized for speed and reliability
+- **Security:** HTTPS encryption and secure data handling
 
-### Development Workflow
-- **Version Control:** Git with GitHub
-- **Branch Strategy:** Main branch deployment
-- **Local Development:** `npm run dev` for local testing
-- **Build Process:** `npm run build` for production builds
-
----
-
-## 11. Technical Considerations & Solutions
-
-### SSR Issues Resolved
-- Client-side components properly isolated with dynamic imports
-- Leaflet maps wrapped in client components to avoid SSR conflicts
-- Search parameters handled on client side for proper hydration
-
-### Performance Optimizations
-- Dynamic imports for heavy components
-- Proper loading states and error boundaries
-- Optimized bundle size with tree shaking
-
-### Security Considerations
-- API rate limiting for geocoding requests
-- Input validation and sanitization
-- Proper error handling without exposing sensitive information
+### Professional Standards
+- **Accessibility:** WCAG compliance for professional accessibility
+- **SEO:** Optimized for real estate search visibility
+- **Analytics:** Professional user tracking and insights
+- **Monitoring:** Performance monitoring and error tracking
 
 ---
 
-## 12. Open Questions / Future Dependencies
+## 12. Brand Guidelines
 
-- Integration with real property data APIs (currently using mock data)
-- Legal review for disclaimers and content accuracy
-- User feedback collection and analysis
-- Performance monitoring and analytics implementation
+### Visual Identity
+- **Logo Usage:** Consistent RE/MAX balloon branding
+- **Color Palette:** Professional RE/MAX red and blue with supporting grays
+- **Typography:** Inter font family for professional readability
+- **Imagery:** Professional real estate photography and icons
 
----
-
-## 13. Maintenance & Updates
-
-### Regular Tasks
-- Monitor Vercel deployment status
-- Update dependencies for security patches
-- Review and update mock data for relevance
-- Monitor API usage and rate limits
-
-### Future Roadmap
-- Phase 2: Real data integration
-- Phase 3: User accounts and personalization
-- Phase 4: Advanced AI features
-- Phase 5: Community features
+### Voice & Tone
+- **Professional:** Trustworthy and knowledgeable
+- **Helpful:** Clear guidance and expert advice
+- **Confident:** Authoritative real estate expertise
+- **Accessible:** Complex information made understandable
 
 ---
 
-**This PRD reflects the current state of "Your Home's Diary" as a fully functional MVP deployed on Vercel. The application successfully delivers on its core promise of providing accessible property history information with a friendly, trustworthy user experience.** 
+## 13. Compliance & Legal
 
----
+- **Disclaimers:** Professional legal disclaimers for property information
+- **Data Sources:** Clear attribution to data providers like CoreLogic
+- **Privacy:** Professional privacy policy and data handling
+- **Terms of Service:** Professional terms for platform usage
 
-If your deployed product is still showing the old branding ("Your Home's Diary"), here are the most common reasons and how to fix them:
-
----
-
-### 1. **Build Artifacts Not Updated**
-- If you deployed without rebuilding after the rebrand, the old static files may still be served.
-- **Solution:**  
-  Run a clean build locally before deploying:
-  ```sh
-  rm -rf .next
-  npm run build
-  npm run start  # or your deploy command
-  ```
-  Then redeploy.
-
----
-
-### 2. **Deployment Source Directory**
-- Make sure you are deploying from the updated `homes-max` directory, not the old `your-homes-diary` directory.
-
----
-
-### 3. **Stale CDN/Cache**
-- Sometimes, Vercel/Netlify or your hosting provider caches old assets.
-- **Solution:**  
-  - Trigger a cache purge or redeploy with cache invalidation.
-  - On Vercel, you can use the "Redeploy" button and select "Clear cache and redeploy".
-
----
-
-### 4. **Missed References**
-- Some files (especially in `.next`, `public`, or static export folders) may still reference the old name.
-- **Solution:**  
-  - Make sure to delete `.next` and any static export folders before building.
-  - Double-check all UI and config files for missed references.
-
----
-
-### 5. **Environment Variables or Config**
-- If your deployment uses environment variables or config files that reference the old name, update those as well.
-
----
-
-## **What to Do Next**
-1. Run the following commands in your project root:
-   ```sh
-   rm -rf .next
-   npm run build
-   # (or yarn build, pnpm build, etc.)
-   ```
-2. Redeploy your app using your normal deployment process.
-3. If using Vercel/Netlify, trigger a cache purge or "Clear cache and redeploy".
-
----
-
-If you want, I can propose the exact terminal commands for you to run, or help you check for any missed references in your codebase. Let me know how you’d like to proceed! 
+This document reflects the current state of HOUSE/MAX as a professional real estate property research platform with RE/MAX-inspired design and comprehensive functionality. 

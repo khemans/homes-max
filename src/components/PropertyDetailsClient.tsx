@@ -380,200 +380,396 @@ const PropertyDetailsClient: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-blue-50 py-8 px-4">
-      {/* Map above property details */}
-      <div className="max-w-2xl w-full mb-8">
-        {geoLoading ? (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-600 border-solid mb-2"></div>
-            <div className="text-blue-600 font-medium">Locating property on map&hellip;</div>
+    <main className="min-h-screen bg-gray-50 py-8">
+      <div className="remax-container">
+        {/* Map Section */}
+        <div className="max-w-4xl mx-auto mb-8">
+          {geoLoading ? (
+            <div className="remax-card text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
+              <div className="remax-text-body text-blue-600 font-medium">Locating property on map...</div>
+            </div>
+          ) : geoError ? (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
+              <h3 className="font-semibold mb-2">Location Error</h3>
+              <p>{geoError}</p>
+            </div>
+          ) : (
+            <div className="remax-card overflow-hidden">
+              <PropertyMap lat={coords?.lat} lng={coords?.lng} address={mlsResults[0] ? `${mlsResults[0].address}, ${mlsResults[0].city}, ${mlsResults[0].state} ${mlsResults[0].zip}` : address} />
+            </div>
+          )}
+        </div>
+
+        {/* Property Details Section */}
+        <div className="max-w-4xl mx-auto">
+          <div className="remax-card mb-8">
+            <div className="remax-card-header text-center">
+              <h1 className="remax-heading-2">Property Details</h1>
+              {address && (
+                <p className="remax-text-body text-lg mt-2">
+                  <span className="font-semibold">Address:</span> {address}
+                </p>
+              )}
+            </div>
+            
+            <div className="remax-card-body">
+              {address && (
+                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaved}
+                    className={isSaved ? 'remax-btn-secondary opacity-60 cursor-not-allowed' : 'remax-btn-outline'}
+                  >
+                    {isSaved ? 'Property Saved' : 'Save Property'}
+                  </button>
+                  <button
+                    onClick={handlePrint}
+                    className="remax-btn-secondary"
+                  >
+                    Print Report
+                  </button>
+                </div>
+              )}
+              
+              {keywords.length > 0 && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                  <p className="remax-text-body">
+                    <span className="font-semibold">Topics detected:</span> {keywords.join(", ")}
+                  </p>
+                </div>
+              )}
+              
+              {!address && !keywords.length && (
+                <div className="text-center py-8">
+                  <p className="remax-text-body text-gray-600">
+                    This is where the property address and research guidance will appear after a search.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        ) : geoError ? (
-          <div className="bg-red-100 text-red-700 rounded-xl shadow p-6 mb-8">{geoError}</div>
-        ) : (
-          <PropertyMap lat={coords?.lat} lng={coords?.lng} address={mlsResults[0] ? `${mlsResults[0].address}, ${mlsResults[0].city}, ${mlsResults[0].state} ${mlsResults[0].zip}` : address} />
-        )}
-      </div>
-      {/* Combined property details, MLS results, and permits */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-2xl w-full text-center mb-8">
-        <h1 className="text-3xl font-bold text-blue-900 mb-4">Property Details</h1>
-        {address && (
-          <>
-            <p className="text-blue-900 text-xl font-semibold mb-2">
-              <span className="text-blue-600">Address:</span> {address}
-            </p>
-            <button
-              onClick={handleSave}
-              disabled={isSaved}
-              className={`px-5 py-2 rounded-lg font-semibold text-lg shadow transition-colors mb-4 mr-2 ${isSaved ? 'bg-green-400 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
-            >
-              {isSaved ? 'Saved' : 'Save Property'}
-            </button>
-            <button
-              onClick={handlePrint}
-              className="px-5 py-2 rounded-lg font-semibold text-lg shadow transition-colors mb-4 bg-gray-200 text-blue-900 hover:bg-gray-300 ml-2"
-            >
-              Print Report
-            </button>
-          </>
-        )}
-        {keywords.length > 0 && (
-          <p className="text-blue-700 text-base mb-4">
-            <span className="font-semibold">Topics detected:</span> {keywords.join(", ")}
-          </p>
-        )}
-        {!address && !keywords.length && (
-          <p className="text-blue-800 mb-8">This is where the property address and research guidance will appear after a search.</p>
-        )}
-        {mlsLoading && (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-600 border-solid mb-2"></div>
-            <div className="text-blue-600 font-medium">Loading MLS results&hellip;</div>
-          </div>
-        )}
-        {!mlsLoading && mlsResults.length > 0 && (
-          <div className="bg-blue-100 rounded-xl shadow p-6 mt-8 text-blue-900">
-            <h2 className="text-xl font-bold mb-4">MLS Results</h2>
-            {mlsResults.map((item) => (
-              <div key={item.mlsId} className="mb-4">
-                <div className="font-semibold">{item.address}, {item.city}, {item.state} {item.zip}</div>
-                <div>Price: {item.price}</div>
-                <div>Beds: {item.beds} | Baths: {item.baths} | Sqft: {item.sqft}</div>
-                <div>Status: {item.status}</div>
-                <div className="text-xs text-blue-600">MLS ID: {item.mlsId}</div>
-                {item.salesPitch && (
-                  <div className="bg-white rounded-lg p-4 mt-3 text-blue-900 shadow-sm border border-blue-200">
-                    <span className="block font-semibold mb-1">Realtor&apos;s Sales Pitch:</span>
-                    <span>{item.salesPitch}</span>
+
+          {/* MLS Results */}
+          {mlsLoading && (
+            <div className="remax-card text-center py-12 mb-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
+              <div className="remax-text-body text-blue-600 font-medium">Loading MLS results...</div>
+            </div>
+          )}
+          
+          {!mlsLoading && mlsResults.length > 0 && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">MLS Results</h2>
+              </div>
+              <div className="remax-card-body">
+                <div className="grid gap-6">
+                  {mlsResults.map((item) => (
+                    <div key={item.mlsId} className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <h3 className="font-semibold text-lg mb-2">{item.address}</h3>
+                          <p className="remax-text-body">{item.city}, {item.state} {item.zip}</p>
+                          <p className="text-2xl font-bold text-green-600 mt-2">{item.price}</p>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="remax-text-small font-medium">Beds:</span>
+                            <span className="remax-text-small">{item.beds}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="remax-text-small font-medium">Baths:</span>
+                            <span className="remax-text-small">{item.baths}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="remax-text-small font-medium">Sqft:</span>
+                            <span className="remax-text-small">{item.sqft}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="remax-text-small font-medium">Status:</span>
+                            <span className="remax-text-small font-semibold">{item.status}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="remax-text-small font-medium">MLS ID:</span>
+                            <span className="remax-text-small font-mono">{item.mlsId}</span>
+                          </div>
+                        </div>
+                      </div>
+                      {item.salesPitch && (
+                        <div className="mt-4 p-4 bg-white border border-blue-200 rounded-lg">
+                          <h4 className="font-semibold mb-2 text-blue-800">Realtor's Sales Pitch:</h4>
+                          <p className="remax-text-body">{item.salesPitch}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {!mlsLoading && address && mlsResults.length === 0 && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">MLS Results</h2>
+              </div>
+              <div className="remax-card-body text-center py-8">
+                <p className="remax-text-body text-gray-600">No MLS results found for this address.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Permit Results */}
+          {permitsLoading && (
+            <div className="remax-card text-center py-12 mb-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
+              <div className="remax-text-body text-blue-600 font-medium">Loading permit data...</div>
+            </div>
+          )}
+          
+          {!permitsLoading && permitsError && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">Permit Records</h2>
+              </div>
+              <div className="remax-card-body">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-800">{permitsError}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {!permitsLoading && !permitsError && permits.length > 0 && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">Recent Permits</h2>
+              </div>
+              <div className="remax-card-body">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="text-left py-3 px-4 font-semibold">Type</th>
+                        <th className="text-left py-3 px-4 font-semibold">Year</th>
+                        <th className="text-left py-3 px-4 font-semibold">Status</th>
+                        <th className="text-left py-3 px-4 font-semibold">Permit ID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {permits.map((p) => (
+                        <tr key={p.permitId} className="border-b border-gray-100">
+                          <td className="py-3 px-4">{p.type}</td>
+                          <td className="py-3 px-4">{p.year}</td>
+                          <td className="py-3 px-4">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              p.status === 'Approved' ? 'bg-green-100 text-green-800' :
+                              p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {p.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 font-mono text-sm">{p.permitId}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {!permitsLoading && !permitsError && address && permits.length === 0 && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">Recent Permits</h2>
+              </div>
+              <div className="remax-card-body text-center py-8">
+                <p className="remax-text-body text-gray-600">No permit records found for this address.</p>
+              </div>
+            </div>
+          )}
+
+          {/* Risk Data Section */}
+          <div className="remax-card border-l-4 border-l-red-500">
+            <div className="remax-card-header bg-red-50">
+              <h2 className="remax-heading-3 text-red-800">Risk & Insurance Data</h2>
+            </div>
+            <div className="remax-card-body">
+              {/* Insurance Claims */}
+              <div className="mb-8">
+                <h3 className="remax-heading-3 text-lg mb-4 text-red-700">Insurance Claims</h3>
+                {riskLoading ? (
+                  <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-red-600 border-solid mb-2 mx-auto"></div>
+                    <div className="remax-text-small text-red-600">Loading insurance claims...</div>
+                  </div>
+                ) : insuranceClaims && insuranceClaims.length > 0 ? (
+                  <div className="space-y-3">
+                    {insuranceClaims.map((claim, idx) => (
+                      <div key={idx} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="font-semibold text-red-800">{claim.type}</span>
+                            <p className="remax-text-small text-red-600">Date: {claim.date}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-semibold text-red-800">${claim.amount.toLocaleString()}</p>
+                            <p className="remax-text-small text-red-600">{claim.status}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-4">
+                    <p className="remax-text-body text-gray-600 italic">No insurance claims data available.</p>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
-        )}
-        {!mlsLoading && address && mlsResults.length === 0 && (
-          <div className="bg-blue-100 rounded-xl shadow p-6 mt-8 text-blue-900">
-            <h2 className="text-xl font-bold mb-4">MLS Results</h2>
-            <div className="text-blue-700">No MLS results found for this address.</div>
-          </div>
-        )}
-        {/* Permit Results */}
-        {permitsLoading && (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-blue-600 border-solid mb-2"></div>
-            <div className="text-blue-600 font-medium">Loading permit data&hellip;</div>
-          </div>
-        )}
-        {!permitsLoading && permitsError && (
-          <div className="bg-red-100 rounded-xl shadow p-6 mt-8 text-red-900">
-            <h2 className="text-xl font-bold mb-4">Permit Records</h2>
-            <div className="text-red-700">{permitsError}</div>
-          </div>
-        )}
-        {!permitsLoading && !permitsError && permits.length > 0 && (
-          <div className="bg-green-100 rounded-xl shadow p-6 mt-8 text-green-900">
-            <h2 className="text-xl font-bold mb-4">Recent Permits for this Property</h2>
-            <table className="w-full text-left border mt-2 bg-white">
-              <thead>
-                <tr className="bg-green-50">
-                  <th className="px-2 py-1">Type</th>
-                  <th className="px-2 py-1">Year</th>
-                  <th className="px-2 py-1">Status</th>
-                  <th className="px-2 py-1">Permit ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                {permits.map((p) => (
-                  <tr key={p.permitId} className="border-t">
-                    <td className="px-2 py-1">{p.type}</td>
-                    <td className="px-2 py-1">{p.year}</td>
-                    <td className="px-2 py-1">{p.status}</td>
-                    <td className="px-2 py-1">{p.permitId}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {!permitsLoading && !permitsError && address && permits.length === 0 && (
-          <div className="bg-green-100 rounded-xl shadow p-6 mt-8 text-green-900">
-            <h2 className="text-xl font-bold mb-4">Recent Permits for this Property</h2>
-            <div className="text-green-700">No permit records found for this address.</div>
-          </div>
-        )}
-        {/* --- Risk Data Section (now below permits, styled red) --- */}
-        <div className="bg-red-100 rounded-xl shadow p-6 mt-8 text-red-900">
-          <h2 className="text-2xl font-bold mb-4">Risk & Insurance Data</h2>
-          {/* Insurance Claims */}
-          <div className="mb-6 text-left">
-            <h3 className="text-xl font-semibold text-red-800 mb-2">Insurance Claims</h3>
-            {riskLoading ? (
-              <div className="text-red-600">Loading insurance claims...</div>
-            ) : insuranceClaims && insuranceClaims.length > 0 ? (
-              <ul className="list-disc list-inside">
-                {insuranceClaims.map((claim, idx) => (
-                  <li key={idx} className="mb-1">
-                    <span className="font-semibold">{claim.type}</span> claim on {claim.date} for ${claim.amount.toLocaleString()} (<span className="text-red-700">{claim.status}</span>)
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="text-red-500 italic">No insurance claims data available.</div>
-            )}
-          </div>
-          {/* Fire and Flood Risk Box */}
-          <div className="mb-6 p-4 bg-red-100 border border-red-300 rounded-xl">
-            {/* Fire Risk */}
-            <div className="mb-6 text-left">
-              <h3 className="text-xl font-semibold text-red-800 mb-2">Fire Risk Assessment</h3>
-              {riskLoading ? (
-                <div className="text-red-600">Loading fire risk data...</div>
-              ) : fireRisk ? (
-                <div>
-                  <div>Risk Score: <span className="font-semibold">{fireRisk.score}</span></div>
-                  <div>Last Inspection: {fireRisk.lastInspection}</div>
-                  <div>Notes: {fireRisk.notes}</div>
+
+              {/* Fire and Flood Risk */}
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                {/* Fire Risk */}
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
+                  <h3 className="remax-heading-3 text-lg mb-4 text-orange-800">Fire Risk Assessment</h3>
+                  {riskLoading ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-orange-600 border-solid mb-2 mx-auto"></div>
+                      <div className="remax-text-small text-orange-600">Loading fire risk data...</div>
+                    </div>
+                  ) : fireRisk ? (
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Risk Score:</span>
+                        <span className="remax-text-small font-semibold">{fireRisk.score}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Last Inspection:</span>
+                        <span className="remax-text-small">{fireRisk.lastInspection}</span>
+                      </div>
+                      <div className="mt-3">
+                        <span className="remax-text-small font-medium">Notes:</span>
+                        <p className="remax-text-small mt-1">{fireRisk.notes}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="remax-text-body text-gray-600 italic">No fire risk data available.</p>
+                  )}
                 </div>
-              ) : (
-                <div className="text-red-500 italic">No fire risk data available.</div>
-              )}
-            </div>
-            {/* Flood Risk */}
-            <div className="mb-4 text-left">
-              <h3 className="text-xl font-semibold text-red-800 mb-2">Flood Risk</h3>
-              {riskLoading ? (
-                <div className="text-red-600">Loading flood risk data...</div>
-              ) : floodRisk ? (
-                <div>
-                  <div>Flood Zone: <span className="font-semibold">{floodRisk.zone}</span></div>
-                  <div>Risk Level: {floodRisk.riskLevel}</div>
-                  <div>Last Flood: {floodRisk.lastFlood ? floodRisk.lastFlood : 'No recorded flood events.'}</div>
+
+                {/* Flood Risk */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                  <h3 className="remax-heading-3 text-lg mb-4 text-blue-800">Flood Risk</h3>
+                  {riskLoading ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-blue-600 border-solid mb-2 mx-auto"></div>
+                      <div className="remax-text-small text-blue-600">Loading flood risk data...</div>
+                    </div>
+                  ) : floodRisk ? (
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Flood Zone:</span>
+                        <span className="remax-text-small font-semibold">{floodRisk.zone}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Risk Level:</span>
+                        <span className="remax-text-small">{floodRisk.riskLevel}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Last Flood:</span>
+                        <span className="remax-text-small">{floodRisk.lastFlood || 'No recorded events'}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="remax-text-body text-gray-600 italic">No flood risk data available.</p>
+                  )}
                 </div>
-              ) : (
-                <div className="text-red-500 italic">No flood risk data available.</div>
-              )}
-            </div>
-            {/* CoreLogic Mock Data - Risk Scores and Report */}
-            {riskLoading ? null : coreLogic ? (
-              <div className="mt-2 text-left">
-                <h3 className="text-xl font-semibold text-red-800 mb-2">CoreLogic Risk Details</h3>
-                <div>Wildfire Risk Score: <span className="font-semibold">{coreLogic.wildfireRiskScore}</span></div>
-                <div>Flood Risk Score: <span className="font-semibold">{coreLogic.floodRiskScore}</span></div>
-                <div>Earthquake Risk Score: <span className="font-semibold">{coreLogic.earthquakeRiskScore}</span></div>
-                <div>CoreLogic Property ID: <span className="font-mono">{coreLogic.coreLogicPropertyId}</span></div>
-                {coreLogic.reportUrl && (
-                  <div>CoreLogic Report: <a href={coreLogic.reportUrl} target="_blank" rel="noopener noreferrer" className="underline text-blue-700">View CoreLogic Report</a></div>
-                )}
               </div>
-            ) : null}
-          </div>
-          {/* Footnote below the box */}
-          <div className="mb-4">
-            <span className="text-xs italic text-gray-600">This data can be obtained from <a href="https://store.corelogic.com/search" target="_blank" rel="noopener noreferrer" className="underline">@https://store.corelogic.com/search</a></span>
+
+              {/* CoreLogic Data */}
+              {!riskLoading && coreLogic && (
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
+                  <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">CoreLogic Risk Details</h3>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Wildfire Risk:</span>
+                        <span className="remax-text-small font-semibold">{coreLogic.wildfireRiskScore}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Flood Risk:</span>
+                        <span className="remax-text-small font-semibold">{coreLogic.floodRiskScore}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="remax-text-small font-medium">Earthquake Risk:</span>
+                        <span className="remax-text-small font-semibold">{coreLogic.earthquakeRiskScore}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="mb-2">
+                        <span className="remax-text-small font-medium">Property ID:</span>
+                        <p className="remax-text-small font-mono">{coreLogic.coreLogicPropertyId}</p>
+                      </div>
+                      {coreLogic.reportUrl && (
+                        <a 
+                          href={coreLogic.reportUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="text-blue-600 hover:text-blue-800 underline remax-text-small"
+                        >
+                          View CoreLogic Report
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Data Source */}
+              <div className="text-center">
+                <p className="remax-text-small text-gray-500 italic">
+                  Risk data sourced from{' '}
+                  <a 
+                    href="https://store.corelogic.com/search" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-600 hover:text-blue-800 underline"
+                  >
+                    CoreLogic
+                  </a>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-        {/* --- End Risk Data Section --- */}
       </div>
+
+      {/* Guidance Sections */}
+      <div className="remax-section remax-section-light mt-12">
+        <div className="remax-container">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relevantSections.map((section) => (
+              <div key={section.title} className="remax-card">
+                <div className="remax-card-body text-center">
+                  <div className="text-4xl mb-4">{section.icon}</div>
+                  <h3 className="remax-heading-3 mb-4">{section.title}</h3>
+                  <div className="remax-text-body">
+                    {section.title === "Permit Pages" ? (
+                      <PermitPages address={address} />
+                    ) : (
+                      section.content
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Printable report section (hidden on screen, used for print/PDF) */}
       <div ref={printableRef} style={{ display: 'none' }}>
         <h1>HOUSE/MAX Property Report</h1>
@@ -659,23 +855,6 @@ const PropertyDetailsClient: React.FC = () => {
           <b>Disclaimer:</b> This report is for informational purposes only. Data may be incomplete or out of date. Always verify with official sources.<br />
           &copy; {new Date().getFullYear()} HOUSE/MAX
         </div>
-      </div>
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-        {relevantSections.map((section) => (
-          <div key={section.title} className="bg-blue-100 rounded-xl shadow p-6 text-left flex gap-4 items-start">
-            <div className="text-3xl mt-1">{section.icon}</div>
-            <div>
-              <h2 className="text-xl font-semibold text-blue-800 mb-2">{section.title}</h2>
-              <div className="text-blue-700 text-base">
-                {section.title === "Permit Pages" ? (
-                  <PermitPages address={address} />
-                ) : (
-                  section.content
-                )}
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </main>
   );

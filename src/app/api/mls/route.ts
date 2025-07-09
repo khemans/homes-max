@@ -721,7 +721,110 @@ const mockMLSData = [
     mlsId: "MLSCA0002",
     salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
-  // ... 23 more for CA ...
+  {
+    address: "3003 Beverly Hills Dr",
+    city: "Beverly Hills",
+    state: "CA",
+    zip: "90210",
+    price: "$2,500,000",
+    beds: 5,
+    baths: 4,
+    sqft: 3500,
+    status: "Active",
+    mlsId: "MLSCA0003",
+    salesPitch: "Luxurious 5-bedroom mansion in prestigious Beverly Hills. Features a gourmet kitchen, large master suite, and a spacious backyard."
+  },
+  {
+    address: "4004 Hollywood Blvd",
+    city: "Hollywood",
+    state: "CA",
+    zip: "90028",
+    price: "$950,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1900,
+    status: "Active",
+    mlsId: "MLSCA0004",
+    salesPitch: "Charming 3-bedroom home in the heart of Hollywood! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining."
+  },
+  {
+    address: "5005 Malibu Beach Rd",
+    city: "Malibu",
+    state: "CA",
+    zip: "90265",
+    price: "$3,200,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2800,
+    status: "Pending",
+    mlsId: "MLSCA0005",
+    salesPitch: "Stunning beachfront property with panoramic ocean views. Modern design with high-end finishes throughout."
+  },
+  {
+    address: "6006 Palo Alto Ave",
+    city: "Palo Alto",
+    state: "CA",
+    zip: "94301",
+    price: "$2,100,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2400,
+    status: "Active",
+    mlsId: "MLSCA0006",
+    salesPitch: "Modern 4-bedroom home in Silicon Valley. Perfect for tech professionals, close to major companies."
+  },
+  {
+    address: "7007 Sacramento St",
+    city: "Sacramento",
+    state: "CA",
+    zip: "95814",
+    price: "$750,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1800,
+    status: "Active",
+    mlsId: "MLSCA0007",
+    salesPitch: "Beautiful 3-bedroom home in the capital city. Great for families, close to schools and parks."
+  },
+  {
+    address: "8008 San Diego Bay Dr",
+    city: "San Diego",
+    state: "CA",
+    zip: "92101",
+    price: "$1,400,000",
+    beds: 3,
+    baths: 2,
+    sqft: 2100,
+    status: "Active",
+    mlsId: "MLSCA0008",
+    salesPitch: "Waterfront condo with stunning bay views. Modern amenities and prime location in downtown San Diego."
+  },
+  {
+    address: "9009 Oakland Hills Rd",
+    city: "Oakland",
+    state: "CA",
+    zip: "94611",
+    price: "$1,100,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2300,
+    status: "Pending",
+    mlsId: "MLSCA0009",
+    salesPitch: "Charming hillside home with city views. Recently renovated with modern finishes."
+  },
+  {
+    address: "1010 Fresno Ave",
+    city: "Fresno",
+    state: "CA",
+    zip: "93721",
+    price: "$450,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1600,
+    status: "Active",
+    mlsId: "MLSCA0010",
+    salesPitch: "Affordable 3-bedroom home in central California. Great starter home with potential for expansion."
+  },
   // Massachusetts
   {
     address: "10 Beacon St",
@@ -749,7 +852,110 @@ const mockMLSData = [
     mlsId: "MLSMA0002",
     salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
-  // ... 23 more for MA ...
+  {
+    address: "30 Commonwealth Ave",
+    city: "Boston",
+    state: "MA",
+    zip: "02116",
+    price: "$1,350,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1800,
+    status: "Pending",
+    mlsId: "MLSMA0003",
+    salesPitch: "Elegant Back Bay brownstone with historic charm and modern amenities. Prime location near parks and shopping."
+  },
+  {
+    address: "40 Harvard St",
+    city: "Cambridge",
+    state: "MA",
+    zip: "02138",
+    price: "$1,200,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2200,
+    status: "Active",
+    mlsId: "MLSMA0004",
+    salesPitch: "Beautiful home near Harvard University. Perfect for academics or professionals, close to campus and transit."
+  },
+  {
+    address: "50 Newbury St",
+    city: "Boston",
+    state: "MA",
+    zip: "02116",
+    price: "$1,750,000",
+    beds: 2,
+    baths: 2,
+    sqft: 1400,
+    status: "Active",
+    mlsId: "MLSMA0005",
+    salesPitch: "Luxury condo on prestigious Newbury Street. High-end finishes and prime shopping location."
+  },
+  {
+    address: "60 Salem St",
+    city: "Salem",
+    state: "MA",
+    zip: "01970",
+    price: "$650,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1700,
+    status: "Active",
+    mlsId: "MLSMA0006",
+    salesPitch: "Historic home in charming Salem. Rich history and modern updates, close to waterfront and attractions."
+  },
+  {
+    address: "70 Cape Cod Dr",
+    city: "Hyannis",
+    state: "MA",
+    zip: "02601",
+    price: "$850,000",
+    beds: 4,
+    baths: 3,
+    sqft: 2000,
+    status: "Active",
+    mlsId: "MLSMA0007",
+    salesPitch: "Beautiful Cape Cod home near the beach. Perfect summer retreat with classic New England charm."
+  },
+  {
+    address: "80 Worcester Ave",
+    city: "Worcester",
+    state: "MA",
+    zip: "01604",
+    price: "$425,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1500,
+    status: "Active",
+    mlsId: "MLSMA0008",
+    salesPitch: "Affordable 3-bedroom home in central Massachusetts. Great value with potential for customization."
+  },
+  {
+    address: "90 Springfield Rd",
+    city: "Springfield",
+    state: "MA",
+    zip: "01103",
+    price: "$375,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1400,
+    status: "Pending",
+    mlsId: "MLSMA0009",
+    salesPitch: "Charming home in historic Springfield. Great starter home with room to grow."
+  },
+  {
+    address: "100 Lowell St",
+    city: "Lowell",
+    state: "MA",
+    zip: "01854",
+    price: "$500,000",
+    beds: 3,
+    baths: 2,
+    sqft: 1600,
+    status: "Active",
+    mlsId: "MLSMA0010",
+    salesPitch: "Well-maintained home in revitalized Lowell. Close to Boston with small-town charm."
+  },
   // Florida
   {
     address: "101 Ocean Dr",
@@ -812,16 +1018,34 @@ const mockMLSData = [
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const address = searchParams.get('address')?.toLowerCase() || "";
+  const query = searchParams.get('query')?.toLowerCase() || "";
 
-  // If no address provided, return all properties
-  if (!address) {
+  // Use either address or query parameter
+  const searchTerm = address || query;
+
+  // If no search term provided, return all properties
+  if (!searchTerm) {
     return NextResponse.json({ results: mockMLSData });
   }
 
-  // Simulate search by address (now checks all address fields)
-  const result = mockMLSData.filter((item) =>
-    `${item.address}, ${item.city}, ${item.state} ${item.zip}`.toLowerCase().includes(address)
-  );
+  // Simulate search by address, city, or state
+  const result = mockMLSData.filter((item) => {
+    const fullAddress = `${item.address}, ${item.city}, ${item.state} ${item.zip}`.toLowerCase();
+    
+    // Check if search term matches any part of the address
+    if (fullAddress.includes(searchTerm)) {
+      return true;
+    }
+    
+    // Also check individual fields for better matching
+    if (item.city.toLowerCase().includes(searchTerm) || 
+        item.state.toLowerCase().includes(searchTerm) ||
+        item.address.toLowerCase().includes(searchTerm)) {
+      return true;
+    }
+    
+    return false;
+  });
 
   return NextResponse.json({ results: result });
 } 

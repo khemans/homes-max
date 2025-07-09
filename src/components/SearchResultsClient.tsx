@@ -1,7 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import PropertyMap from './PropertyMap';
 
 interface MLSResult {
   address: string;
@@ -14,280 +15,203 @@ interface MLSResult {
   sqft: number;
   status: string;
   mlsId: string;
-}
-
-// State abbreviation to full name map (shared)
-const stateMap: Record<string, string> = {
-  'ca': 'california',
-  'ma': 'massachusetts',
-  'fl': 'florida',
-  'la': 'louisiana',
-};
-
-// Add a helper to normalize search queries for state abbreviations and human-friendly terms
-function normalizeSearchQuery(query: string): string {
-  let normalized = query.trim().toLowerCase();
-  // Replace state abbreviations with full names
-  Object.entries(stateMap).forEach(([abbr, full]) => {
-    const regex = new RegExp(`\\b${abbr}\\b`, 'gi');
-    normalized = normalized.replace(regex, full);
-  });
-  // Add more normalization as needed (e.g., remove punctuation, etc.)
-  return normalized;
-}
-
-function getStateAbbreviationOrFull(query: string): string[] {
-  const q = query.trim().toLowerCase();
-  const abbr = Object.keys(stateMap).find((abbr) => abbr === q);
-  const full = Object.values(stateMap).find((full) => full === q);
-  if (abbr) return [abbr.toUpperCase()];
-  if (full) {
-    // Find the abbreviation for the full name
-    const abbrKey = Object.entries(stateMap).find(([, v]) => v === full)?.[0];
-    return abbrKey ? [abbrKey.toUpperCase()] : [];
-  }
-  return [];
+  salesPitch: string;
 }
 
 const SearchResultsClient: React.FC = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const query = searchParams.get("query") || "";
-  const [searchResults, setSearchResults] = useState<MLSResult[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const query = searchParams.get('query') || '';
+  const [results, setResults] = useState<MLSResult[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!query) {
-      router.push("/");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    // Fetch all properties and filter based on the query
-    fetch("/api/mls")
-      .then(res => res.json())
-      .then(data => {
-        const allProperties = data.results || [];
-        const normalizedQuery = normalizeSearchQuery(query);
-        const stateMatches = getStateAbbreviationOrFull(normalizedQuery);
-        const filteredResults = allProperties.filter((property: MLSResult) => {
-          const searchLower = normalizedQuery;
-          const addressLower = property.address.toLowerCase();
-
-          // State abbreviation/full name search
-          if (stateMatches.length > 0) {
-            return stateMatches.includes(property.state.toUpperCase());
-          }
-
-          // If the query is 'denver', return all Denver metro properties (exclude the original two)
-          if (searchLower === "denver") {
-            return !["123 main st", "456 oak ave"].includes(addressLower);
-          }
-
-          // Enhanced: Parse for bedroom/bathroom and city
-          // e.g. "4 bedroom homes in Denver" or "3 bath Colfax"
-          const bedMatch = searchLower.match(/(\d+)\s*bed(room)?s?/);
-          const bathMatch = searchLower.match(/(\d+)\s*bath(room)?s?/);
-          const cityMatch = searchLower.match(/denver|colfax|broadway|larimer|alameda|colorado|evans|hampden|mississippi|yale|speer|parker|arapahoe|belleview|dartmouth|florida|girard|holly|jewell|kentucky|leetsdale|monaco|oneida|quebec|rampart|sheridan|tamarac|union|wadsworth|zuni|1st|2nd|3rd|4th|5th|6th|7th|8th|9th|10th|11th|12th|13th|14th|15th|16th|17th|18th|19th|20th/);
-
-          // If we have a natural language query with bedroom/bathroom and city
-          if ((bedMatch || bathMatch) && cityMatch) {
-            let matches = true;
-            
-            if (bedMatch) {
-              const beds = parseInt(bedMatch[1], 10);
-              matches = matches && property.beds >= beds;
-            }
-            if (bathMatch) {
-              const baths = parseInt(bathMatch[1], 10);
-              matches = matches && property.baths >= baths;
-            }
-            if (cityMatch) {
-              // For Denver, include all properties except the original two
-              if (cityMatch[0] === "denver") {
-                matches = matches && !["123 main st", "456 oak ave"].includes(addressLower);
-              } else {
-                // For other cities, check if the street name matches
-                matches = matches && addressLower.includes(cityMatch[0]);
-              }
-            }
-            
-            return matches;
-          }
-          
-          // If we only have bedroom/bathroom criteria (no city)
-          if (bedMatch || bathMatch) {
-            let matches = true;
-            
-            if (bedMatch) {
-              const beds = parseInt(bedMatch[1], 10);
-              matches = matches && property.beds >= beds;
-            }
-            if (bathMatch) {
-              const baths = parseInt(bathMatch[1], 10);
-              matches = matches && property.baths >= baths;
-            }
-            
-            return matches;
-          }
-          
-          // If we only have city criteria
-          if (cityMatch) {
-            if (cityMatch[0] === "denver") {
-              return !["123 main st", "456 oak ave"].includes(addressLower);
-            } else {
-              return addressLower.includes(cityMatch[0]);
-            }
-          }
-
-          // Otherwise, match address
-          return addressLower.includes(searchLower);
-        });
-        
-        setSearchResults(filteredResults);
-      })
-      .catch(() => {
-        setError("Could not fetch search results.");
-      })
-      .finally(() => {
+    const fetchResults = async () => {
+      if (!query) {
         setLoading(false);
-      });
-  }, [query, router]);
+        return;
+      }
 
-  const handlePropertyClick = (address: string) => {
-    router.push(`/property?query=${encodeURIComponent(address)}`);
-  };
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/mls?query=${encodeURIComponent(query)}`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch search results');
+        }
+        
+        const data = await response.json();
+        setResults(data.results || []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  return (
-    <main className="min-h-screen bg-blue-50 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Search Results Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 text-center">
-          <h1 className="text-3xl font-bold text-blue-900 mb-4">Search Results</h1>
-          <p className="text-blue-700 text-lg mb-2">
-            Showing results for: <span className="font-semibold">&quot;{query}&quot;</span>
-          </p>
-          <p className="text-blue-600 text-sm">
-            {searchResults.length} propert{searchResults.length === 1 ? 'y' : 'ies'} found
-          </p>
+    fetchResults();
+  }, [query]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 py-8">
+        <div className="remax-container">
+          <div className="remax-card text-center py-16">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-solid mb-6 mx-auto"></div>
+            <h2 className="remax-heading-3 mb-2">Searching Properties</h2>
+            <p className="remax-text-body text-gray-600">Finding the best matches for "{query}"...</p>
+          </div>
         </div>
+      </main>
+    );
+  }
 
-        {/* Loading State */}
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4"></div>
-            <div className="text-blue-600 font-medium text-lg">Searching properties...</div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
-          <div className="bg-red-100 text-red-700 rounded-xl shadow p-6 mb-8 text-center">
-            <div className="text-red-700">{error}</div>
-          </div>
-        )}
-
-        {/* Search Results */}
-        {!loading && !error && searchResults.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {searchResults.map((property) => (
-              <div
-                key={property.mlsId}
-                className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer border-2 border-transparent hover:border-blue-200"
-                onClick={() => handlePropertyClick(`${property.address}, ${property.city}, ${property.state} ${property.zip}`)}
-              >
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                    {property.address}, {property.city}, {property.state} {property.zip}
-                  </h3>
-                  <div className="text-2xl font-bold text-blue-600 mb-3">
-                    {property.price}
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-4 mb-4 text-center">
-                  <div>
-                    <div className="text-lg font-semibold text-blue-900">{property.beds}</div>
-                    <div className="text-sm text-blue-600">Beds</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-semibold text-blue-900">{property.baths}</div>
-                    <div className="text-sm text-blue-600">Baths</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-semibold text-blue-900">{property.sqft}</div>
-                    <div className="text-sm text-blue-600">Sq Ft</div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    property.status === "Active" 
-                      ? "bg-green-100 text-green-800" 
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}>
-                    {property.status}
-                  </span>
-                  <div className="text-xs text-blue-500">MLS: {property.mlsId}</div>
-                </div>
-                
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <button
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePropertyClick(`${property.address}, ${property.city}, ${property.state} ${property.zip}`);
-                    }}
-                  >
-                    View Details
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* No Results */}
-        {!loading && !error && searchResults.length === 0 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-            <div className="text-4xl mb-4 flex justify-center">
-              <svg width="48" height="72" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <clipPath id="pinClip">
-                    <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" />
-                  </clipPath>
-                </defs>
-                <ellipse cx="16" cy="45" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-                <g clipPath="url(#pinClip)">
-                  <rect x="4" y="4" width="24" height="14" fill="#e31837" />
-                  <rect x="4" y="18" width="24" height="14" fill="#fff" />
-                  <rect x="4" y="32" width="24" height="12" fill="#005ba6" />
-                  <polygon points="16,38 19,44 13,44" fill="#003366" />
-                </g>
-                <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" fill="none" stroke="#222" strokeWidth="2"/>
+  if (error) {
+    return (
+      <main className="min-h-screen bg-gray-50 py-8">
+        <div className="remax-container">
+          <div className="remax-card text-center py-16">
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">No Properties Found</h2>
-            <p className="text-blue-700 mb-6">
-              We couldn&apos;t find any properties matching &quot;{query}&quot;.
-            </p>
-            <div className="space-y-2 text-blue-600">
-              <p>Try searching for:</p>
-              <ul className="text-sm">
-                <li>• A specific address (e.g., &quot;1234 Larimer St&quot;)</li>
-                <li>• A city name (e.g., &quot;Denver&quot;)</li>
-                <li>• A street name (e.g., &quot;Colfax&quot;)</li>
-              </ul>
-            </div>
-            <Link
-              href="/"
-              className="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            <h2 className="remax-heading-3 mb-2 text-red-800">Search Error</h2>
+            <p className="remax-text-body text-red-600">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="remax-btn-primary mt-4"
             >
-              ← Back to Search
-            </Link>
+              Try Again
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-gray-50 py-8">
+      <div className="remax-container">
+        {/* Search Header */}
+        <div className="remax-card mb-8">
+          <div className="remax-card-body text-center">
+            <h1 className="remax-heading-2 mb-2">Search Results</h1>
+            <p className="remax-text-body text-gray-600">
+              {results.length > 0 
+                ? `Found ${results.length} properties matching "${query}"`
+                : `No properties found matching "${query}"`
+              }
+            </p>
+          </div>
+        </div>
+
+        {results.length === 0 ? (
+          <div className="remax-card text-center py-16">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="remax-heading-3 mb-4">No Properties Found</h3>
+            <p className="remax-text-body text-gray-600 mb-6">
+              Try adjusting your search terms or browse our featured properties.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="/search" className="remax-btn-primary">
+                New Search
+              </a>
+              <a href="/" className="remax-btn-outline">
+                Browse All Properties
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Results List */}
+            <div className="space-y-6">
+              {results.map((property) => (
+                <div key={property.mlsId} className="remax-card">
+                  <div className="remax-card-body">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="remax-heading-3 text-lg mb-1">{property.address}</h3>
+                        <p className="remax-text-body text-gray-600">
+                          {property.city}, {property.state} {property.zip}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-green-600">{property.price}</p>
+                        <p className="remax-text-small text-gray-600">MLS: {property.mlsId}</p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                      <div className="text-center">
+                        <div className="text-xl font-semibold text-blue-600">{property.beds}</div>
+                        <div className="remax-text-small text-gray-600">Beds</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-semibold text-blue-600">{property.baths}</div>
+                        <div className="remax-text-small text-gray-600">Baths</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-xl font-semibold text-blue-600">{property.sqft.toLocaleString()}</div>
+                        <div className="remax-text-small text-gray-600">Sq Ft</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-4">
+                      <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        property.status === 'For Sale' ? 'bg-green-100 text-green-800' :
+                        property.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                        property.status === 'Sold' ? 'bg-red-100 text-red-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {property.status}
+                      </span>
+                    </div>
+
+                    {property.salesPitch && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold mb-2 text-blue-800">Realtor's Insight:</h4>
+                        <p className="remax-text-body">{property.salesPitch}</p>
+                      </div>
+                    )}
+
+                    <div className="flex gap-3">
+                      <a 
+                        href={`/property?query=${encodeURIComponent(property.address)}`}
+                        className="remax-btn-primary flex-1 text-center"
+                      >
+                        View Details
+                      </a>
+                      <button className="remax-btn-outline px-4">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+                         {/* Map */}
+             <div className="sticky top-8">
+               <div className="remax-card overflow-hidden">
+                 <div className="remax-card-header">
+                   <h3 className="remax-heading-3">Property Locations</h3>
+                 </div>
+                 <div className="h-96">
+                   {results.length > 0 && (
+                     <PropertyMap 
+                       address={`${results[0].address}, ${results[0].city}, ${results[0].state} ${results[0].zip}`}
+                     />
+                   )}
+                 </div>
+               </div>
+             </div>
           </div>
         )}
       </div>

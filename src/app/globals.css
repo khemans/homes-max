@@ -3,6 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* RE/MAX Brand Colors */
+  --remax-red: #DC1C2E;
+  --remax-blue: #003DA5;
+  --remax-white: #FFFFFF;
+  --remax-light-gray: #F8F9FA;
+  --remax-gray: #6C757D;
+  --remax-dark-gray: #343A40;
+  
+  /* RE/MAX Typography */
+  --remax-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --remax-heading-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 @theme inline {
@@ -10,6 +22,14 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* RE/MAX Theme Colors */
+  --color-remax-red: var(--remax-red);
+  --color-remax-blue: var(--remax-blue);
+  --color-remax-white: var(--remax-white);
+  --color-remax-light-gray: var(--remax-light-gray);
+  --color-remax-gray: var(--remax-gray);
+  --color-remax-dark-gray: var(--remax-dark-gray);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,9 +40,157 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--remax-white);
+  color: var(--remax-dark-gray);
+  font-family: var(--remax-font-family);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* RE/MAX Typography Classes */
+.remax-heading-1 {
+  font-family: var(--remax-heading-font);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--remax-blue);
+}
+
+.remax-heading-2 {
+  font-family: var(--remax-heading-font);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--remax-blue);
+}
+
+.remax-heading-3 {
+  font-family: var(--remax-heading-font);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--remax-blue);
+}
+
+.remax-text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--remax-dark-gray);
+}
+
+.remax-text-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--remax-gray);
+}
+
+/* RE/MAX Button Styles */
+.remax-btn-primary {
+  background-color: var(--remax-red);
+  color: var(--remax-white);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.remax-btn-primary:hover {
+  background-color: #C11A2A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 28, 46, 0.3);
+}
+
+.remax-btn-secondary {
+  background-color: var(--remax-blue);
+  color: var(--remax-white);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.remax-btn-secondary:hover {
+  background-color: #002D7A;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 61, 165, 0.3);
+}
+
+.remax-btn-outline {
+  background-color: transparent;
+  color: var(--remax-red);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+  border: 2px solid var(--remax-red);
+  cursor: pointer;
+}
+
+.remax-btn-outline:hover {
+  background-color: var(--remax-red);
+  color: var(--remax-white);
+  transform: translateY(-1px);
+}
+
+/* RE/MAX Card Styles */
+.remax-card {
+  background-color: var(--remax-white);
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: 1px solid #E9ECEF;
+}
+
+.remax-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.remax-card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.remax-card-body {
+  padding: 1.5rem;
+}
+
+.remax-card-footer {
+  padding: 1rem 1.5rem;
+  background-color: var(--remax-light-gray);
+  border-top: 1px solid #E9ECEF;
+}
+
+/* RE/MAX Input Styles */
+.remax-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #E9ECEF;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  background-color: var(--remax-white);
+}
+
+.remax-input:focus {
+  outline: none;
+  border-color: var(--remax-blue);
+  box-shadow: 0 0 0 3px rgba(0, 61, 165, 0.1);
+}
+
+.remax-input::placeholder {
+  color: var(--remax-gray);
 }
 
 /* Ensure Leaflet elements stay below the header */
@@ -36,4 +204,30 @@ body {
 /* Ensure header stays on top */
 header {
   z-index: 9999 !important;
+}
+
+/* RE/MAX Section Styles */
+.remax-section {
+  padding: 4rem 0;
+}
+
+.remax-section-light {
+  background-color: var(--remax-light-gray);
+}
+
+.remax-section-white {
+  background-color: var(--remax-white);
+}
+
+/* RE/MAX Container */
+.remax-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 768px) {
+  .remax-container {
+    padding: 0 2rem;
+  }
 }
