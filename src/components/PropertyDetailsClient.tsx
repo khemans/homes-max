@@ -171,6 +171,15 @@ interface FloodRisk {
   lastFlood: string | null;
 }
 
+// Add SavedProperty type for localStorage
+interface SavedProperty {
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  mlsId?: string;
+}
+
 // Dynamic Permit Pages component (simplified - no permit data display)
 const PermitPages: React.FC<{ address: string }> = ({ address }) => {
   const links = getPermitLinks(address);
@@ -239,15 +248,15 @@ const PropertyDetailsClient: React.FC = () => {
   // Check if property is already saved
   useEffect(() => {
     if (!address) return;
-    const saved = JSON.parse(localStorage.getItem("savedProperties") || "[]");
-    setIsSaved(saved.some((p: any) => p.address === address));
+    const saved: SavedProperty[] = JSON.parse(localStorage.getItem("savedProperties") || "[]");
+    setIsSaved(saved.some((p) => p.address === address));
   }, [address]);
 
   // Save property handler
   const handleSave = () => {
     if (!address) return;
-    const saved = JSON.parse(localStorage.getItem("savedProperties") || "[]");
-    if (!saved.some((p: any) => p.address === address)) {
+    const saved: SavedProperty[] = JSON.parse(localStorage.getItem("savedProperties") || "[]");
+    if (!saved.some((p) => p.address === address)) {
       const property = mlsResults[0] || { address, city: "", state: "", zip: "", mlsId: "" };
       saved.push(property);
       localStorage.setItem("savedProperties", JSON.stringify(saved));
@@ -434,7 +443,7 @@ const PropertyDetailsClient: React.FC = () => {
                 <div className="text-xs text-blue-600">MLS ID: {item.mlsId}</div>
                 {item.salesPitch && (
                   <div className="bg-white rounded-lg p-4 mt-3 text-blue-900 shadow-sm border border-blue-200">
-                    <span className="block font-semibold mb-1">Realtor's Sales Pitch:</span>
+                    <span className="block font-semibold mb-1">Realtor&apos;s Sales Pitch:</span>
                     <span>{item.salesPitch}</span>
                   </div>
                 )}
