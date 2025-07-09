@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import PropertyMap from './PropertyMap';
 
@@ -21,10 +21,12 @@ interface MLSResult {
 
 const SearchResultsClient: React.FC = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const query = searchParams.get('query') || '';
   const [results, setResults] = useState<MLSResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
     const fetchResults = async () => {
@@ -52,6 +54,13 @@ const SearchResultsClient: React.FC = () => {
 
     fetchResults();
   }, [query]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchInput.trim()) {
+      router.push(`/search?query=${encodeURIComponent(searchInput.trim())}`);
+    }
+  };
 
   if (loading) {
     return (
@@ -91,6 +100,82 @@ const SearchResultsClient: React.FC = () => {
     );
   }
 
+  // If no query, show search form
+  if (!query) {
+    return (
+      <main className="min-h-screen bg-gray-50 py-8">
+        <div className="remax-container">
+          <div className="max-w-4xl mx-auto">
+            {/* Search Form */}
+            <div className="remax-card text-center mb-8">
+              <div className="remax-card-body py-12">
+                <h1 className="remax-heading-1 mb-6">Search Properties</h1>
+                <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                  Find your dream home by searching for properties by location, address, or area.
+                </p>
+                
+                <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <input
+                        type="text"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        className="remax-input text-lg h-14"
+                        placeholder="Enter city, state, or specific address..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="remax-btn-primary text-lg h-14 px-8 whitespace-nowrap"
+                    >
+                      Search Properties
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            {/* Popular Searches */}
+            <div className="remax-card">
+              <div className="remax-card-header">
+                <h2 className="remax-heading-3">Popular Searches</h2>
+              </div>
+              <div className="remax-card-body">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <Link href="/search?query=CA" className="remax-btn-outline text-center">
+                    California
+                  </Link>
+                  <Link href="/search?query=MA" className="remax-btn-outline text-center">
+                    Massachusetts
+                  </Link>
+                  <Link href="/search?query=FL" className="remax-btn-outline text-center">
+                    Florida
+                  </Link>
+                  <Link href="/search?query=LA" className="remax-btn-outline text-center">
+                    Louisiana
+                  </Link>
+                  <Link href="/search?query=Denver" className="remax-btn-outline text-center">
+                    Denver
+                  </Link>
+                  <Link href="/search?query=Boston" className="remax-btn-outline text-center">
+                    Boston
+                  </Link>
+                  <Link href="/search?query=Los Angeles" className="remax-btn-outline text-center">
+                    Los Angeles
+                  </Link>
+                  <Link href="/search?query=Miami" className="remax-btn-outline text-center">
+                    Miami
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-gray-50 py-8">
       <div className="remax-container">
@@ -104,6 +189,27 @@ const SearchResultsClient: React.FC = () => {
                 : `No properties found matching "${query}"`
               }
             </p>
+            
+            {/* Search Again Form */}
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mt-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="remax-input"
+                    placeholder="Search again..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="remax-btn-primary px-6 whitespace-nowrap"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 
