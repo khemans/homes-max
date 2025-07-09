@@ -62,11 +62,18 @@ const Header: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-xl font-bold">Homes\Max</h1>
-              <p className="text-blue-200 text-sm">Uncover its past stories</p>
+              <h1 className="text-xl font-bold">House\MAX</h1>
+              <p className="text-blue-200 text-sm">Getting the MAX on your home before you buy.</p>
             </div>
           </Link>
         </div>
+        {/* Nav links */}
+        <nav className="flex-1 flex justify-center md:justify-end items-center gap-6 text-base font-medium">
+          <Link href="/my-properties" className="hover:text-blue-300 transition-colors">My Properties</Link>
+          <Link href="/resources" className="hover:text-blue-300 transition-colors">Resources</Link>
+          <Link href="/about" className="hover:text-blue-300 transition-colors">About</Link>
+        </nav>
+        {/* Search bar right-aligned */}
         {showSearch && (
           <form className="flex flex-row gap-2 items-center w-full md:w-auto" onSubmit={handleSubmit}>
             <input
@@ -84,14 +91,6 @@ const Header: React.FC = () => {
             </button>
           </form>
         )}
-        <nav>
-          <Link 
-            href="/" 
-            className="px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-600 transition-colors text-sm font-medium"
-          >
-            ← Back to Search
-          </Link>
-        </nav>
       </div>
     </header>
   );

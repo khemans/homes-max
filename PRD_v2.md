@@ -1,4 +1,4 @@
-# Homes\Max
+# House\MAX
 
 **Tagline:** Getting the MAX on your home before you buy.
 
