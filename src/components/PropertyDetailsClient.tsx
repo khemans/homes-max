@@ -55,22 +55,6 @@ const infoSections = [
       </>
     ),
   },
-  {
-    icon: "💬",
-    title: "Sensitive Stories & Disclosures",
-    keyword: ["death", "deaths", "disclosure", "disclosures", "story", "stories"],
-    content: (
-      <>
-        <p className="mb-2 text-blue-800 font-semibold">About sensitive disclosures:</p>
-        <ul className="list-disc list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
-          <li>Disclosure laws vary by state (e.g., deaths on property).</li>
-          <li>Agents must answer truthfully if asked directly.</li>
-          <li>&quot;HOUSE/MAX&quot; does not access private records.</li>
-        </ul>
-        <p className="text-blue-600 text-sm">Always consult your agent and local laws for specifics.</p>
-      </>
-    ),
-  },
 ];
 
 function parseQuery(query: string | null) {
