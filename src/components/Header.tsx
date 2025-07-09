@@ -34,7 +34,7 @@ const Header: React.FC = () => {
                   <span style={{ color: '#003DA5' }}>HOUSE/</span>
                   <span style={{ color: '#DC1C2E' }}>MAX</span>
                 </div>
-                <div className="text-xs text-gray-600 -mt-1">Getting the MAX on your home</div>
+                <div className="text-xs text-gray-600 -mt-1">Getting the MAX for your future</div>
               </div>
             </div>
           </Link>

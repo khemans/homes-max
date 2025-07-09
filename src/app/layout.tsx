@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HOUSE/MAX - Getting the MAX on your home before you buy.",
+  title: "HOUSE/MAX - Getting the MAX for your future before you buy.",
   description: "Find your dream home with comprehensive property insights, risk assessments, and permit history. Research with confidence using HOUSE/MAX.",
 };
 
