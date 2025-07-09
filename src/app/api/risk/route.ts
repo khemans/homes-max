@@ -205,6 +205,23 @@ const mockRiskData: Record<string, RiskData> = {
   },
 };
 
+// Default fallback risk data for any property not explicitly listed
+const defaultRiskData: RiskData = {
+  insuranceClaims: [
+    { date: '2022-05-15', type: 'Water Damage', amount: 8000, status: 'Paid' },
+    { date: '2020-09-10', type: 'Wind', amount: 3500, status: 'Paid' }
+  ],
+  fireRisk: { score: 5.4, lastInspection: '2023-01-15', notes: 'Average risk, some brush nearby.' },
+  floodRisk: { zone: 'A', riskLevel: 'Moderate', lastFlood: '2019-06-22' },
+  coreLogic: {
+    coreLogicPropertyId: 'CL-DEFAULT',
+    wildfireRiskScore: 5,
+    floodRiskScore: 4,
+    earthquakeRiskScore: 3,
+    reportUrl: 'https://store.corelogic.com/search/report/CL-DEFAULT',
+  },
+};
+
 // Helper to build a robust key: 'address, city, state' all lowercased and trimmed
 function buildRiskKey(address: string, city: string, state: string): string {
   return `${address}, ${city}, ${state}`.toLowerCase().replace(/\s+/g, ' ').trim();
@@ -231,10 +248,6 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  const data = mockRiskData[key] || {
-    insuranceClaims: [],
-    fireRisk: { score: 0, lastInspection: '', notes: '' },
-    floodRisk: { zone: '', riskLevel: '', lastFlood: null },
-  };
+  const data = mockRiskData[key] || defaultRiskData;
   return NextResponse.json(data);
 } 

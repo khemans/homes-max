@@ -14,6 +14,7 @@ const mockMLSData = [
     sqft: 1800,
     status: "Active",
     mlsId: "MLS123456",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "456 Oak Ave",
@@ -26,6 +27,7 @@ const mockMLSData = [
     sqft: 2500,
     status: "Pending",
     mlsId: "MLS654321",
+    salesPitch: "Beautifully maintained 4-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   // Denver metro area properties
   {
@@ -39,6 +41,7 @@ const mockMLSData = [
     sqft: 1200,
     status: "Active",
     mlsId: "MLS100001",
+    salesPitch: "Cozy 2-bedroom condo in a prime location. Close to downtown, parks, and public transportation. Perfect for first-time homebuyers or investors."
   },
   {
     address: "5678 Colfax Ave",
@@ -51,6 +54,7 @@ const mockMLSData = [
     sqft: 1850,
     status: "Active",
     mlsId: "MLS100002",
+    salesPitch: "Modern 3-bedroom townhome with a private backyard. Features a large kitchen, open floor plan, and a convenient location."
   },
   {
     address: "9012 Broadway",
@@ -63,6 +67,7 @@ const mockMLSData = [
     sqft: 2800,
     status: "Active",
     mlsId: "MLS100003",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "3456 Speer Blvd",
@@ -75,6 +80,7 @@ const mockMLSData = [
     sqft: 1400,
     status: "Pending",
     mlsId: "MLS100004",
+    salesPitch: "Charming 2-bedroom condo with a modern kitchen and a spacious living area. Perfect for a small family or a professional."
   },
   {
     address: "7890 Alameda Ave",
@@ -87,6 +93,7 @@ const mockMLSData = [
     sqft: 1950,
     status: "Active",
     mlsId: "MLS100005",
+    salesPitch: "Spacious 3-bedroom home with a large backyard. Features a modern kitchen, open floor plan, and a convenient location."
   },
   {
     address: "2345 Colorado Blvd",
@@ -99,6 +106,7 @@ const mockMLSData = [
     sqft: 1750,
     status: "Active",
     mlsId: "MLS100006",
+    salesPitch: "Cozy 3-bedroom home with a modern kitchen and a spacious living area. Perfect for a small family or a professional."
   },
   {
     address: "6789 Evans Ave",
@@ -111,6 +119,7 @@ const mockMLSData = [
     sqft: 1100,
     status: "Active",
     mlsId: "MLS100007",
+    salesPitch: "Charming 2-bedroom condo with a modern kitchen and a spacious living area. Perfect for a small family or a professional."
   },
   {
     address: "1122 Hampden Ave",
@@ -123,6 +132,7 @@ const mockMLSData = [
     sqft: 2600,
     status: "Active",
     mlsId: "MLS100008",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "3344 Mississippi Ave",
@@ -135,6 +145,7 @@ const mockMLSData = [
     sqft: 1650,
     status: "Pending",
     mlsId: "MLS100009",
+    salesPitch: "Cozy 3-bedroom home with a modern kitchen and a spacious living area. Perfect for a small family or a professional."
   },
   {
     address: "5566 Yale Ave",
@@ -147,6 +158,7 @@ const mockMLSData = [
     sqft: 1900,
     status: "Active",
     mlsId: "MLS100010",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "7788 Iliff Ave",
@@ -159,6 +171,7 @@ const mockMLSData = [
     sqft: 1350,
     status: "Active",
     mlsId: "MLS100011",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "9900 Parker Rd",
@@ -171,6 +184,7 @@ const mockMLSData = [
     sqft: 2400,
     status: "Active",
     mlsId: "MLS100012",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "1111 Arapahoe Rd",
@@ -183,6 +197,7 @@ const mockMLSData = [
     sqft: 2900,
     status: "Active",
     mlsId: "MLS100013",
+    salesPitch: "Charming 4-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "2222 Belleview Ave",
@@ -195,6 +210,7 @@ const mockMLSData = [
     sqft: 1800,
     status: "Pending",
     mlsId: "MLS100014",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "3333 Dartmouth Ave",
@@ -207,6 +223,7 @@ const mockMLSData = [
     sqft: 2000,
     status: "Active",
     mlsId: "MLS100015",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "4444 Evans Ave",
@@ -219,6 +236,7 @@ const mockMLSData = [
     sqft: 1150,
     status: "Active",
     mlsId: "MLS100016",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "5555 Florida Ave",
@@ -231,6 +249,7 @@ const mockMLSData = [
     sqft: 1850,
     status: "Active",
     mlsId: "MLS100017",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "6666 Girard Ave",
@@ -243,6 +262,7 @@ const mockMLSData = [
     sqft: 2500,
     status: "Active",
     mlsId: "MLS100018",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "7777 Holly St",
@@ -255,6 +275,7 @@ const mockMLSData = [
     sqft: 1700,
     status: "Pending",
     mlsId: "MLS100019",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "8888 Jewell Ave",
@@ -267,6 +288,7 @@ const mockMLSData = [
     sqft: 1950,
     status: "Active",
     mlsId: "MLS100020",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "9999 Kentucky Ave",
@@ -279,6 +301,7 @@ const mockMLSData = [
     sqft: 1400,
     status: "Active",
     mlsId: "MLS100021",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "1111 Leetsdale Dr",
@@ -291,6 +314,7 @@ const mockMLSData = [
     sqft: 2700,
     status: "Active",
     mlsId: "MLS100022",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "2222 Monaco Pkwy",
@@ -303,6 +327,7 @@ const mockMLSData = [
     sqft: 1750,
     status: "Active",
     mlsId: "MLS100023",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "3333 Oneida St",
@@ -315,6 +340,7 @@ const mockMLSData = [
     sqft: 1200,
     status: "Pending",
     mlsId: "MLS100024",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "4444 Quebec St",
@@ -327,6 +353,7 @@ const mockMLSData = [
     sqft: 2300,
     status: "Active",
     mlsId: "MLS100025",
+    salesPitch: "Charming 4-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "5555 Rampart Way",
@@ -339,6 +366,7 @@ const mockMLSData = [
     sqft: 2800,
     status: "Active",
     mlsId: "MLS100026",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "6666 Sheridan Blvd",
@@ -351,6 +379,7 @@ const mockMLSData = [
     sqft: 1900,
     status: "Active",
     mlsId: "MLS100027",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "7777 Tamarac Dr",
@@ -363,6 +392,7 @@ const mockMLSData = [
     sqft: 1650,
     status: "Pending",
     mlsId: "MLS100028",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "8888 Union Ave",
@@ -375,6 +405,7 @@ const mockMLSData = [
     sqft: 2000,
     status: "Active",
     mlsId: "MLS100029",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "9999 Wadsworth Blvd",
@@ -387,6 +418,7 @@ const mockMLSData = [
     sqft: 2400,
     status: "Active",
     mlsId: "MLS100030",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "1111 Zuni St",
@@ -399,6 +431,7 @@ const mockMLSData = [
     sqft: 1350,
     status: "Active",
     mlsId: "MLS100031",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "2222 1st Ave",
@@ -411,6 +444,7 @@ const mockMLSData = [
     sqft: 1850,
     status: "Pending",
     mlsId: "MLS100032",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "3333 2nd Ave",
@@ -423,6 +457,7 @@ const mockMLSData = [
     sqft: 2200,
     status: "Active",
     mlsId: "MLS100033",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "4444 3rd Ave",
@@ -435,6 +470,7 @@ const mockMLSData = [
     sqft: 1100,
     status: "Active",
     mlsId: "MLS100034",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "5555 4th Ave",
@@ -447,6 +483,7 @@ const mockMLSData = [
     sqft: 1700,
     status: "Active",
     mlsId: "MLS100035",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "6666 5th Ave",
@@ -459,6 +496,7 @@ const mockMLSData = [
     sqft: 2600,
     status: "Pending",
     mlsId: "MLS100036",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "7777 6th Ave",
@@ -471,6 +509,7 @@ const mockMLSData = [
     sqft: 1950,
     status: "Active",
     mlsId: "MLS100037",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "8888 7th Ave",
@@ -483,6 +522,7 @@ const mockMLSData = [
     sqft: 1600,
     status: "Active",
     mlsId: "MLS100038",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "9999 8th Ave",
@@ -495,6 +535,7 @@ const mockMLSData = [
     sqft: 2500,
     status: "Active",
     mlsId: "MLS100039",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "1111 9th Ave",
@@ -507,6 +548,7 @@ const mockMLSData = [
     sqft: 1800,
     status: "Pending",
     mlsId: "MLS100040",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "2222 10th Ave",
@@ -519,6 +561,7 @@ const mockMLSData = [
     sqft: 1400,
     status: "Active",
     mlsId: "MLS100041",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "3333 11th Ave",
@@ -531,6 +574,7 @@ const mockMLSData = [
     sqft: 2300,
     status: "Active",
     mlsId: "MLS100042",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "4444 12th Ave",
@@ -543,6 +587,7 @@ const mockMLSData = [
     sqft: 2900,
     status: "Active",
     mlsId: "MLS100043",
+    salesPitch: "Charming 4-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "5555 13th Ave",
@@ -555,6 +600,7 @@ const mockMLSData = [
     sqft: 1750,
     status: "Pending",
     mlsId: "MLS100044",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "6666 14th Ave",
@@ -567,6 +613,7 @@ const mockMLSData = [
     sqft: 2000,
     status: "Active",
     mlsId: "MLS100045",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "7777 15th Ave",
@@ -579,6 +626,7 @@ const mockMLSData = [
     sqft: 1200,
     status: "Active",
     mlsId: "MLS100046",
+    salesPitch: "Beautifully maintained 2-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "8888 16th Ave",
@@ -591,6 +639,7 @@ const mockMLSData = [
     sqft: 1850,
     status: "Active",
     mlsId: "MLS100047",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "9999 17th Ave",
@@ -603,6 +652,7 @@ const mockMLSData = [
     sqft: 2400,
     status: "Pending",
     mlsId: "MLS100048",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   {
     address: "1111 18th Ave",
@@ -615,6 +665,7 @@ const mockMLSData = [
     sqft: 1650,
     status: "Active",
     mlsId: "MLS100049",
+    salesPitch: "Charming 3-bedroom home in the heart of Denver! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "2222 19th Ave",
@@ -627,6 +678,7 @@ const mockMLSData = [
     sqft: 1950,
     status: "Active",
     mlsId: "MLS100050",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   {
     address: "3333 20th Ave",
@@ -639,6 +691,7 @@ const mockMLSData = [
     sqft: 2700,
     status: "Active",
     mlsId: "MLS100051",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   // --- BEGIN GENERATED MOCK PROPERTIES ---
   // California
@@ -653,6 +706,7 @@ const mockMLSData = [
     sqft: 2200,
     status: "Active",
     mlsId: "MLSCA0001",
+    salesPitch: "Modern 4-bedroom home in a prime location. Close to downtown, parks, and public transportation. Perfect for first-time homebuyers or investors."
   },
   {
     address: "2002 Market St",
@@ -665,6 +719,7 @@ const mockMLSData = [
     sqft: 1800,
     status: "Pending",
     mlsId: "MLSCA0002",
+    salesPitch: "Beautifully maintained 3-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   // ... 23 more for CA ...
   // Massachusetts
@@ -679,6 +734,7 @@ const mockMLSData = [
     sqft: 1600,
     status: "Active",
     mlsId: "MLSMA0001",
+    salesPitch: "Charming 3-bedroom home in the heart of Boston! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "20 Main St",
@@ -691,6 +747,7 @@ const mockMLSData = [
     sqft: 2100,
     status: "Active",
     mlsId: "MLSMA0002",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   // ... 23 more for MA ...
   // Florida
@@ -705,6 +762,7 @@ const mockMLSData = [
     sqft: 3200,
     status: "Active",
     mlsId: "MLSFL0001",
+    salesPitch: "Modern 5-bedroom home in a prime location. Close to downtown, parks, and public transportation. Perfect for first-time homebuyers or investors."
   },
   {
     address: "202 Gulf Blvd",
@@ -717,6 +775,7 @@ const mockMLSData = [
     sqft: 2500,
     status: "Pending",
     mlsId: "MLSFL0002",
+    salesPitch: "Beautifully maintained 4-bedroom home with modern finishes throughout. Features a gourmet kitchen, large master suite, and a private backyard oasis. Move-in ready!"
   },
   // ... 23 more for FL ...
   // Louisiana
@@ -731,6 +790,7 @@ const mockMLSData = [
     sqft: 1700,
     status: "Active",
     mlsId: "MLSLA0001",
+    salesPitch: "Charming 3-bedroom home in the heart of New Orleans! Enjoy an open floor plan, updated kitchen, and a spacious backyard perfect for entertaining. Walk to shops, parks, and restaurants!"
   },
   {
     address: "200 Canal St",
@@ -743,6 +803,7 @@ const mockMLSData = [
     sqft: 2100,
     status: "Active",
     mlsId: "MLSLA0002",
+    salesPitch: "Luxurious 4-bedroom home with a modern design. Features a gourmet kitchen, large master suite, and a spacious backyard."
   },
   // ... 23 more for LA ...
   // --- END GENERATED MOCK PROPERTIES ---

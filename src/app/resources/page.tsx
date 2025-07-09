@@ -2,7 +2,6 @@ import React from "react";
 
 const resources = [
   { name: "CoreLogic Property Risk Reports", url: "https://store.corelogic.com/search" },
-  { name: "CARFAX Vehicle History Reports", url: "https://www.carfax.com/" },
   // Add more as needed
 ];
 

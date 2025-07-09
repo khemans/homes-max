@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 
@@ -58,7 +58,7 @@ const infoSections = [
         <ul className="list-disc list-inside text-blue-700 text-left mx-auto max-w-md mb-2">
           <li>Disclosure laws vary by state (e.g., deaths on property).</li>
           <li>Agents must answer truthfully if asked directly.</li>
-          <li>&quot;House\MAX&quot; does not access private records.</li>
+          <li>&quot;HOUSE/MAX&quot; does not access private records.</li>
         </ul>
         <p className="text-blue-600 text-sm">Always consult your agent and local laws for specifics.</p>
       </>
@@ -118,6 +118,7 @@ interface MLSResult {
   sqft: number;
   status: string;
   mlsId: string;
+  salesPitch: string;
 }
 
 // Utility: map city/county keywords to permit search URLs
@@ -232,6 +233,28 @@ const PropertyDetailsClient: React.FC = () => {
     reportUrl: string;
   } | null>(null);
 
+  // Add state for saved property
+  const [isSaved, setIsSaved] = useState(false);
+
+  // Check if property is already saved
+  useEffect(() => {
+    if (!address) return;
+    const saved = JSON.parse(localStorage.getItem("savedProperties") || "[]");
+    setIsSaved(saved.some((p: any) => p.address === address));
+  }, [address]);
+
+  // Save property handler
+  const handleSave = () => {
+    if (!address) return;
+    const saved = JSON.parse(localStorage.getItem("savedProperties") || "[]");
+    if (!saved.some((p: any) => p.address === address)) {
+      const property = mlsResults[0] || { address, city: "", state: "", zip: "", mlsId: "" };
+      saved.push(property);
+      localStorage.setItem("savedProperties", JSON.stringify(saved));
+      setIsSaved(true);
+    }
+  };
+
   useEffect(() => {
     if (address) {
       setMlsLoading(true);
@@ -312,6 +335,41 @@ const PropertyDetailsClient: React.FC = () => {
       .finally(() => setGeoLoading(false));
   }, [address]);
 
+  const printableRef = useRef<HTMLDivElement>(null);
+
+  // Print handler
+  const handlePrint = () => {
+    if (!printableRef.current) return;
+    const printContents = printableRef.current.innerHTML;
+    const printWindow = window.open('', '', 'width=900,height=1200');
+    if (!printWindow) return;
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>HOUSE/MAX Property Report</title>
+          <style>
+            body { font-family: sans-serif; color: #222; margin: 2em; }
+            h1, h2, h3 { color: #005BAA; }
+            .section { margin-bottom: 2em; }
+            .risk { color: #E31837; }
+            .permits { color: #0a6c3d; }
+            .mls { color: #005BAA; }
+            table { border-collapse: collapse; width: 100%; margin-top: 1em; }
+            th, td { border: 1px solid #ccc; padding: 6px 10px; }
+            th { background: #f0f8ff; }
+            .footnote { color: #888; font-size: 0.9em; margin-top: 2em; }
+            @media print { button { display: none !important; } }
+          </style>
+        </head>
+        <body>
+          ${printContents}
+          <script>window.onload = function() { window.print(); }<\/script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  };
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-blue-50 py-8 px-4">
       {/* Map above property details */}
@@ -331,9 +389,24 @@ const PropertyDetailsClient: React.FC = () => {
       <div className="bg-white rounded-2xl shadow-lg p-8 max-w-2xl w-full text-center mb-8">
         <h1 className="text-3xl font-bold text-blue-900 mb-4">Property Details</h1>
         {address && (
-          <p className="text-blue-900 text-xl font-semibold mb-2">
-            <span className="text-blue-600">Address:</span> {address}
-          </p>
+          <>
+            <p className="text-blue-900 text-xl font-semibold mb-2">
+              <span className="text-blue-600">Address:</span> {address}
+            </p>
+            <button
+              onClick={handleSave}
+              disabled={isSaved}
+              className={`px-5 py-2 rounded-lg font-semibold text-lg shadow transition-colors mb-4 mr-2 ${isSaved ? 'bg-green-400 text-white cursor-not-allowed' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+            >
+              {isSaved ? 'Saved' : 'Save Property'}
+            </button>
+            <button
+              onClick={handlePrint}
+              className="px-5 py-2 rounded-lg font-semibold text-lg shadow transition-colors mb-4 bg-gray-200 text-blue-900 hover:bg-gray-300 ml-2"
+            >
+              Print Report
+            </button>
+          </>
         )}
         {keywords.length > 0 && (
           <p className="text-blue-700 text-base mb-4">
@@ -359,6 +432,12 @@ const PropertyDetailsClient: React.FC = () => {
                 <div>Beds: {item.beds} | Baths: {item.baths} | Sqft: {item.sqft}</div>
                 <div>Status: {item.status}</div>
                 <div className="text-xs text-blue-600">MLS ID: {item.mlsId}</div>
+                {item.salesPitch && (
+                  <div className="bg-white rounded-lg p-4 mt-3 text-blue-900 shadow-sm border border-blue-200">
+                    <span className="block font-semibold mb-1">Realtor's Sales Pitch:</span>
+                    <span>{item.salesPitch}</span>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -485,6 +564,92 @@ const PropertyDetailsClient: React.FC = () => {
           </div>
         </div>
         {/* --- End Risk Data Section --- */}
+      </div>
+      {/* Printable report section (hidden on screen, used for print/PDF) */}
+      <div ref={printableRef} style={{ display: 'none' }}>
+        <h1>HOUSE/MAX Property Report</h1>
+        {address && <h2>{address}</h2>}
+        {mlsResults.length > 0 && (
+          <div className="section mls">
+            <h3>MLS Results</h3>
+            {mlsResults.map((item) => (
+              <div key={item.mlsId}>
+                <div><b>Address:</b> {item.address}, {item.city}, {item.state} {item.zip}</div>
+                <div><b>Price:</b> {item.price}</div>
+                <div><b>Beds:</b> {item.beds} | <b>Baths:</b> {item.baths} | <b>Sqft:</b> {item.sqft}</div>
+                <div><b>Status:</b> {item.status}</div>
+                <div><b>MLS ID:</b> {item.mlsId}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {permits.length > 0 && (
+          <div className="section permits">
+            <h3>Recent Permits</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Year</th>
+                  <th>Status</th>
+                  <th>Permit ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                {permits.map((p) => (
+                  <tr key={p.permitId}>
+                    <td>{p.type}</td>
+                    <td>{p.year}</td>
+                    <td>{p.status}</td>
+                    <td>{p.permitId}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <div className="section risk">
+          <h3>Risk & Insurance Data</h3>
+          {insuranceClaims && insuranceClaims.length > 0 && (
+            <div>
+              <b>Insurance Claims:</b>
+              <ul>
+                {insuranceClaims.map((claim, idx) => (
+                  <li key={idx}>
+                    {claim.type} claim on {claim.date} for ${claim.amount.toLocaleString()} ({claim.status})
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {fireRisk && (
+            <div>
+              <b>Fire Risk Score:</b> {fireRisk.score}<br />
+              <b>Last Inspection:</b> {fireRisk.lastInspection}<br />
+              <b>Notes:</b> {fireRisk.notes}
+            </div>
+          )}
+          {floodRisk && (
+            <div>
+              <b>Flood Zone:</b> {floodRisk.zone}<br />
+              <b>Flood Risk Level:</b> {floodRisk.riskLevel}<br />
+              <b>Last Flood:</b> {floodRisk.lastFlood || 'N/A'}
+            </div>
+          )}
+          {coreLogic && (
+            <div>
+              <b>CoreLogic Property ID:</b> {coreLogic.coreLogicPropertyId}<br />
+              <b>Wildfire Risk Score:</b> {coreLogic.wildfireRiskScore}<br />
+              <b>Flood Risk Score:</b> {coreLogic.floodRiskScore}<br />
+              <b>Earthquake Risk Score:</b> {coreLogic.earthquakeRiskScore}<br />
+              <b>Report URL:</b> <a href={coreLogic.reportUrl}>{coreLogic.reportUrl}</a>
+            </div>
+          )}
+        </div>
+        <div className="footnote">
+          <b>Disclaimer:</b> This report is for informational purposes only. Data may be incomplete or out of date. Always verify with official sources.<br />
+          &copy; {new Date().getFullYear()} HOUSE/MAX
+        </div>
       </div>
       <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8">
         {relevantSections.map((section) => (

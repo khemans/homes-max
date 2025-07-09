@@ -45,22 +45,18 @@ const CustomMarker: React.FC<{ position: [number, number]; address?: string }> =
   useEffect(() => {
     if (!isClient) return;
     import("leaflet").then((L) => {
-      // Classic map pin with even horizontal RE/MAX bands using clipPath
+      // RE/MAX balloon pin SVG with distinct white band (matches header)
       const pinSVG = `
-        <svg width="32" height="48" viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <clipPath id="pinClip">
-              <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" />
-            </clipPath>
-          </defs>
-          <ellipse cx="16" cy="45" rx="8" ry="2" fill="rgba(0,0,0,0.3)"/>
-          <g clip-path="url(#pinClip)">
-            <rect x="4" y="4" width="24" height="14" fill="#e31837" />
-            <rect x="4" y="18" width="24" height="14" fill="#fff" />
-            <rect x="4" y="32" width="24" height="12" fill="#005ba6" />
-            <polygon points="16,38 19,44 13,44" fill="#003366" />
+        <svg width="36" height="48" viewBox="0 0 36 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="18" cy="46" rx="4" ry="2" fill="#888"/>
+          <g>
+            <path d="M18 4C8 4 2 14 2 22c0 10 8 18 16 18s16-8 16-18C34 14 28 4 18 4z" fill="#fff" stroke="#222" stroke-width="1.5"/>
+            <path d="M18 4C8 4 2 14 2 16.5h32C34 14 28 4 18 4z" fill="#e31837"/>
+            <path d="M2 27c2 7 8 13 16 13s14-6 16-13H2z" fill="#005ba6"/>
+            <rect x="2" y="16.5" width="32" height="10.5" fill="#fff"/>
+            <ellipse cx="18" cy="22" rx="16" ry="18" fill="none" stroke="#222" stroke-width="1.5"/>
           </g>
-          <path d="M16 4C10 4 4 10 4 18C4 32 16 44 16 44C16 44 28 32 28 18C28 10 22 4 16 4Z" fill="none" stroke="#222" stroke-width="1.5"/>
+          <path d="M18 40v4" stroke="#222" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
       `;
       const customIcon = new L.default.Icon({

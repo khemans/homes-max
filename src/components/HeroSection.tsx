@@ -37,7 +37,7 @@ const HeroSection: React.FC = () => {
       </div>
       {/* Headline */}
       <h1 className="text-4xl md:text-5xl font-extrabold text-blue-900 mb-4">
-        House\MAX: <span className="text-blue-600">Getting the MAX on your home before you buy.</span>
+        <span style={{ color: '#005BAA' }}>HOUSE/</span><span style={{ color: '#E31837' }}>MAX</span>: <span className="text-blue-600">Getting the MAX on your home before you buy.</span>
       </h1>
       {/* Sub-headline */}
       <p className="text-lg md:text-xl text-blue-800 mb-8 max-w-2xl mx-auto">
