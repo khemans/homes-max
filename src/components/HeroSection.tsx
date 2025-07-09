@@ -34,7 +34,7 @@ const HeroSection: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           {/* Main Headline */}
           <h1 className="remax-heading-1 mb-6">
-            Find Your Dream Home with{' '}
+            Understand Your Future Home With{' '}
             <span style={{ color: '#003DA5' }}>HOUSE/</span>
             <span style={{ color: '#DC1C2E' }}>MAX</span>
           </h1>
