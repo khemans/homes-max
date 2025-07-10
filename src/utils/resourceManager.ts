@@ -20,11 +20,11 @@ export const createResourceFromLink = (resource: LinkedResource): ResourceItem =
 // Function to get resources that are linked in property details
 export const getLinkedResources = (): LinkedResource[] => [
   {
-    name: "CoreLogic Property Risk Reports",
-    url: "https://store.corelogic.com/search",
+    name: "Cotality Property Risk Reports",
+    url: "https://store.cotality.com/search",
     description: "Comprehensive property risk assessments including flood, fire, and earthquake data",
     category: "Risk Assessment",
-    buttonText: "View CoreLogic Report"
+    buttonText: "View Cotality Report"
   },
   {
     name: "LexisNexis C.L.U.E.® Property",

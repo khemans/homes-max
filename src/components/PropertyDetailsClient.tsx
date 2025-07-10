@@ -294,9 +294,9 @@ const PropertyDetailsClient: React.FC = () => {
   const [avmData, setAvmData] = useState<AVMData | null>(null);
   const [avmLoading, setAvmLoading] = useState(false);
 
-  // Add state for coreLogic
-  const [coreLogic, setCoreLogic] = useState<{
-    coreLogicPropertyId: string;
+  // Add state for cotality
+  const [cotality, setCotality] = useState<{
+    cotalityPropertyId: string;
     wildfireRiskScore: number;
     floodRiskScore: number;
     earthquakeRiskScore: number;
@@ -350,7 +350,7 @@ const PropertyDetailsClient: React.FC = () => {
           setInsuranceClaims(data.insuranceClaims);
           setFireRisk(data.fireRisk);
           setFloodRisk(data.floodRisk);
-          setCoreLogic(data.coreLogic || null);
+          setCotality(data.cotality || null);
         })
         .finally(() => setRiskLoading(false));
 
@@ -366,7 +366,7 @@ const PropertyDetailsClient: React.FC = () => {
       setInsuranceClaims(null);
       setFireRisk(null);
       setFloodRisk(null);
-      setCoreLogic(null);
+              setCotality(null);
       setAvmData(null);
     }
   }, [address]);
@@ -913,26 +913,26 @@ const PropertyDetailsClient: React.FC = () => {
 
                 {/* CoreLogic Reference */}
                 {(() => {
-                  const coreLogicResource = getLinkedResource("CoreLogic Property Risk Reports");
-                  if (!coreLogicResource) return null;
+                  const cotalityResource = getLinkedResource("Cotality Property Risk Reports");
+                  if (!cotalityResource) return null;
                   
                   return (
                     <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h4 className="font-semibold text-gray-800 mb-1">Get {coreLogicResource.name}</h4>
+                          <h4 className="font-semibold text-gray-800 mb-1">Get {cotalityResource.name}</h4>
                           <p className="remax-text-small text-gray-600">
-                            {coreLogicResource.description}
+                            {cotalityResource.description}
                           </p>
                         </div>
                         <div className="ml-4">
                           <a 
-                            href={coreLogicResource.url} 
+                            href={cotalityResource.url} 
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
                           >
-                            {coreLogicResource.buttonText || 'Access Resource'}
+                            {cotalityResource.buttonText || 'Access Resource'}
                           </a>
                         </div>
                       </div>
@@ -940,29 +940,29 @@ const PropertyDetailsClient: React.FC = () => {
                   );
                 })()}
 
-              {/* CoreLogic Data Display */}
-              {!riskLoading && coreLogic && (
+              {/* Cotality Data Display */}
+              {!riskLoading && cotality && (
                 <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
-                  <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">CoreLogic Risk Details</h3>
+                  <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">Cotality Risk Details</h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="remax-text-small font-medium">Wildfire Risk:</span>
-                        <span className="remax-text-small font-semibold">{coreLogic.wildfireRiskScore}</span>
+                        <span className="remax-text-small font-semibold">{cotality.wildfireRiskScore}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="remax-text-small font-medium">Flood Risk:</span>
-                        <span className="remax-text-small font-semibold">{coreLogic.floodRiskScore}</span>
+                        <span className="remax-text-small font-semibold">{cotality.floodRiskScore}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="remax-text-small font-medium">Earthquake Risk:</span>
-                        <span className="remax-text-small font-semibold">{coreLogic.earthquakeRiskScore}</span>
+                        <span className="remax-text-small font-semibold">{cotality.earthquakeRiskScore}</span>
                       </div>
                     </div>
                     <div>
                       <div className="mb-2">
                         <span className="remax-text-small font-medium">Property ID:</span>
-                        <p className="remax-text-small font-mono">{coreLogic.coreLogicPropertyId}</p>
+                        <p className="remax-text-small font-mono">{cotality.cotalityPropertyId}</p>
                       </div>
                     </div>
                   </div>
@@ -974,22 +974,22 @@ const PropertyDetailsClient: React.FC = () => {
                 <p className="remax-text-small text-gray-500 italic">
                   Risk data sourced from{' '}
                   {(() => {
-                    const coreLogicResource = getLinkedResource("CoreLogic Property Risk Reports");
+                    const cotalityResource = getLinkedResource("Cotality Property Risk Reports");
                     const clueResource = getLinkedResource("LexisNexis C.L.U.E.® Property");
                     
                     return (
                       <>
-                        {coreLogicResource && (
+                        {cotalityResource && (
                           <a 
-                            href={coreLogicResource.url} 
+                            href={cotalityResource.url} 
                             target="_blank" 
                             rel="noopener noreferrer" 
                             className="text-blue-600 hover:text-blue-800 underline"
                           >
-                            CoreLogic
+                            Cotality
                           </a>
                         )}
-                        {coreLogicResource && clueResource && ' and '}
+                        {cotalityResource && clueResource && ' and '}
                         {clueResource && (
                           <a 
                             href={clueResource.url} 
@@ -1127,13 +1127,13 @@ const PropertyDetailsClient: React.FC = () => {
               <b>Last Flood:</b> {floodRisk.lastFlood || 'N/A'}
             </div>
           )}
-          {coreLogic && (
+          {cotality && (
             <div>
-              <b>CoreLogic Property ID:</b> {coreLogic.coreLogicPropertyId}<br />
-              <b>Wildfire Risk Score:</b> {coreLogic.wildfireRiskScore}<br />
-              <b>Flood Risk Score:</b> {coreLogic.floodRiskScore}<br />
-              <b>Earthquake Risk Score:</b> {coreLogic.earthquakeRiskScore}<br />
-              <b>Report URL:</b> <a href={coreLogic.reportUrl}>{coreLogic.reportUrl}</a>
+              <b>Cotality Property ID:</b> {cotality.cotalityPropertyId}<br />
+              <b>Wildfire Risk Score:</b> {cotality.wildfireRiskScore}<br />
+              <b>Flood Risk Score:</b> {cotality.floodRiskScore}<br />
+              <b>Earthquake Risk Score:</b> {cotality.earthquakeRiskScore}<br />
+              <b>Report URL:</b> <a href={cotality.reportUrl}>{cotality.reportUrl}</a>
             </div>
           )}
         </div>

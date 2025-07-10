@@ -1,7 +1,7 @@
 # Product Requirements Document: HOUSE/MAX
 
-**Version:** 3.0  
-**Date:** December 2024  
+**Version:** 3.1  
+**Date:** January 2025  
 **Author:** AI Assistant (with User Collaboration)  
 **Product Name:** HOUSE/MAX  
 **Current Status:** MVP Deployed on Vercel with RE/MAX Professional Design
@@ -12,7 +12,13 @@
 
 "HOUSE/MAX" is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
 
-**Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, and comprehensive property data.
+**Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, and comprehensive property data integrated with Cotality risk analytics.
+
+**Recent Updates (v3.1):**
+- Complete migration from CoreLogic to Cotality for risk assessment data
+- Updated all branding and references to reflect Cotality's new identity
+- Enhanced data integration with Cotality's "Intelligence Beyond Bounds" platform
+- Improved risk assessment display with new Cotality branding
 
 ---
 
@@ -22,33 +28,40 @@
 Empower homebuyers with comprehensive property insights and risk assessments, providing the MAX on their home before they buy.
 
 **Key Objectives:**
-- Provide comprehensive property history and risk assessment data
+- Provide comprehensive property history and risk assessment data through Cotality integration
 - Offer professional-grade property research tools and resources
 - Deliver expert guidance on permits, property rights, and legal considerations
 - Maintain a professional, trustworthy user experience with RE/MAX design standards
 - Utilize modern web technologies for efficient development and superior performance
+- Leverage Cotality's advanced property data and analytics capabilities
 
 ---
 
 ## 3. Target Audience
 
-- Prospective Homebuyers (first-time and experienced)
-- Real Estate Agents and Professionals
-- Property Investors and Researchers
-- Insurance Professionals
-- Legal Professionals working in real estate
+- **Primary Users:**
+  - Prospective Homebuyers (first-time and experienced)
+  - Real Estate Agents and Professionals
+  - Property Investors and Researchers
+- **Secondary Users:**
+  - Insurance Professionals
+  - Legal Professionals working in real estate
+  - Property Inspectors and Appraisers
+  - Mortgage Lenders and Brokers
 
 ---
 
 ## 4. User Stories (Implemented)
 
-- ✅ As a homebuyer, I want to access comprehensive property data including risk assessments and permit history
+- ✅ As a homebuyer, I want to access comprehensive property data including Cotality risk assessments and permit history
 - ✅ As a homebuyer, I want to understand property rights, easements, and legal considerations in clear terms
 - ✅ As a homebuyer, I want to research building permits and code compliance records
 - ✅ As a homebuyer, I want to save properties for future reference and comparison
 - ✅ As a homebuyer, I want to generate printable property reports for my records
 - ✅ As a real estate professional, I want access to comprehensive property data to better serve my clients
 - ✅ As a user, I want a professional, trustworthy platform that instills confidence
+- ✅ As a user, I want to access Cotality's advanced risk analytics and property intelligence
+- ✅ As a user, I want detailed wildfire, flood, and earthquake risk assessments for properties
 
 ---
 
@@ -75,12 +88,16 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
   - **Interactive Map:** Leaflet map with custom RE/MAX balloon markers
   - **MLS Results:** Professional property listings with realtor insights
   - **Permit Records:** Comprehensive building permit history with status indicators
-  - **Risk Assessment:** Detailed risk analysis including:
+  - **Risk Assessment:** Detailed risk analysis powered by Cotality including:
     - Insurance claims history
     - Fire risk assessment
     - Flood risk evaluation
-    - CoreLogic risk scores
+    - Cotality risk scores and analytics
+    - Wildfire, flood, and earthquake risk ratings
+    - Cotality Property ID integration
+    - Direct links to Cotality reports
 - **User Actions:** Save property functionality and printable report generation
+- **Data Sources:** Clear attribution to Cotality for risk assessment data
 
 ### 5.3. Search Results Page ✅
 
@@ -97,9 +114,10 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - Trust-building content with professional design
 
 **Resources Page:**
-- Categorized resource library
+- Categorized resource library including Cotality Property Risk Reports
 - Professional external links to industry tools
 - Filterable resource categories
+- Integration with Cotality's Intelligence Beyond Bounds platform
 
 **My Properties Page:**
 - Saved property management
@@ -149,13 +167,14 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - **Typography:** Inter font family
 - **Maps:** Leaflet with react-leaflet and custom markers
 - **Geocoding:** Nominatim API
+- **Data Integration:** Cotality API integration for risk assessment data
 - **Deployment:** Vercel
 - **Version Control:** Git with GitHub
 
 ### 7.2. Enhanced Project Structure
 
 ```
-house-max/
+homes-max/
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx (Home page)
@@ -164,16 +183,22 @@ house-max/
 │   │   ├── my-properties/page.tsx (Saved properties)
 │   │   ├── search/page.tsx (Search results)
 │   │   ├── property/page.tsx (Property details)
-│   │   ├── api/mls/route.ts (MLS API)
+│   │   ├── api/
+│   │   │   ├── mls/route.ts (MLS API)
+│   │   │   └── risk/route.ts (Cotality risk assessment API)
 │   │   ├── globals.css (RE/MAX design system)
 │   │   └── layout.tsx (Root layout with professional footer)
 │   ├── components/
 │   │   ├── Header.tsx (Professional navigation)
 │   │   ├── HeroSection.tsx (Professional hero with trust indicators)
-│   │   ├── PropertyDetailsClient.tsx (Comprehensive property data)
+│   │   ├── PropertyDetailsClient.tsx (Comprehensive property data with Cotality integration)
 │   │   ├── SearchResultsClient.tsx (Professional search results)
 │   │   ├── PropertyMap.tsx (Custom RE/MAX markers)
 │   │   └── WhatYoullDiscover.tsx (Professional feature cards)
+│   ├── data/
+│   │   └── resources.ts (Resource definitions including Cotality)
+│   ├── utils/
+│   │   └── resourceManager.ts (Resource management with Cotality integration)
 │   └── types/
 │       └── property.ts (TypeScript interfaces)
 ├── public/ (Static assets including RE/MAX branding)
@@ -183,14 +208,26 @@ house-max/
 ### 7.3. Enhanced Components
 
 - **Header:** Professional navigation with RE/MAX branding and mobile responsiveness
-- **PropertyDetailsClient:** Comprehensive property data with risk assessments and professional styling
+- **PropertyDetailsClient:** Comprehensive property data with Cotality risk assessments and professional styling
 - **SearchResultsClient:** Professional search results with filtering and map integration
 - **PropertyMap:** Custom RE/MAX balloon markers with professional popup design
 
 ### 7.4. API Routes
 
 - **`/api/mls`:** Enhanced MLS data endpoint with comprehensive property information
-- **Risk Data Integration:** Mock risk assessment data with realistic property insights
+- **`/api/risk`:** Cotality risk assessment data integration with comprehensive property risk analytics
+- **Risk Data Integration:** Mock risk assessment data with realistic property insights powered by Cotality's data model
+
+### 7.5. Data Integration
+
+- **Cotality Integration:** Complete integration with Cotality's property risk assessment platform
+- **Risk Assessment Data:**
+  - Wildfire risk scores and analytics
+  - Flood risk assessment and zone information
+  - Earthquake risk evaluation
+  - Property-specific risk identifiers
+  - Direct links to Cotality reports
+- **Resource Management:** Dynamic resource linking with Cotality Property Risk Reports
 
 ---
 
@@ -202,12 +239,13 @@ house-max/
 - **Accessibility:** Professional contrast ratios and semantic HTML structure
 - **Performance:** Optimized loading states and error handling
 - **Mobile Experience:** Fully responsive design with professional mobile interactions
+- **Data Visualization:** Clear presentation of Cotality risk assessment data with professional charts and indicators
 
 ---
 
 ## 9. Current Implementation Status
 
-### ✅ Completed Features (Version 3.0)
+### ✅ Completed Features (Version 3.1)
 
 1. **Professional Design System**
    - Complete RE/MAX brand implementation
@@ -223,10 +261,11 @@ house-max/
 
 3. **Comprehensive Property Details**
    - Professional layout with card-based design
-   - Risk assessment integration
+   - Cotality risk assessment integration
    - Permit history with status indicators
    - MLS data with realtor insights
    - Save functionality and printable reports
+   - Detailed risk analytics display
 
 4. **Professional Navigation**
    - Clean header design with RE/MAX branding
@@ -235,7 +274,7 @@ house-max/
 
 5. **Secondary Pages**
    - Professional About page with mission/vision
-   - Resources page with categorized tools
+   - Resources page with categorized tools including Cotality integration
    - My Properties page with saved property management
 
 6. **Enhanced User Experience**
@@ -244,14 +283,23 @@ house-max/
    - Responsive design across all breakpoints
    - Trust-building design elements
 
+7. **Cotality Integration (New in v3.1)**
+   - Complete migration from CoreLogic to Cotality
+   - Updated risk assessment data structure
+   - Enhanced property risk analytics
+   - Professional presentation of Cotality data
+   - Direct integration with Cotality's "Intelligence Beyond Bounds" platform
+
 ### 🔄 Future Enhancements
 
-- Real-time data integration with property APIs
-- Advanced risk assessment algorithms
+- Real-time data integration with Cotality APIs
+- Advanced risk assessment algorithms using Cotality's ML models
 - User account system with enhanced property tracking
 - Professional reporting and document generation
 - Integration with real estate professional tools
 - Advanced search and filtering capabilities
+- Enhanced mobile app experience
+- Integration with additional Cotality data sources
 
 ---
 
@@ -262,6 +310,8 @@ house-max/
 - **Professional Adoption:** Usage by real estate professionals
 - **Technical Performance:** Page load times and user experience metrics
 - **Brand Recognition:** Association with professional real estate services
+- **Data Accuracy:** Quality of Cotality risk assessment data and user feedback
+- **Conversion Rates:** Property research to real estate action conversion
 
 ---
 
@@ -272,12 +322,14 @@ house-max/
 - **Domain:** Professional domain setup
 - **Performance:** Optimized for speed and reliability
 - **Security:** HTTPS encryption and secure data handling
+- **API Integration:** Secure integration with Cotality data services
 
 ### Professional Standards
 - **Accessibility:** WCAG compliance for professional accessibility
 - **SEO:** Optimized for real estate search visibility
 - **Analytics:** Professional user tracking and insights
 - **Monitoring:** Performance monitoring and error tracking
+- **Data Privacy:** Compliance with data protection regulations
 
 ---
 
@@ -295,13 +347,40 @@ house-max/
 - **Confident:** Authoritative real estate expertise
 - **Accessible:** Complex information made understandable
 
+### Data Presentation
+- **Accuracy:** Precise presentation of Cotality risk data
+- **Clarity:** Clear visualization of complex risk assessments
+- **Transparency:** Open attribution to data sources
+- **Professionalism:** Consistent with real estate industry standards
+
 ---
 
 ## 13. Compliance & Legal
 
 - **Disclaimers:** Professional legal disclaimers for property information
-- **Data Sources:** Clear attribution to data providers like CoreLogic
+- **Data Sources:** Clear attribution to data providers like Cotality
 - **Privacy:** Professional privacy policy and data handling
 - **Terms of Service:** Professional terms for platform usage
+- **Data Accuracy:** Disclaimers about data accuracy and currency
+- **Professional Use:** Guidelines for real estate professional usage
 
-This document reflects the current state of HOUSE/MAX as a professional real estate property research platform with RE/MAX-inspired design and comprehensive functionality. 
+---
+
+## 14. Data Sources & Integrations
+
+### Primary Data Sources
+- **Cotality:** Primary risk assessment and property intelligence provider
+  - Wildfire, flood, and earthquake risk scores
+  - Property-specific risk identifiers
+  - Comprehensive risk analytics
+  - Direct report access
+- **MLS Data:** Property listings and market information
+- **Public Records:** Permit and legal information
+- **Geographic Data:** Location and mapping services
+
+### API Integrations
+- **Cotality API:** Risk assessment data integration
+- **Nominatim API:** Geocoding and location services
+- **Leaflet Maps:** Interactive mapping functionality
+
+This document reflects the current state of HOUSE/MAX as a professional real estate property research platform with RE/MAX-inspired design, comprehensive functionality, and full integration with Cotality's advanced property risk assessment capabilities. 

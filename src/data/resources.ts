@@ -7,9 +7,9 @@ export interface ResourceItem {
 }
 
 export const resources: ResourceItem[] = [
-  { 
-    name: "CoreLogic Property Risk Reports", 
-    url: "https://store.corelogic.com/search",
+    {
+    name: "Cotality Property Risk Reports",
+    url: "https://store.cotality.com/search",
     description: "Comprehensive property risk assessments including flood, fire, and earthquake data",
     category: "Risk Assessment",
     isActive: true
