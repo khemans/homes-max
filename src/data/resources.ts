@@ -9,7 +9,7 @@ export interface ResourceItem {
 export const resources: ResourceItem[] = [
     {
     name: "Cotality Property Risk Reports",
-    url: "https://store.cotality.com/search",
+    url: "https://www.cotality.com/products/underwriting-center",
     description: "Comprehensive property risk assessments including flood, fire, and earthquake data",
     category: "Risk Assessment",
     isActive: true

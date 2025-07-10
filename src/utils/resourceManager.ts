@@ -21,7 +21,7 @@ export const createResourceFromLink = (resource: LinkedResource): ResourceItem =
 export const getLinkedResources = (): LinkedResource[] => [
   {
     name: "Cotality Property Risk Reports",
-    url: "https://store.cotality.com/search",
+    url: "https://www.cotality.com/products/underwriting-center",
     description: "Comprehensive property risk assessments including flood, fire, and earthquake data",
     category: "Risk Assessment",
     buttonText: "View Cotality Report"

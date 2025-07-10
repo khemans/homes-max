@@ -44,7 +44,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 8,
       floodRiskScore: 7,
       earthquakeRiskScore: 3,
-      reportUrl: 'https://store.cotality.com/search/report/CL-123456',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '456 oak ave': {
@@ -58,7 +58,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 2,
       floodRiskScore: 1,
       earthquakeRiskScore: 4,
-      reportUrl: 'https://store.cotality.com/search/report/CL-456789',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '1234 larimer st': {
@@ -72,7 +72,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 5,
       floodRiskScore: 4,
       earthquakeRiskScore: 2,
-      reportUrl: 'https://store.cotality.com/search/report/CL-789012',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '5678 colfax ave': {
@@ -87,7 +87,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 7,
       floodRiskScore: 6,
       earthquakeRiskScore: 5,
-      reportUrl: 'https://store.cotality.com/search/report/CL-135790',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '9012 broadway': {
@@ -101,7 +101,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 1,
       floodRiskScore: 2,
       earthquakeRiskScore: 1,
-      reportUrl: 'https://store.cotality.com/search/report/CL-246801',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '3456 speer blvd': {
@@ -115,7 +115,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 4,
       floodRiskScore: 3,
       earthquakeRiskScore: 4,
-      reportUrl: 'https://store.cotality.com/search/report/CL-369123',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '7890 alameda ave': {
@@ -129,7 +129,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 6,
       floodRiskScore: 5,
       earthquakeRiskScore: 3,
-      reportUrl: 'https://store.cotality.com/search/report/CL-482103',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '2345 colorado blvd': {
@@ -143,7 +143,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 2,
       floodRiskScore: 1,
       earthquakeRiskScore: 2,
-      reportUrl: 'https://store.cotality.com/search/report/CL-591476',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '6789 evans ave': {
@@ -157,7 +157,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 5,
       floodRiskScore: 4,
       earthquakeRiskScore: 3,
-      reportUrl: 'https://store.cotality.com/search/report/CL-602587',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '1122 hampden ave': {
@@ -171,7 +171,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 7,
       floodRiskScore: 6,
       earthquakeRiskScore: 4,
-      reportUrl: 'https://store.cotality.com/search/report/CL-713698',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '3344 mississippi ave': {
@@ -185,7 +185,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 3,
       floodRiskScore: 2,
       earthquakeRiskScore: 1,
-      reportUrl: 'https://store.cotality.com/search/report/CL-824709',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
   '5566 yale ave': {
@@ -199,7 +199,7 @@ const mockRiskData: Record<string, RiskData> = {
       wildfireRiskScore: 1,
       floodRiskScore: 1,
       earthquakeRiskScore: 2,
-      reportUrl: 'https://store.cotality.com/search/report/CL-935810',
+      reportUrl: 'https://www.cotality.com/products/underwriting-center',
     },
   },
 };
@@ -217,7 +217,7 @@ const defaultRiskData: RiskData = {
     wildfireRiskScore: 5,
     floodRiskScore: 4,
     earthquakeRiskScore: 3,
-    reportUrl: 'https://store.cotality.com/search/report/CL-DEFAULT',
+    reportUrl: 'https://www.cotality.com/products/underwriting-center',
   },
 };
 
