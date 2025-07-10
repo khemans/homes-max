@@ -7,6 +7,16 @@ const ResourcesPage = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("All");
   
   const filteredResources = getResourcesByCategory(selectedCategory);
+  
+  // Sort resources to show active resources first, then coming soon resources
+  const sortedResources = [...filteredResources].sort((a, b) => {
+    // Resources with actual URLs (not "#") come first
+    if (a.url !== "#" && b.url === "#") return -1;
+    if (a.url === "#" && b.url !== "#") return 1;
+    
+    // Within the same group, maintain original order
+    return 0;
+  });
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
@@ -51,7 +61,7 @@ const ResourcesPage = () => {
 
           {/* Resources Grid */}
           <div className="grid md:grid-cols-2 gap-6">
-            {filteredResources.map((resource, index) => (
+            {sortedResources.map((resource, index) => (
               <div key={index} className="remax-card">
                 <div className="remax-card-body">
                   <div className="flex items-start justify-between mb-4">
