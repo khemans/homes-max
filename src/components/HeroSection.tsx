@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import AddressAutocomplete from './AddressAutocomplete';
 
 const HeroSection: React.FC = () => {
   const [search, setSearch] = React.useState('');
@@ -48,12 +49,15 @@ const HeroSection: React.FC = () => {
           <div className="max-w-2xl mx-auto mb-12">
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
-                <input
-                  type="text"
+                <AddressAutocomplete
                   value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  className="remax-input text-lg h-14"
-                  placeholder="Enter an address or search properties..."
+                  onChange={setSearch}
+                  placeholder="Enter any address or search properties..."
+                  className="text-lg h-14 remax-input"
+                  onAddressSelect={(suggestion) => {
+                    // Auto-navigate to property details for specific addresses
+                    router.push(`/property?query=${encodeURIComponent(suggestion.fullAddress)}`);
+                  }}
                 />
               </div>
               <button

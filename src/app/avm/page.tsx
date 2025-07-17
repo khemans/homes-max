@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import AddressAutocomplete from '../../components/AddressAutocomplete';
 
 // AVM data interface with enhanced properties
 interface AVMData {
@@ -156,14 +157,15 @@ const AVMPage = () => {
                   <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
                     Property Address
                   </label>
-                  <input
-                    type="text"
-                    id="address"
+                  <AddressAutocomplete
                     value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="Enter full property address (e.g., 123 Main St, San Francisco, CA)"
-                    className="remax-input w-full"
+                    onChange={setAddress}
+                    placeholder="Enter any property address (e.g., 123 Main St, San Francisco, CA)"
+                    className="text-lg py-3"
                     disabled={loading}
+                    onAddressSelect={(suggestion) => {
+                      console.log('Selected address:', suggestion);
+                    }}
                   />
                 </div>
                 

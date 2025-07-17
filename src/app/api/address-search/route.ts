@@ -15,8 +15,113 @@ interface GeocodingResult {
   };
 }
 
-// Geocoding using Nominatim (OpenStreetMap) - Free service
+
+
+// Geoapify address autocomplete function
+async function getGeoapifyAddressSuggestions(query: string, limit: number = 10): Promise<Array<{
+  fullAddress: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  coordinates?: { lat: number; lng: number };
+}>> {
+  const apiKey = process.env.GEOAPIFY_API_KEY;
+  
+  if (!apiKey) {
+    console.warn('Geoapify API key not found, falling back to database suggestions');
+    return getAddressSuggestions(query, limit);
+  }
+
+  try {
+    const encodedQuery = encodeURIComponent(query);
+    const response = await fetch(
+      `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodedQuery}&limit=${limit}&format=json&apiKey=${apiKey}`,
+      {
+        headers: {
+          'User-Agent': 'HOUSE-MAX-Property-Search/1.0'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      console.warn('Geoapify autocomplete failed:', response.status);
+      return getAddressSuggestions(query, limit);
+    }
+
+    const data = await response.json();
+    
+    if (data.results && Array.isArray(data.results)) {
+      return data.results.map((result: any) => {
+        const address = result.housenumber && result.street 
+          ? `${result.housenumber} ${result.street}`
+          : result.address_line1 || result.formatted.split(',')[0];
+        
+        return {
+          fullAddress: result.formatted,
+          address: address || '',
+          city: result.city || '',
+          state: result.state || '',
+          zip: result.postcode || '',
+          coordinates: result.lat && result.lon ? {
+            lat: parseFloat(result.lat),
+            lng: parseFloat(result.lon)
+          } : undefined
+        };
+      }).filter((suggestion: { address: string; city: string; state: string }) => 
+        suggestion.address && suggestion.city && suggestion.state
+      );
+    }
+
+    return getAddressSuggestions(query, limit);
+  } catch (error) {
+    console.error('Geoapify autocomplete error:', error);
+    return getAddressSuggestions(query, limit);
+  }
+}
+
+// Enhanced geocoding using Geoapify with Nominatim fallback
 async function geocodeAddress(address: string): Promise<GeocodingResult | null> {
+  const apiKey = process.env.GEOAPIFY_API_KEY;
+  
+  // Try Geoapify first if API key is available
+  if (apiKey) {
+    try {
+      const encodedAddress = encodeURIComponent(address);
+      const response = await fetch(
+        `https://api.geoapify.com/v1/geocode/search?text=${encodedAddress}&format=json&apiKey=${apiKey}`,
+        {
+          headers: {
+            'User-Agent': 'HOUSE-MAX-Property-Search/1.0'
+          }
+        }
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        if (data.results && data.results.length > 0) {
+          const result = data.results[0];
+          return {
+            lat: parseFloat(result.lat),
+            lng: parseFloat(result.lon),
+            formatted_address: result.formatted,
+            components: {
+              street_number: result.housenumber,
+              route: result.street,
+              locality: result.city,
+              administrative_area_level_1: result.state,
+              postal_code: result.postcode,
+              country: result.country
+            }
+          };
+        }
+      }
+    } catch (error) {
+      console.warn('Geoapify geocoding failed, falling back to Nominatim:', error);
+    }
+  }
+
+  // Fallback to Nominatim (OpenStreetMap) - Free service
   try {
     const encodedAddress = encodeURIComponent(address);
     const response = await fetch(
@@ -29,7 +134,7 @@ async function geocodeAddress(address: string): Promise<GeocodingResult | null> 
     );
     
     if (!response.ok) {
-      console.warn('Geocoding failed:', response.status);
+      console.warn('Nominatim geocoding failed:', response.status);
       return null;
     }
     
@@ -109,10 +214,11 @@ export async function GET(req: NextRequest) {
   
   // Handle address suggestions for autocomplete
   if (suggestions) {
-    const suggestionList = getAddressSuggestions(query);
+    const suggestionList = await getGeoapifyAddressSuggestions(query);
     return NextResponse.json({
       suggestions: suggestionList,
-      count: suggestionList.length
+      count: suggestionList.length,
+      source: process.env.GEOAPIFY_API_KEY ? 'geoapify' : 'database'
     });
   }
   

@@ -410,18 +410,14 @@ const PropertyDetailsClient: React.FC = () => {
       setGeoError("");
       return;
     }
-    // Otherwise, geocode with Nominatim
+    // Otherwise, geocode using our enhanced address search API (Geoapify + Nominatim)
     setGeoLoading(true);
     setGeoError("");
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`, {
-      headers: {
-        'User-Agent': 'homes-max-app/1.0 (your@email.com)'
-      }
-    })
+    fetch(`/api/address-search?q=${encodeURIComponent(address)}&validate=true`)
       .then(res => res.json())
       .then(data => {
-        if (data && data.length > 0) {
-          setCoords({ lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) });
+        if (data.geocoding && data.geocoding.lat && data.geocoding.lng) {
+          setCoords({ lat: data.geocoding.lat, lng: data.geocoding.lng });
           setGeoError("");
         } else {
           setCoords(null);
