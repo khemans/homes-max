@@ -19,7 +19,7 @@ interface PropertyPublicRecords {
   sources: {
     [key: string]: {
       status: 'success' | 'error' | 'unavailable';
-      data?: any;
+      data?: unknown;
       error?: string;
     };
   };
@@ -238,7 +238,7 @@ class PublicRecordsService {
   }
 
   // 5. Building permits (many cities have open data APIs)
-  async getBuildingPermits(address: string, coordinates?: {lat: number, lng: number}): Promise<PermitData[]> {
+  async getBuildingPermits(_address: string, _coordinates?: {lat: number, lng: number}): Promise<PermitData[]> {
     try {
       // This would integrate with city-specific open data APIs
       // Many major cities provide free access to permit data
@@ -350,7 +350,11 @@ export async function GET(request: NextRequest) {
     }
 
     const service = new PublicRecordsService();
-    const sources: {[key: string]: any} = {};
+    const sources: {[key: string]: {
+      status: 'success' | 'error' | 'unavailable';
+      data?: unknown;
+      error?: string;
+    }} = {};
     
     // Start with geocoding
     const coordinates = await service.geocodeAddress(address);
@@ -412,7 +416,11 @@ export async function GET(request: NextRequest) {
     
     results.forEach((result) => {
       if (result.status === 'fulfilled') {
-        const { source, data, error } = result.value as any;
+        const { source, data, error } = result.value as {
+          source: string;
+          data: unknown;
+          error?: string;
+        };
         
         sources[source] = {
           status: error ? 'error' : 'success',

@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { allAddresses, searchPropertiesByAddress } from '../../../data/realAddresses';
 
+// TypeScript interfaces for API responses
+interface GeoapifyResult {
+  housenumber?: string;
+  street?: string;
+  address_line1?: string;
+  formatted: string;
+  country_code?: string;
+  state?: string;
+  city?: string;
+  postcode?: string;
+  lon: number;
+  lat: number;
+}
+
+
+
 interface GeocodingResult {
   lat: number;
   lng: number;
@@ -52,7 +68,7 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
     const data = await response.json();
     
     if (data.results && Array.isArray(data.results)) {
-      return data.results.map((result: any) => {
+      return data.results.map((result: GeoapifyResult) => {
         const address = result.housenumber && result.street 
           ? `${result.housenumber} ${result.street}`
           : result.address_line1 || result.formatted.split(',')[0];
@@ -64,8 +80,8 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
           state: result.state || '',
           zip: result.postcode || '',
           coordinates: result.lat && result.lon ? {
-            lat: parseFloat(result.lat),
-            lng: parseFloat(result.lon)
+            lat: result.lat,
+            lng: result.lon
           } : undefined
         };
       }).filter((suggestion: { address: string; city: string; state: string }) => 
