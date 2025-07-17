@@ -109,10 +109,9 @@ function findAddressMatch(searchAddress: string): PropertyData | null {
 
 // Generate comparable sales based on target property
 function generateComparables(targetProperty: PropertyData, count: number = 3): AVMData['comparables'] {
-  // Get other properties
   const otherProperties = realPropertiesDatabase.filter(prop => prop.property.mlsId !== targetProperty.property.mlsId);
   
-  // Sort by distance if coordinates are available
+  // Calculate distances and categorize properties
   const withDistances = otherProperties.map(prop => {
     const distance = calculateDistance(
       targetProperty.property.coordinates.lat,
@@ -121,12 +120,68 @@ function generateComparables(targetProperty: PropertyData, count: number = 3): A
       prop.property.coordinates.lng
     );
     return { ...prop, distance };
-  }).sort((a, b) => a.distance - b.distance);
+  });
   
-  // Select the closest properties
-  const selectedProps = withDistances.slice(0, count);
+  // Prioritize comparable selection
+  let selectedProps: Array<typeof withDistances[0]> = [];
   
-  return selectedProps.map((prop, index) => {
+  // 1. First priority: Same city (exact city match)
+  const sameCity = withDistances.filter(prop => 
+    prop.property.city.toLowerCase() === targetProperty.property.city.toLowerCase()
+  );
+  selectedProps.push(...sameCity.slice(0, count));
+  
+  // 2. Second priority: Same state, within 50 miles
+  if (selectedProps.length < count) {
+    const sameStateNearby = withDistances.filter(prop => 
+      prop.property.state === targetProperty.property.state &&
+      prop.distance <= 50 &&
+      !selectedProps.some(selected => selected.property.mlsId === prop.property.mlsId)
+    ).sort((a, b) => a.distance - b.distance);
+    
+    const needed = count - selectedProps.length;
+    selectedProps.push(...sameStateNearby.slice(0, needed));
+  }
+  
+  // 3. Third priority: Similar price range, same state (within 100 miles)
+  if (selectedProps.length < count) {
+    const targetPrice = parseFloat(targetProperty.property.price.replace(/[$,]/g, ''));
+    const similarPriceSameState = withDistances.filter(prop => {
+      const propPrice = parseFloat(prop.property.price.replace(/[$,]/g, ''));
+      return prop.property.state === targetProperty.property.state &&
+        prop.distance <= 100 &&
+        Math.abs(propPrice - targetPrice) / targetPrice <= 0.5 && // Within 50% of target price
+        !selectedProps.some(selected => selected.property.mlsId === prop.property.mlsId);
+    }).sort((a, b) => a.distance - b.distance);
+    
+    const needed = count - selectedProps.length;
+    selectedProps.push(...similarPriceSameState.slice(0, needed));
+  }
+  
+  // 4. Last resort: Similar price range, any location (but prefer closer)
+  if (selectedProps.length < count) {
+    const targetPrice = parseFloat(targetProperty.property.price.replace(/[$,]/g, ''));
+    const similarPriceAny = withDistances.filter(prop => {
+      const propPrice = parseFloat(prop.property.price.replace(/[$,]/g, ''));
+      return Math.abs(propPrice - targetPrice) / targetPrice <= 0.3 && // Within 30% of target price
+        !selectedProps.some(selected => selected.property.mlsId === prop.property.mlsId);
+    }).sort((a, b) => a.distance - b.distance);
+    
+    const needed = count - selectedProps.length;
+    selectedProps.push(...similarPriceAny.slice(0, needed));
+  }
+  
+  // Ensure we have the requested count (pad with closest if needed)
+  if (selectedProps.length < count) {
+    const remaining = withDistances
+      .filter(prop => !selectedProps.some(selected => selected.property.mlsId === prop.property.mlsId))
+      .sort((a, b) => a.distance - b.distance);
+    
+    const needed = count - selectedProps.length;
+    selectedProps.push(...remaining.slice(0, needed));
+  }
+  
+  return selectedProps.slice(0, count).map((prop, index) => {
     const soldDates = ['2024-11-15', '2024-10-28', '2024-11-03', '2024-10-12', '2024-11-20'];
     
     return {

@@ -476,6 +476,267 @@ export const realPropertiesDatabase: PropertyData[] = [
         reportUrl: "https://www.cotality.com/products/underwriting-center"
       }
     }
+  },
+
+  // Additional Miami Beach properties for better comparables
+  {
+    property: {
+      address: "789 Collins Ave",
+      city: "Miami Beach",
+      state: "FL",
+      zip: "33139",
+      price: "$2,850,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1800,
+      status: "Active",
+      mlsId: "MLS-FL-011",
+      salesPitch: "Luxury beachfront condo with stunning ocean views! Modern finishes, wraparound terrace, and premium building amenities. Prime South Beach location.",
+      yearBuilt: 2020,
+      lotSize: "Condo",
+      propertyType: "Condo",
+      coordinates: { lat: 25.7825, lng: -80.1298 }
+    },
+    permits: [
+      { type: "Interior Renovation", year: 2023, status: "Finaled", permitId: "MIA-2023-1122", cost: 35000, contractor: "Luxury Renovations FL", description: "Complete interior renovation with custom finishes" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-09-28", type: "Hurricane", amount: 28000, status: "Paid", description: "Hurricane Ian minor wind damage" }
+      ],
+      fireRisk: { score: 2.0, lastInspection: "2023-08-15", notes: "Low fire risk, new construction with advanced safety" },
+      floodRisk: { zone: "VE", riskLevel: "Very High", lastFlood: "2022-09-28" },
+      cotality: {
+        cotalityPropertyId: "CL-FL-0789",
+        wildfireRiskScore: 1,
+        floodRiskScore: 9,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  {
+    property: {
+      address: "321 Washington Ave",
+      city: "Miami Beach",
+      state: "FL",
+      zip: "33139",
+      price: "$3,750,000",
+      beds: 3,
+      baths: 3,
+      sqft: 2100,
+      status: "Active",
+      mlsId: "MLS-FL-012",
+      salesPitch: "Penthouse-level condo with private rooftop access! Panoramic ocean and city views, designer kitchen, and exclusive amenities. Art Deco district location.",
+      yearBuilt: 2019,
+      lotSize: "Condo",
+      propertyType: "Condo",
+      coordinates: { lat: 25.7809, lng: -80.1320 }
+    },
+    permits: [
+      { type: "Rooftop Deck", year: 2023, status: "Finaled", permitId: "MIA-2023-0888", cost: 45000, contractor: "Elite Outdoor Spaces", description: "Custom rooftop deck with outdoor kitchen" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 1.8, lastInspection: "2023-10-12", notes: "Very low fire risk, new construction" },
+      floodRisk: { zone: "VE", riskLevel: "Very High", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-FL-0321",
+        wildfireRiskScore: 1,
+        floodRiskScore: 9,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Additional Los Angeles properties
+  {
+    property: {
+      address: "2345 Melrose Ave",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90046",
+      price: "$1,450,000",
+      beds: 3,
+      baths: 2,
+      sqft: 2000,
+      status: "Active",
+      mlsId: "MLS-CA-013",
+      salesPitch: "Mid-century modern gem in West Hollywood! Completely updated with premium finishes, private pool, and mature landscaping. Walk to Melrose shopping.",
+      yearBuilt: 1958,
+      lotSize: "0.18 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 34.0837, lng: -118.3570 }
+    },
+    permits: [
+      { type: "Pool Renovation", year: 2023, status: "Finaled", permitId: "LA-2023-0567", cost: 35000, contractor: "Hollywood Pools", description: "Complete pool renovation with new tile and equipment" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-02-20", type: "Earthquake", amount: 12000, status: "Paid", description: "Minor foundation settling from 3.8 earthquake" }
+      ],
+      fireRisk: { score: 8.2, lastInspection: "2023-07-10", notes: "High wildfire risk area" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CA-2345",
+        wildfireRiskScore: 8,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 8,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Additional Chicago properties
+  {
+    property: {
+      address: "555 N State St",
+      city: "Chicago",
+      state: "IL",
+      zip: "60654",
+      price: "$1,850,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1500,
+      status: "Active",
+      mlsId: "MLS-IL-014",
+      salesPitch: "Luxury high-rise condo in River North! Floor-to-ceiling windows, chef's kitchen, and building amenities. Walk to Magnificent Mile shopping.",
+      yearBuilt: 2010,
+      lotSize: "Condo",
+      propertyType: "Condo",
+      coordinates: { lat: 41.8919, lng: -87.6281 }
+    },
+    permits: [
+      { type: "Kitchen Remodel", year: 2022, status: "Finaled", permitId: "CHI-2022-1789", cost: 55000, contractor: "Chicago Kitchen Design", description: "Luxury kitchen renovation with marble countertops" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-02-15", type: "Water Damage", amount: 8500, status: "Paid", description: "Pipe freeze damage during polar vortex" }
+      ],
+      fireRisk: { score: 2.8, lastInspection: "2023-05-20", notes: "Low fire risk, modern high-rise" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-IL-0555",
+        wildfireRiskScore: 1,
+        floodRiskScore: 3,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // One more Miami Beach property for complete local comparables
+  {
+    property: {
+      address: "1200 Lincoln Rd",
+      city: "Miami Beach",
+      state: "FL",
+      zip: "33139",
+      price: "$2,995,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1700,
+      status: "Active",
+      mlsId: "MLS-FL-015",
+      salesPitch: "Designer condo on iconic Lincoln Road! Contemporary finishes, oversized terrace, and premium location. Walk to shops, restaurants, and beach.",
+      yearBuilt: 2017,
+      lotSize: "Condo",
+      propertyType: "Condo",
+      coordinates: { lat: 25.7907, lng: -80.1418 }
+    },
+    permits: [
+      { type: "Smart Home Install", year: 2023, status: "Finaled", permitId: "MIA-2023-0999", cost: 18000, contractor: "Tech Home Solutions", description: "Complete smart home automation system" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-09-28", type: "Hurricane", amount: 15000, status: "Paid", description: "Hurricane Ian window damage" }
+      ],
+      fireRisk: { score: 1.9, lastInspection: "2023-09-20", notes: "Very low fire risk, modern construction" },
+      floodRisk: { zone: "VE", riskLevel: "Very High", lastFlood: "2022-09-28" },
+      cotality: {
+        cotalityPropertyId: "CL-FL-1200",
+        wildfireRiskScore: 1,
+        floodRiskScore: 9,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // One more Los Angeles property for better local comparables
+  {
+    property: {
+      address: "8899 Beverly Blvd",
+      city: "Los Angeles", 
+      state: "CA",
+      zip: "90048",
+      price: "$1,375,000",
+      beds: 3,
+      baths: 3,
+      sqft: 2200,
+      status: "Active",
+      mlsId: "MLS-CA-016",
+      salesPitch: "Stylish contemporary home in desirable West Hollywood adjacent! Open floor plan, gourmet kitchen, and private yard. Close to Beverly Center and entertainment.",
+      yearBuilt: 1995,
+      lotSize: "0.14 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 34.0758, lng: -118.3736 }
+    },
+    permits: [
+      { type: "Bathroom Remodel", year: 2023, status: "Finaled", permitId: "LA-2023-0678", cost: 28000, contractor: "West Side Renovations", description: "Master bathroom renovation with luxury finishes" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 7.8, lastInspection: "2023-08-25", notes: "Moderate-high wildfire risk area" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CA-8899",
+        wildfireRiskScore: 8,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 7,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Final Los Angeles property for complete local comparables
+  {
+    property: {
+      address: "1456 Fairfax Ave",
+      city: "Los Angeles",
+      state: "CA", 
+      zip: "90046",
+      price: "$1,195,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1800,
+      status: "Active",
+      mlsId: "MLS-CA-017",
+      salesPitch: "Charming craftsman in trendy Fairfax district! Original hardwood floors, updated kitchen, and spacious backyard. Walk to Farmer's Market and Grove.",
+      yearBuilt: 1925,
+      lotSize: "0.16 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 34.0766, lng: -118.3614 }
+    },
+    permits: [
+      { type: "Foundation Repair", year: 2022, status: "Finaled", permitId: "LA-2022-1234", cost: 22000, contractor: "LA Foundation Experts", description: "Seismic foundation reinforcement" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-03-10", type: "Earthquake", amount: 6500, status: "Paid", description: "Minor chimney damage from 3.5 earthquake" }
+      ],
+      fireRisk: { score: 7.9, lastInspection: "2023-07-30", notes: "Moderate-high wildfire risk area" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CA-1456",
+        wildfireRiskScore: 8,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 8,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
   }
 ];
 
