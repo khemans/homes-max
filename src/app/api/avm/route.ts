@@ -117,7 +117,7 @@ function selectOptimalComparables(targetProperty: PropertyData, count: number = 
   // Calculate similarity scores for each property
   const scoredProperties = otherProperties.map(prop => {
     const propFeatures = calculatePropertyFeatures(prop);
-    const similarityScore = calculateSimilarityScore(targetFeatures, propFeatures, prop);
+    const similarityScore = calculateSimilarityScore(targetFeatures, propFeatures);
     return { property: prop, score: similarityScore };
   });
   
@@ -128,7 +128,7 @@ function selectOptimalComparables(targetProperty: PropertyData, count: number = 
     .map(item => item.property);
 }
 
-function calculateSimilarityScore(target: unknown, comp: unknown, _compProperty: PropertyData): number {
+function calculateSimilarityScore(target: unknown, comp: unknown): number {
   const targetFeatures = target as PropertyFeatures;
   const compFeatures = comp as PropertyFeatures;
   
@@ -214,7 +214,7 @@ function calculateAdjustedSalesComparison(targetProperty: PropertyData, comparab
     adjustedPrice += luxuryAdjustment;
     
     // Weight based on similarity (closer = higher weight)
-    const weight = calculateSimilarityScore(targetFeatures, compFeatures, comp) / 100;
+    const weight = calculateSimilarityScore(targetFeatures, compFeatures) / 100;
     
     totalAdjustedValue += adjustedPrice * weight;
     totalWeight += weight;

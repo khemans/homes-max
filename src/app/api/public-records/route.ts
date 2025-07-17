@@ -238,7 +238,7 @@ class PublicRecordsService {
   }
 
   // 5. Building permits (many cities have open data APIs)
-  async getBuildingPermits(_address: string, _coordinates?: {lat: number, lng: number}): Promise<PermitData[]> {
+  async getBuildingPermits(): Promise<PermitData[]> {
     try {
       // This would integrate with city-specific open data APIs
       // Many major cities provide free access to permit data
@@ -394,7 +394,7 @@ export async function GET(request: NextRequest) {
     }
     
     dataPromises.push(
-      service.getBuildingPermits(address, coordinates || undefined)
+      service.getBuildingPermits()
         .then(data => ({ source: 'permits', data }))
         .catch(error => ({ source: 'permits', error: error.message }))
     );
