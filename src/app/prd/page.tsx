@@ -483,7 +483,7 @@ const PRDPage = () => (
                       <p className="text-sm text-green-700 mb-2">Property risk assessment and analytics platform</p>
                       <div className="text-xs text-green-600 space-y-1">
                         <div>• Website: <a href="https://www.cotality.com/" target="_blank" rel="noopener noreferrer" className="underline">cotality.com</a></div>
-                        <div>• Platform: "Intelligence Beyond Bounds"</div>
+                        <div>• Platform: &ldquo;Intelligence Beyond Bounds&rdquo;</div>
                       </div>
                     </div>
                     
