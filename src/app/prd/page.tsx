@@ -27,7 +27,7 @@ const PRDPage = () => (
           <div className="remax-card-body">
             <h2 className="remax-heading-2 mb-4">Introduction</h2>
             <p className="remax-text-body mb-4">
-              "HOUSE/MAX" is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
+              &ldquo;HOUSE/MAX&rdquo; is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
             </p>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
               <h3 className="font-semibold text-green-800 mb-2">Current Implementation</h3>
@@ -39,8 +39,8 @@ const PRDPage = () => (
               <h3 className="font-semibold text-blue-800 mb-2">Recent Updates (v3.1)</h3>
               <ul className="text-blue-700 space-y-1">
                 <li>• Complete migration from CoreLogic to Cotality for risk assessment data</li>
-                <li>• Updated all branding and references to reflect Cotality's new identity</li>
-                <li>• Enhanced data integration with Cotality's "Intelligence Beyond Bounds" platform</li>
+                <li>• Updated all branding and references to reflect Cotality&rsquo;s new identity</li>
+                <li>• Enhanced data integration with Cotality&rsquo;s &ldquo;Intelligence Beyond Bounds&rdquo; platform</li>
                 <li>• Improved risk assessment display with new Cotality branding</li>
               </ul>
             </div>
@@ -97,7 +97,7 @@ const PRDPage = () => (
                     <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-gray-700">Leverage Cotality's advanced property data and analytics capabilities</span>
+                    <span className="text-gray-700">Leverage Cotality&rsquo;s advanced property data and analytics capabilities</span>
                   </li>
                 </ul>
               </div>
@@ -197,7 +197,7 @@ const PRDPage = () => (
                   <li>• <strong>Design:</strong> Professional RE/MAX-inspired design with clean, modern aesthetics</li>
                   <li>• <strong>Hero Section:</strong> Compelling headline with prominent search functionality</li>
                   <li>• <strong>Trust Indicators:</strong> Three professional feature highlights with icons</li>
-                  <li>• <strong>"What You'll Discover" Section:</strong> Feature cards for Permit History, Risk Assessment, Property Rights</li>
+                  <li>• <strong>&ldquo;What You&rsquo;ll Discover&rdquo; Section:</strong> Feature cards for Permit History, Risk Assessment, Property Rights</li>
                 </ul>
               </div>
             </div>
