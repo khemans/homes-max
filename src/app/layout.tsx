@@ -75,7 +75,7 @@ export default function RootLayout({
                 <h3 className="text-lg font-semibold mb-4">About Project</h3>
                 <ul className="space-y-2 text-sm">
                   <li><Link href="/docs" className="text-gray-400 hover:text-white transition-colors">📚 Documentation</Link></li>
-                  <li><Link href="/docs/prd" className="text-gray-400 hover:text-white transition-colors">📋 PRD</Link></li>
+                  <li><Link href="/prd" className="text-gray-400 hover:text-white transition-colors">📋 PRD</Link></li>
                   <li><Link href="/docs/avm-accuracy-improvements" className="text-gray-400 hover:text-white transition-colors">🔧 AVM v2.0</Link></li>
                   <li><Link href="/docs/public-records-integration" className="text-gray-400 hover:text-white transition-colors">🏛️ Public Records</Link></li>
                   <li><Link href="/docs/vercel-troubleshooting" className="text-gray-400 hover:text-white transition-colors">🚀 Deployment</Link></li>
