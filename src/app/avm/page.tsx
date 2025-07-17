@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// AVM data interface (reused from PropertyDetailsClient)
+// AVM data interface with enhanced properties
 interface AVMData {
   estimatedValue: number;
   confidenceLevel: number;
@@ -24,6 +24,16 @@ interface AVMData {
     yearlyChange: number;
     marketDirection: 'up' | 'down' | 'stable';
   };
+  propertyDetails?: {
+    bedrooms: number;
+    bathrooms: number;
+    sqft: number;
+    lotSize: string;
+    propertyType: string;
+    yearBuilt: number;
+  };
+  dataSource?: 'real_address' | 'estimated';
+  accuracy?: string;
 }
 
 // Helper to generate mock AVM data (reused from PropertyDetailsClient)
@@ -78,18 +88,30 @@ const AVMPage = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!address.trim()) return;
 
     setLoading(true);
     setHasSearched(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch(`/api/avm?address=${encodeURIComponent(address)}`);
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        setAvmData(result.data);
+      } else {
+        // Fallback to mock data if API fails
+        setAvmData(generateMockAVMData());
+      }
+    } catch (error) {
+      console.error('AVM API Error:', error);
+      // Fallback to mock data on error
       setAvmData(generateMockAVMData());
-      setLoading(false);
-    }, 2000);
+    }
+    
+    setLoading(false);
   };
 
   const handleReset = () => {
@@ -100,11 +122,11 @@ const AVMPage = () => {
   };
 
   const popularAddresses = [
-    "123 Main St, Denver, CO",
-    "456 Oak Ave, Aurora, CO", 
-    "1234 Larimer St, Denver, CO",
-    "5678 Colfax Ave, Lakewood, CO",
-    "9012 Broadway, Englewood, CO"
+    "1567 Ocean Dr, Miami Beach, FL",
+    "900 N Michigan Ave, Chicago, IL",
+    "456 E 1st St, Austin, TX",
+    "1200 University Ave, Denver, CO",
+    "2350 3rd Ave, Seattle, WA"
   ];
 
   return (
@@ -222,8 +244,28 @@ const AVMPage = () => {
                         <div className="text-xs text-gray-500 mt-2">
                           Valuation Date: {avmData.valuationDate}
                         </div>
+                        {avmData.dataSource && (
+                          <div className="text-xs text-blue-600 mt-1">
+                            Data Source: {avmData.dataSource === 'real_address' ? 'Real Property Data' : 'Estimated'}
+                          </div>
+                        )}
                       </div>
                     </div>
+                    
+                    {/* Property Details */}
+                    {avmData.propertyDetails && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-blue-800 mb-2">Property Details</h4>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div className="text-gray-600">Bedrooms: <span className="font-medium">{avmData.propertyDetails.bedrooms}</span></div>
+                          <div className="text-gray-600">Bathrooms: <span className="font-medium">{avmData.propertyDetails.bathrooms}</span></div>
+                          <div className="text-gray-600">Square Feet: <span className="font-medium">{avmData.propertyDetails.sqft.toLocaleString()}</span></div>
+                          <div className="text-gray-600">Year Built: <span className="font-medium">{avmData.propertyDetails.yearBuilt}</span></div>
+                          <div className="text-gray-600">Lot Size: <span className="font-medium">{avmData.propertyDetails.lotSize}</span></div>
+                          <div className="text-gray-600">Type: <span className="font-medium">{avmData.propertyDetails.propertyType}</span></div>
+                        </div>
+                      </div>
+                    )}
                     
                     {/* Market Trends */}
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
