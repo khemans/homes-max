@@ -50,6 +50,9 @@ const Header: React.FC = () => {
             <Link href="/resources" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               Resources
             </Link>
+            <Link href="/prd" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+              PRD
+            </Link>
             <Link href="/about" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">
               About
             </Link>
@@ -102,6 +105,13 @@ const Header: React.FC = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Resources
+              </Link>
+              <Link 
+                href="/prd" 
+                className="block px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 font-medium transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                PRD
               </Link>
               <Link 
                 href="/about" 
