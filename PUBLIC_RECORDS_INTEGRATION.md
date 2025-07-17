@@ -4,6 +4,11 @@
 
 Your **HouseMax** platform now includes a comprehensive **Public Records API** that integrates multiple free data sources to provide detailed property information beyond basic MLS data. This API enhances property searches with government data, assessments, permits, and neighborhood information.
 
+**🆕 Recent Updates (v3.4):**
+- **Consolidated Integration:** Building permits now appear exclusively within the Public Records section, eliminating duplicate displays
+- **Enhanced Printable Reports:** All public records data is now included in printable property documents
+- **Streamlined Architecture:** Removed redundant `/api/permits` endpoint in favor of unified public records API
+
 ## 🌟 **Key Features**
 
 ### **1. Multiple Data Sources Integration**
@@ -16,10 +21,11 @@ Your **HouseMax** platform now includes a comprehensive **Public Records API** t
 
 ### **2. Comprehensive Property Data**
 - ✅ **Tax Assessments** - Assessed values, land values, tax amounts
-- ✅ **Building Permits** - Recent construction activity and improvements
+- ✅ **Building Permits** - Recent construction activity and improvements (consolidated in Public Records section)
 - ✅ **Flood Risk Data** - FEMA flood zones and risk levels
 - ✅ **Demographics** - Income, home values, crime rates, walkability
 - ✅ **Property Coordinates** - Accurate latitude/longitude positioning
+- ✅ **Printable Integration** - All data included in comprehensive property reports
 
 ## 🚀 **API Endpoints**
 
@@ -418,6 +424,43 @@ function calculateInvestmentMetrics(property: any, publicRecords: any) {
 
 ### **User Experience**
 - **One-Stop Platform** - All property information in a single search
+- **Consolidated Display** - Building permits integrated within Public Records section (no duplicate sections)
+- **Comprehensive Reports** - All public records data included in printable property documents
+- **Professional Presentation** - Data formatted with proper source attribution and visual hierarchy
+
+## 📄 **Printable Reports Integration**
+
+### **Public Records in Printable Documents**
+The public records data is seamlessly integrated into printable property reports, providing:
+
+**Assessment Information:**
+- Property assessed value and land value
+- Annual tax amount and tax rate
+- Last assessment date
+
+**Building Permits (up to 5 most recent):**
+- Permit type and permit number
+- Issue date and contractor information
+- Permit value and current status
+
+**FEMA Flood Information:**
+- Flood zone designation
+- Risk level assessment
+- Insurance requirements
+
+**Area Demographics:**
+- Median household income
+- Walk score and transportation options
+- Crime rate and safety statistics
+
+**Data Source Attribution:**
+- US Census Bureau
+- FEMA Flood Maps
+- Local Government Records
+- OpenStreetMap
+- Municipal Permit Databases
+
+This ensures users have comprehensive property intelligence in both digital and printed formats, with proper source crediting for all government data.
 - **Detailed Reports** - Professional-grade property analysis
 - **Informed Decisions** - Complete picture for buyers, sellers, and investors
 

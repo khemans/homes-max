@@ -27,6 +27,11 @@
   - Graceful degradation for API failures
   - Client-side and server-side logging for issue diagnosis
   - Production-ready error recovery mechanisms
+- **Data Consolidation & Documentation Improvements:**
+  - Removed duplicate building permits section to eliminate redundancy
+  - Building permits now exclusively displayed within Public Records section
+  - Enhanced printable reports with comprehensive public records data integration
+  - Streamlined property page reducing size from 9.29 kB to 8.88 kB, then optimized to 9.22 kB with full public records in printable documents
 
 **Previous Updates (v3.3):**
 - **Enhanced AVM v2.0 Implementation:**
@@ -89,7 +94,7 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - ✅ As a homebuyer, I want to understand property rights, easements, and legal considerations in clear terms
 - ✅ As a homebuyer, I want to research building permits and code compliance records
 - ✅ As a homebuyer, I want to save properties for future reference and comparison
-- ✅ As a homebuyer, I want to generate printable property reports for my records
+- ✅ As a homebuyer, I want to generate printable property reports with comprehensive public records data for my records
 - ✅ As a real estate professional, I want access to comprehensive property data to better serve my clients
 - ✅ As a user, I want a professional, trustworthy platform that instills confidence
 - ✅ As a user, I want to access Cotality's advanced risk analytics and property intelligence
@@ -128,10 +133,11 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
     - Synchronized valuations between standalone AVM page and property details
   - **Public Records Integration:** Comprehensive government data access including:
     - Property tax assessments and land values
-    - Building permits and recent construction activity
+    - Building permits and recent construction activity (consolidated within Public Records section)
     - FEMA flood zone data and risk assessments
     - Demographics, income levels, and walkability scores
     - Alternative to premium APIs using free government sources
+    - Full public records data included in printable reports
   - **Risk Assessment:** Detailed risk analysis powered by Cotality including:
     - Insurance claims history
     - Fire risk assessment
@@ -140,7 +146,7 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
     - Wildfire, flood, and earthquake risk ratings
     - Cotality Property ID integration
     - Direct links to Cotality reports
-- **User Actions:** Save property functionality and printable report generation
+- **User Actions:** Save property functionality and printable report generation with comprehensive public records data
 - **Data Sources:** Clear attribution to Cotality for risk assessment data and government sources
 
 ### 5.3. Search Results Page ✅
@@ -314,7 +320,7 @@ homes-max/
    - Cotality risk assessment integration
    - Permit history with status indicators
    - MLS data with realtor insights
-   - Save functionality and printable reports
+   - Save functionality and printable reports with comprehensive public records integration
    - Detailed risk analytics display
 
 4. **Professional Navigation**
