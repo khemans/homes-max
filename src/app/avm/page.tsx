@@ -35,6 +35,12 @@ interface AVMData {
   };
   dataSource?: 'real_address' | 'estimated';
   accuracy?: string;
+  modelVersion?: string;
+  valuationMethods?: {
+    method: string;
+    weight: string;
+    value: number;
+  }[];
 }
 
 // Helper to generate mock AVM data (reused from PropertyDetailsClient)

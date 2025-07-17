@@ -97,50 +97,7 @@ function getMockCoords(address: string) {
   return null;
 }
 
-// Helper to generate mock AVM data
-function generateMockAVMData(): AVMData {
-  const baseValue = 450000 + Math.floor(Math.random() * 300000); // Random base value between 450k-750k
-  const confidenceLevel = 75 + Math.floor(Math.random() * 20); // 75-95% confidence
-  const rangeFactor = 0.1; // 10% range around estimate
-  
-  // Use real addresses from MLS data for comparables
-  const realComparables = [
-    { address: "1234 Larimer St, Denver, CO", basePrice: 425000, sqft: 1200 },
-    { address: "5678 Colfax Ave, Lakewood, CO", basePrice: 675000, sqft: 1850 },
-    { address: "2345 Colorado Blvd, Denver, CO", basePrice: 625000, sqft: 1750 },
-    { address: "6789 Evans Ave, Denver, CO", basePrice: 475000, sqft: 1100 },
-    { address: "3344 Mississippi Ave, Denver, CO", basePrice: 575000, sqft: 1650 },
-    { address: "5566 Yale Ave, Denver, CO", basePrice: 695000, sqft: 1900 },
-    { address: "7788 Iliff Ave, Denver, CO", basePrice: 525000, sqft: 1350 }
-  ];
-  
-  // Select 3 random comparables
-  const selectedComparables = [...realComparables]
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 3);
-  
-  return {
-    estimatedValue: baseValue,
-    confidenceLevel,
-    valuationDate: new Date().toISOString().split('T')[0],
-    priceRange: {
-      low: Math.floor(baseValue * (1 - rangeFactor)),
-      high: Math.floor(baseValue * (1 + rangeFactor))
-    },
-    comparables: selectedComparables.map((comp, index) => ({
-      address: comp.address,
-      soldPrice: comp.basePrice + Math.floor(Math.random() * 50000 - 25000), // ±$25k variation
-      soldDate: ["2024-01-15", "2024-02-03", "2024-01-28"][index],
-      sqft: comp.sqft + Math.floor(Math.random() * 200 - 100), // ±100 sqft variation
-      distance: 0.2 + Math.random() * 0.6 // 0.2 to 0.8 miles
-    })),
-    marketTrends: {
-      monthlyChange: -1 + Math.random() * 2, // -1% to +1%
-      yearlyChange: 2 + Math.random() * 6, // 2% to 8%
-      marketDirection: Math.random() > 0.5 ? 'up' : 'stable'
-    }
-  };
-}
+
 
 // Define MLS result type
 interface MLSResult {
@@ -238,6 +195,12 @@ interface AVMData {
   };
   dataSource?: 'real_address' | 'estimated';
   accuracy?: string;
+  modelVersion?: string;
+  valuationMethods?: {
+    method: string;
+    weight: string;
+    value: number;
+  }[];
 }
 
 // Add SavedProperty type for localStorage
@@ -364,7 +327,7 @@ const PropertyDetailsClient: React.FC = () => {
         })
         .finally(() => setRiskLoading(false));
 
-      // Get AVM data from API
+      // Get AVM data from API (using enhanced algorithm)
       setAvmLoading(true);
       fetch(`/api/avm?address=${encodeURIComponent(address)}`)
         .then(res => res.json())
@@ -372,14 +335,15 @@ const PropertyDetailsClient: React.FC = () => {
           if (result.success && result.data) {
             setAvmData(result.data);
           } else {
-            // Fallback to mock data if API fails
-            setAvmData(generateMockAVMData());
+            console.error('AVM API failed:', result.error || 'Unknown error');
+            // Set to null instead of mock data to show error state
+            setAvmData(null);
           }
         })
         .catch(error => {
           console.error('AVM API Error:', error);
-          // Fallback to mock data on error
-          setAvmData(generateMockAVMData());
+          // Set to null instead of mock data to show error state
+          setAvmData(null);
         })
         .finally(() => setAvmLoading(false));
     } else {
@@ -704,7 +668,19 @@ const PropertyDetailsClient: React.FC = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <div className="remax-text-body text-gray-600">AVM data not available for this address.</div>
+                    <div className="mb-4">
+                      <svg className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                    </div>
+                    <div className="remax-text-body text-gray-600 mb-2">Enhanced AVM data not available for this address</div>
+                    <div className="text-sm text-gray-500">
+                      This property may not be in our enhanced database. Try the{' '}
+                      <a href="/avm" className="text-blue-600 hover:text-blue-800 underline">
+                        standalone AVM tool
+                      </a>{' '}
+                      for estimated valuations.
+                    </div>
                   </div>
                 )}
 

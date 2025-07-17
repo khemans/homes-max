@@ -1,6 +1,6 @@
 # Product Requirements Document: HOUSE/MAX
 
-**Version:** 3.2  
+**Version:** 3.3  
 **Date:** January 2025  
 **Author:** AI Assistant (with User Collaboration)  
 **Product Name:** HOUSE/MAX  
@@ -12,15 +12,29 @@
 
 "HOUSE/MAX" is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
 
-**Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, and comprehensive property data integrated with Cotality risk analytics.
+**Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, comprehensive property data integrated with Cotality risk analytics, enhanced AVM v2.0 with multi-approach valuation algorithms, and public records integration using free government APIs.
 
-**Recent Updates (v3.2):**
-- Complete migration from CoreLogic to Cotality for risk assessment data
-- Updated all branding and references to reflect Cotality's new identity
-- Enhanced data integration with Cotality's "Intelligence Beyond Bounds" platform
-- Improved risk assessment display with new Cotality branding
-- Added comprehensive PRD presentation page for stakeholder demonstrations
-- Defined future development roadmap with enhanced API integrations
+**Recent Updates (v3.3):**
+- **Enhanced AVM v2.0 Implementation:**
+  - Multi-approach valuation: Sales Comparison (60%), Cost Approach (20%), Income Approach (20%)
+  - Advanced feature engineering with luxury scores, location scoring, and market tiers
+  - Enhanced comparable selection with weighted similarity algorithms (geographic proximity, size, age, market tier, features)
+  - Intelligent property adjustments and confidence scoring (70-98% range)
+  - Synchronized valuation between standalone AVM page and property details
+- **Public Records API Integration:**
+  - Comprehensive free API integration (US Census, FEMA, OpenStreetMap, local government sources)
+  - Property assessment data, building permits, flood risk, demographics, walkability scores
+  - Alternative to premium APIs using government data sources ($0 vs $74+/month)
+  - Parallel data fetching with graceful error handling
+- **Data Infrastructure Improvements:**
+  - Real address database with enhanced property valuations
+  - Geoapify API integration for address autocomplete and geocoding
+  - Performance optimizations and error handling enhancements
+- **Previous Updates (v3.2):**
+  - Complete migration from CoreLogic to Cotality for risk assessment data
+  - Updated branding and references to reflect Cotality's new identity
+  - Enhanced data integration with Cotality's "Intelligence Beyond Bounds" platform
+  - Comprehensive PRD presentation page for stakeholder demonstrations
 
 ---
 
@@ -31,11 +45,13 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 
 **Key Objectives:**
 - Provide comprehensive property history and risk assessment data through Cotality integration
-- Offer professional-grade property research tools and resources
-- Deliver expert guidance on permits, property rights, and legal considerations
+- Deliver enterprise-grade property valuations using enhanced AVM v2.0 with multi-approach algorithms
+- Offer professional-grade property research tools and public records access using free government APIs
+- Provide expert guidance on permits, property rights, legal considerations, and risk assessments
 - Maintain a professional, trustworthy user experience with RE/MAX design standards
 - Utilize modern web technologies for efficient development and superior performance
-- Leverage Cotality's advanced property data and analytics capabilities
+- Leverage cost-effective data sources to provide premium insights without subscription fees
+- Ensure accurate and consistent property valuations across all platform features
 
 ---
 
@@ -90,6 +106,18 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
   - **Interactive Map:** Leaflet map with custom RE/MAX balloon markers
   - **MLS Results:** Professional property listings with realtor insights
   - **Permit Records:** Comprehensive building permit history with status indicators
+  - **Enhanced AVM (v2.0):** Advanced Automated Valuation Model with:
+    - Multi-approach valuation: Sales Comparison (60%), Cost Approach (20%), Income Approach (20%)
+    - Advanced feature engineering with luxury scores and location scoring
+    - Enhanced comparable selection with weighted similarity algorithms
+    - Intelligent property adjustments and confidence scoring (70-98% range)
+    - Synchronized valuations between standalone AVM page and property details
+  - **Public Records Integration:** Comprehensive government data access including:
+    - Property tax assessments and land values
+    - Building permits and recent construction activity
+    - FEMA flood zone data and risk assessments
+    - Demographics, income levels, and walkability scores
+    - Alternative to premium APIs using free government sources
   - **Risk Assessment:** Detailed risk analysis powered by Cotality including:
     - Insurance claims history
     - Fire risk assessment
@@ -99,7 +127,7 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
     - Cotality Property ID integration
     - Direct links to Cotality reports
 - **User Actions:** Save property functionality and printable report generation
-- **Data Sources:** Clear attribution to Cotality for risk assessment data
+- **Data Sources:** Clear attribution to Cotality for risk assessment data and government sources
 
 ### 5.3. Search Results Page ✅
 
@@ -125,6 +153,12 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - Saved property management
 - Professional property cards with management actions
 - Empty state with clear call-to-actions
+
+**Standalone AVM Page:**
+- Dedicated Automated Valuation Model interface
+- Enhanced property valuation using advanced algorithms
+- Professional presentation of estimation confidence and methodologies
+- Integration with real property database for accurate valuations
 
 ### 5.5. Navigation & Layout ✅
 
@@ -376,13 +410,26 @@ homes-max/
   - Property-specific risk identifiers
   - Comprehensive risk analytics
   - Direct report access
+- **Enhanced AVM Database:** Real property data with advanced valuations
+  - Multi-approach valuation algorithms
+  - Enhanced comparable selection
+  - Advanced feature engineering
+  - Confidence scoring and accuracy metrics
+- **Public Records (Government APIs):** Comprehensive free data integration
+  - US Census Bureau API (demographics, home values)
+  - FEMA Flood Maps API (flood zones, risk assessments)
+  - OpenStreetMap Nominatim (free geocoding)
+  - Local government APIs (property tax, building permits)
+  - Alternative to premium APIs ($0 vs $74+/month)
 - **MLS Data:** Property listings and market information
-- **Public Records:** Permit and legal information
-- **Geographic Data:** Location and mapping services
+- **Geographic Data:** Location and mapping services through Geoapify integration
 
 ### API Integrations
 - **Cotality API:** Risk assessment data integration
-- **Nominatim API:** Geocoding and location services
+- **Enhanced AVM API:** Advanced property valuation with multi-approach algorithms
+- **Public Records API:** Free government data sources integration
+- **Geoapify API:** Professional address autocomplete and geocoding
+- **Nominatim API:** Backup geocoding and location services
 - **Leaflet Maps:** Interactive mapping functionality
 
 ---
