@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 import Header from "../components/Header";
 import { Suspense } from "react";
@@ -31,7 +32,7 @@ export default function RootLayout({
         <footer className="bg-gray-900 text-white">
           <div className="remax-container">
             {/* Main Footer Content */}
-            <div className="py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
               {/* Company Info */}
               <div className="md:col-span-1">
                 <div className="flex items-center space-x-2 mb-4">
@@ -66,6 +67,18 @@ export default function RootLayout({
                   <li><a href="/my-properties" className="text-gray-400 hover:text-white transition-colors">My Properties</a></li>
                   <li><a href="/resources" className="text-gray-400 hover:text-white transition-colors">Resources</a></li>
                   <li><a href="/about" className="text-gray-400 hover:text-white transition-colors">About</a></li>
+                </ul>
+              </div>
+
+              {/* Project Documentation */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">About Project</h3>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/docs" className="text-gray-400 hover:text-white transition-colors">📚 Documentation</Link></li>
+                  <li><Link href="/docs/prd" className="text-gray-400 hover:text-white transition-colors">📋 PRD</Link></li>
+                  <li><Link href="/docs/avm-accuracy-improvements" className="text-gray-400 hover:text-white transition-colors">🔧 AVM v2.0</Link></li>
+                  <li><Link href="/docs/public-records-integration" className="text-gray-400 hover:text-white transition-colors">🏛️ Public Records</Link></li>
+                  <li><Link href="/docs/vercel-troubleshooting" className="text-gray-400 hover:text-white transition-colors">🚀 Deployment</Link></li>
                 </ul>
               </div>
 
