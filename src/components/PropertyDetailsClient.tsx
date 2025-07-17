@@ -228,6 +228,16 @@ interface AVMData {
     yearlyChange: number;
     marketDirection: 'up' | 'down' | 'stable';
   };
+  propertyDetails?: {
+    bedrooms: number;
+    bathrooms: number;
+    sqft: number;
+    lotSize: string;
+    propertyType: string;
+    yearBuilt: number;
+  };
+  dataSource?: 'real_address' | 'estimated';
+  accuracy?: string;
 }
 
 // Add SavedProperty type for localStorage
@@ -354,12 +364,24 @@ const PropertyDetailsClient: React.FC = () => {
         })
         .finally(() => setRiskLoading(false));
 
-      // Generate AVM data
+      // Get AVM data from API
       setAvmLoading(true);
-      setTimeout(() => {
-        setAvmData(generateMockAVMData());
-        setAvmLoading(false);
-      }, 1000); // Simulate API delay
+      fetch(`/api/avm?address=${encodeURIComponent(address)}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.success && result.data) {
+            setAvmData(result.data);
+          } else {
+            // Fallback to mock data if API fails
+            setAvmData(generateMockAVMData());
+          }
+        })
+        .catch(error => {
+          console.error('AVM API Error:', error);
+          // Fallback to mock data on error
+          setAvmData(generateMockAVMData());
+        })
+        .finally(() => setAvmLoading(false));
     } else {
       setMlsResults([]);
       setPermits([]);
@@ -594,7 +616,14 @@ const PropertyDetailsClient: React.FC = () => {
           {address && (
             <div className="remax-card mb-8">
               <div className="remax-card-header">
-                <h2 className="remax-heading-3">Automated Valuation Model (AVM)</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="remax-heading-3">Automated Valuation Model (AVM)</h2>
+                  {avmData?.dataSource && (
+                    <div className="text-sm text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                      {avmData.dataSource === 'real_address' ? 'Real Property Data' : 'Estimated Data'}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="remax-card-body">
                 {avmLoading ? (
