@@ -86,7 +86,7 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
       try {
         const errorBody = await response.text();
         console.warn('Geoapify error body:', errorBody);
-      } catch (e) {
+      } catch {
         console.warn('Could not read Geoapify error response');
       }
       

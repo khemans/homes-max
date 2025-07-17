@@ -102,7 +102,7 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
         try {
           const errorData = await response.text();
           console.error('AddressAutocomplete API Error Details:', errorData);
-        } catch (e) {
+        } catch {
           console.error('Could not parse error response');
         }
         

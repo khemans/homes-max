@@ -1,10 +1,10 @@
 # Product Requirements Document: HOUSE/MAX
 
-**Version:** 3.3  
+**Version:** 3.4  
 **Date:** January 2025  
 **Author:** AI Assistant (with User Collaboration)  
 **Product Name:** HOUSE/MAX  
-**Current Status:** MVP Deployed on Vercel with RE/MAX Professional Design
+**Current Status:** Production-Ready Deployment with Advanced Debugging & Troubleshooting
 
 ---
 
@@ -14,7 +14,21 @@
 
 **Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, comprehensive property data integrated with Cotality risk analytics, enhanced AVM v2.0 with multi-approach valuation algorithms, and public records integration using free government APIs.
 
-**Recent Updates (v3.3):**
+**Recent Updates (v3.4):**
+- **Production Deployment & Debugging Infrastructure:**
+  - Comprehensive Vercel deployment troubleshooting system
+  - Advanced logging and monitoring for production environments
+  - Real-time debugging capabilities for address autocomplete and API issues
+  - Test endpoints for system health monitoring (`/api/test`)
+  - Detailed error tracking and fallback mechanisms
+  - Environment variable validation and debugging tools
+- **Enhanced Error Handling & Reliability:**
+  - Multi-layered fallback systems (Geoapify → Nominatim → Local Database)
+  - Graceful degradation for API failures
+  - Client-side and server-side logging for issue diagnosis
+  - Production-ready error recovery mechanisms
+
+**Previous Updates (v3.3):**
 - **Enhanced AVM v2.0 Implementation:**
   - Multi-approach valuation: Sales Comparison (60%), Cost Approach (20%), Income Approach (20%)
   - Advanced feature engineering with luxury scores, location scoring, and market tiers
@@ -464,7 +478,151 @@ homes-max/
 - Professional API rate limiting and error handling
 - Comprehensive data validation and accuracy checks
 
+**Production Infrastructure & Debugging (v3.4):**
+- **Advanced Monitoring & Logging:**
+  - Real-time application monitoring with detailed error tracking
+  - Server-side and client-side logging for comprehensive debugging
+  - Environment variable validation and configuration monitoring
+  - API health checks and system status monitoring
+- **Robust Error Handling:**
+  - Multi-layered fallback systems for API failures
+  - Graceful degradation for external service outages
+  - Automated error recovery and retry mechanisms
+  - Production-ready troubleshooting capabilities
+- **Deployment & Operations:**
+  - Vercel production deployment with advanced debugging tools
+  - Environment-specific configuration management
+  - Performance monitoring and optimization
+  - Comprehensive troubleshooting documentation and procedures
+
 **Timeline:** Q1-Q2 2025 for initial API integrations, with full government data integration by Q3 2025.
+
+---
+
+## 9. Resources & References
+
+This section provides links to all APIs, tools, technologies, and services integrated into the HOUSE/MAX platform.
+
+### **Core APIs & Data Sources**
+
+#### **Geoapify (Address Autocomplete & Geocoding)**
+- **Website:** https://www.geoapify.com/
+- **Documentation:** https://apidocs.geoapify.com/
+- **Service:** Address autocomplete, geocoding, and location data
+- **Plan:** Free tier (3,000 requests/day)
+- **Integration:** Primary address search and autocomplete functionality
+
+#### **Cotality (Risk Assessment)**
+- **Website:** https://www.cotality.com/
+- **Service:** Property risk assessment and analytics
+- **Integration:** Comprehensive property risk data and analysis
+- **Platform:** "Intelligence Beyond Bounds" risk assessment platform
+
+#### **US Census Bureau API (Demographics & Economics)**
+- **Website:** https://www.census.gov/data/developers/data-sets.html
+- **Documentation:** https://www.census.gov/data/developers/guidance/api-user-guide.html
+- **Service:** Demographics, income data, home values, population statistics
+- **Cost:** Free government API
+- **Integration:** Public records demographic data
+
+#### **FEMA Flood Maps API**
+- **Website:** https://www.fema.gov/flood-maps/national-flood-hazard-layer
+- **Documentation:** https://hazards.fema.gov/femaportal/docs/
+- **Service:** Flood zone data, flood risk assessments, FIRM maps
+- **Cost:** Free government API
+- **Integration:** Flood risk analysis for properties
+
+#### **OpenStreetMap Nominatim (Geocoding Fallback)**
+- **Website:** https://nominatim.openstreetmap.org/
+- **Documentation:** https://nominatim.org/release-docs/develop/api/Overview/
+- **Service:** Free geocoding and address search
+- **Cost:** Free (rate limited)
+- **Integration:** Fallback geocoding service when Geoapify unavailable
+
+### **Technology Stack & Frameworks**
+
+#### **Next.js (React Framework)**
+- **Website:** https://nextjs.org/
+- **Documentation:** https://nextjs.org/docs
+- **Version:** 15.3.4
+- **Purpose:** Full-stack React framework for the web application
+
+#### **React (Frontend Library)**
+- **Website:** https://react.dev/
+- **Documentation:** https://react.dev/learn
+- **Purpose:** User interface component library
+
+#### **TypeScript (Programming Language)**
+- **Website:** https://www.typescriptlang.org/
+- **Documentation:** https://www.typescriptlang.org/docs/
+- **Purpose:** Type-safe JavaScript development
+
+#### **Tailwind CSS (Styling Framework)**
+- **Website:** https://tailwindcss.com/
+- **Documentation:** https://tailwindcss.com/docs
+- **Purpose:** Utility-first CSS framework for styling
+
+#### **Leaflet (Interactive Maps)**
+- **Website:** https://leafletjs.com/
+- **Documentation:** https://leafletjs.com/reference.html
+- **Purpose:** Interactive property maps and location visualization
+
+### **Deployment & Infrastructure**
+
+#### **Vercel (Hosting Platform)**
+- **Website:** https://vercel.com/
+- **Documentation:** https://vercel.com/docs
+- **Service:** Serverless deployment and hosting
+- **Integration:** Production deployment with environment variable management
+
+#### **GitHub (Version Control)**
+- **Website:** https://github.com/
+- **Repository:** https://github.com/khemans/homes-max
+- **Service:** Code repository and version control
+- **Integration:** CI/CD pipeline with Vercel deployment
+
+### **Development Tools & APIs**
+
+#### **ESLint (Code Linting)**
+- **Website:** https://eslint.org/
+- **Documentation:** https://eslint.org/docs/latest/
+- **Purpose:** Code quality and consistency enforcement
+
+#### **PostCSS (CSS Processing)**
+- **Website:** https://postcss.org/
+- **Documentation:** https://postcss.org/docs/
+- **Purpose:** CSS transformation and optimization
+
+#### **Walk Score API (Walkability Data)**
+- **Website:** https://www.walkscore.com/professional/api.php
+- **Documentation:** https://www.walkscore.com/professional/walk-score-apis.php
+- **Service:** Walkability and transit scores for properties
+- **Integration:** Location quality assessments
+
+### **Free Government Data Sources**
+
+#### **Local Government APIs**
+- **Building Permits:** Municipal and county permit databases
+- **Property Tax Records:** Local assessor databases
+- **Zoning Information:** City and county zoning APIs
+- **Code Compliance:** Municipal code enforcement records
+
+#### **Crime Data APIs**
+- **FBI Crime Data:** https://ucr.fbi.gov/crime-in-the-u.s
+- **Local Police Departments:** City-specific crime statistics APIs
+- **Purpose:** Neighborhood safety assessments
+
+### **Alternative Premium Services (For Reference)**
+
+#### **CoreLogic API (Not Currently Used)**
+- **Website:** https://www.corelogic.com/
+- **Cost:** $74+/month
+- **Alternative:** Replaced with free government APIs
+
+#### **LexisNexis C.L.U.E. (Future Integration)**
+- **Website:** https://personalreports.lexisnexis.com/
+- **Service:** Comprehensive Loss Underwriting Exchange property reports
+- **Status:** Planned for future integration
 
 ---
 
