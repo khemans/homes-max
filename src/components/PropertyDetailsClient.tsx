@@ -3,6 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { getLinkedResource } from '@/utils/resourceManager';
+import { useState, useEffect } from 'react';
+import { MapPin, Bath, Bed, Square, Calendar, DollarSign, TrendingUp, AlertTriangle, Shield, Home, FileText, Droplets, Users, Star } from 'lucide-react';
 
 // HOW TO ADD NEW RESOURCES:
 // 1. Add the resource to the getLinkedResources() array in /utils/resourceManager.ts
@@ -277,119 +279,96 @@ const PermitPages: React.FC<{ address: string }> = ({ address }) => {
   );
 };
 
-const PropertyDetailsClient: React.FC = () => {
-  const searchParams = useSearchParams();
-  const query = searchParams.get("query");
-  const { address, keywords } = parseQuery(query);
-
-  // Show only relevant sections if keywords found, else show all
-  const relevantSections = keywords.length
-    ? infoSections.filter(section => section.keyword.some(k => keywords.includes(k)))
-    : infoSections;
-
-  // MLS integration (mock)
-  const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
-  const [mlsLoading, setMlsLoading] = useState(false);
-  
-  // Permit integration (mock)
-  const [permits, setPermits] = useState<PermitRecord[]>([]);
-  const [permitsLoading, setPermitsLoading] = useState(false);
-  const [permitsError, setPermitsError] = useState("");
-
-  // Add state for risk data
-  const [insuranceClaims, setInsuranceClaims] = useState<InsuranceClaim[] | null>(null);
-  const [fireRisk, setFireRisk] = useState<FireRisk | null>(null);
-  const [floodRisk, setFloodRisk] = useState<FloodRisk | null>(null);
-  const [riskLoading, setRiskLoading] = useState(false);
-  const [avmData, setAvmData] = useState<AVMData | null>(null);
-  const [avmLoading, setAvmLoading] = useState(false);
-
-  // Add state for cotality
-  const [cotality, setCotality] = useState<{
-    cotalityPropertyId: string;
-    wildfireRiskScore: number;
-    floodRiskScore: number;
-    earthquakeRiskScore: number;
-    reportUrl: string;
-  } | null>(null);
-
-  // Add state for saved property
-  const [isSaved, setIsSaved] = useState(false);
-
-  // Check if property is already saved
-  useEffect(() => {
-    if (!address) return;
-    const saved: SavedProperty[] = JSON.parse(localStorage.getItem("savedProperties") || "[]");
-    setIsSaved(saved.some((p) => p.address === address));
-  }, [address]);
-
-  // Save property handler
-  const handleSave = () => {
-    if (!address) return;
-    const saved: SavedProperty[] = JSON.parse(localStorage.getItem("savedProperties") || "[]");
-    if (!saved.some((p) => p.address === address)) {
-      const property = mlsResults[0] || { address, city: "", state: "", zip: "", mlsId: "" };
-      saved.push(property);
-      localStorage.setItem("savedProperties", JSON.stringify(saved));
-      setIsSaved(true);
-    }
+// Add new interface for public records
+interface PublicRecordsData {
+  basic: {
+    address: string;
+    coordinates?: { lat: number; lng: number };
   };
+  assessment?: {
+    assessedValue?: number;
+    marketValue?: number;
+    landValue?: number;
+    improvementValue?: number;
+    assessmentYear?: number;
+    taxAmount?: number;
+    taxRate?: number;
+  };
+  permits?: Array<{
+    permitNumber: string;
+    permitType: string;
+    description: string;
+    issuedDate: string;
+    value?: number;
+    status: string;
+    contractor?: string;
+  }>;
+  flood?: {
+    floodZone?: string;
+    floodRisk?: string;
+  };
+  demographics?: {
+    medianHouseholdIncome?: number;
+    medianHomeValue?: number;
+    crimeRate?: number;
+    walkabilityScore?: number;
+  };
+  sources: Record<string, any>;
+}
+
+export default function PropertyDetailsClient({ address }: { address: string }) {
+  const [property, setProperty] = useState<PropertyData | null>(null);
+  const [publicRecords, setPublicRecords] = useState<PublicRecordsData | null>(null);
+  const [avmData, setAvmData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [publicRecordsLoading, setPublicRecordsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (address) {
-      setMlsLoading(true);
-      fetch(`/api/mls?address=${encodeURIComponent(address)}`)
-        .then(res => res.json())
-        .then(data => setMlsResults(data.results || []))
-        .finally(() => setMlsLoading(false));
-      
-      // Also fetch permit data
-      setPermitsLoading(true);
-      setPermitsError("");
-      fetch(`/api/permits?address=${encodeURIComponent(address)}`)
-        .then(res => res.json())
-        .then(data => setPermits(data.permits || []))
-        .catch(() => setPermitsError("Could not fetch permit data."))
-        .finally(() => setPermitsLoading(false));
+    const fetchPropertyData = async () => {
+      try {
+        setLoading(true);
+        
+        // Parallel fetch for performance
+        const [propertyResponse, avmResponse, publicRecordsResponse] = await Promise.allSettled([
+          fetch(`/api/property-search?address=${encodeURIComponent(address)}`),
+          fetch(`/api/avm?address=${encodeURIComponent(address)}`),
+          fetch(`/api/public-records?address=${encodeURIComponent(address)}`)
+        ]);
 
-      // Fetch risk data
-      setRiskLoading(true);
-      fetch(`/api/risk?address=${encodeURIComponent(address)}`)
-        .then(res => res.json())
-        .then(data => {
-          setInsuranceClaims(data.insuranceClaims);
-          setFireRisk(data.fireRisk);
-          setFloodRisk(data.floodRisk);
-          setCotality(data.cotality || null);
-        })
-        .finally(() => setRiskLoading(false));
+        // Handle property data
+        if (propertyResponse.status === 'fulfilled' && propertyResponse.value.ok) {
+          const propertyData = await propertyResponse.value.json();
+          setProperty(propertyData.property);
+        }
 
-      // Get AVM data from API
-      setAvmLoading(true);
-      fetch(`/api/avm?address=${encodeURIComponent(address)}`)
-        .then(res => res.json())
-        .then(result => {
-          if (result.success && result.data) {
-            setAvmData(result.data);
-          } else {
-            // Fallback to mock data if API fails
-            setAvmData(generateMockAVMData());
+        // Handle AVM data
+        if (avmResponse.status === 'fulfilled' && avmResponse.value.ok) {
+          const avmResult = await avmResponse.value.json();
+          if (avmResult.success) {
+            setAvmData(avmResult.data);
           }
-        })
-        .catch(error => {
-          console.error('AVM API Error:', error);
-          // Fallback to mock data on error
-          setAvmData(generateMockAVMData());
-        })
-        .finally(() => setAvmLoading(false));
-    } else {
-      setMlsResults([]);
-      setPermits([]);
-      setInsuranceClaims(null);
-      setFireRisk(null);
-      setFloodRisk(null);
-              setCotality(null);
-      setAvmData(null);
+        }
+
+        // Handle public records data
+        if (publicRecordsResponse.status === 'fulfilled' && publicRecordsResponse.value.ok) {
+          const publicRecordsResult = await publicRecordsResponse.value.json();
+          if (publicRecordsResult.success) {
+            setPublicRecords(publicRecordsResult.data);
+          }
+        }
+
+        setPublicRecordsLoading(false);
+      } catch (error) {
+        console.error('Error fetching property data:', error);
+        setError('Failed to load property information');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (address) {
+      fetchPropertyData();
     }
   }, [address]);
 
@@ -467,570 +446,446 @@ const PropertyDetailsClient: React.FC = () => {
     printWindow.document.close();
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading property details...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+            <div className="flex items-center">
+              <AlertTriangle className="h-6 w-6 text-red-600 mr-3" />
+              <h2 className="text-lg font-semibold text-red-800">Error Loading Property</h2>
+            </div>
+            <p className="mt-2 text-red-700">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
-      <div className="remax-container">
-        {/* Map Section */}
-        <div className="max-w-4xl mx-auto mb-8">
-          {geoLoading ? (
-            <div className="remax-card text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
-              <div className="remax-text-body text-blue-600 font-medium">Locating property on map...</div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto p-6">
+        {/* Header */}
+        <div className="bg-white rounded-xl shadow-lg mb-6 overflow-hidden">
+          <div className="p-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+            <div className="flex items-center mb-2">
+              <MapPin className="h-6 w-6 mr-2" />
+              <h1 className="text-2xl font-bold">{address}</h1>
             </div>
-          ) : geoError ? (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-red-800">
-              <h3 className="font-semibold mb-2">Location Error</h3>
-              <p>{geoError}</p>
-            </div>
-          ) : (
-            <div className="remax-card overflow-hidden">
-              <PropertyMap lat={coords?.lat} lng={coords?.lng} address={mlsResults[0] ? `${mlsResults[0].address}, ${mlsResults[0].city}, ${mlsResults[0].state} ${mlsResults[0].zip}` : address} />
-            </div>
-          )}
+            {property && (
+              <div className="flex flex-wrap gap-4 text-blue-100">
+                <span className="flex items-center">
+                  <Home className="h-4 w-4 mr-1" />
+                  {property.property.propertyType}
+                </span>
+                <span className="flex items-center">
+                  <Calendar className="h-4 w-4 mr-1" />
+                  Built {property.property.yearBuilt}
+                </span>
+                <span className="flex items-center">
+                  <DollarSign className="h-4 w-4 mr-1" />
+                  {property.property.price}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Property Details Section */}
-        <div className="max-w-4xl mx-auto">
-          <div className="remax-card mb-8">
-            <div className="remax-card-header text-center">
-              <h1 className="remax-heading-2">Property Details</h1>
-              {address && (
-                <p className="remax-text-body text-lg mt-2">
-                  <span className="font-semibold">Address:</span> {address}
-                </p>
-              )}
-            </div>
-            
-            <div className="remax-card-body">
-              {address && (
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-                  <button
-                    onClick={handleSave}
-                    disabled={isSaved}
-                    className={isSaved ? 'remax-btn-secondary opacity-60 cursor-not-allowed' : 'remax-btn-outline'}
-                  >
-                    {isSaved ? 'Property Saved' : 'Save Property'}
-                  </button>
-                  <button
-                    onClick={handlePrint}
-                    className="remax-btn-secondary"
-                  >
-                    Print Report
-                  </button>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Property Overview */}
+            {property && (
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <Home className="h-5 w-5 mr-2 text-blue-600" />
+                  Property Overview
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <Bed className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-gray-900">{property.property.beds}</div>
+                    <div className="text-sm text-gray-600">Bedrooms</div>
+                  </div>
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <Bath className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-gray-900">{property.property.baths}</div>
+                    <div className="text-sm text-gray-600">Bathrooms</div>
+                  </div>
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <Square className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-gray-900">{property.property.sqft.toLocaleString()}</div>
+                    <div className="text-sm text-gray-600">Sq Ft</div>
+                  </div>
+                  <div className="text-center p-4 bg-gray-50 rounded-lg">
+                    <Calendar className="h-6 w-6 text-blue-600 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-gray-900">{property.property.yearBuilt}</div>
+                    <div className="text-sm text-gray-600">Year Built</div>
+                  </div>
                 </div>
-              )}
-              
-              {keywords.length > 0 && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <p className="remax-text-body">
-                    <span className="font-semibold">Topics detected:</span> {keywords.join(", ")}
-                  </p>
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <p className="text-gray-700">{property.property.salesPitch}</p>
                 </div>
-              )}
-              
-              {!address && !keywords.length && (
-                <div className="text-center py-8">
-                  <p className="remax-text-body text-gray-600">
-                    This is where the property address and research guidance will appear after a search.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* MLS Results */}
-          {mlsLoading && (
-            <div className="remax-card text-center py-12 mb-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
-              <div className="remax-text-body text-blue-600 font-medium">Loading MLS results...</div>
-            </div>
-          )}
-          
-          {!mlsLoading && mlsResults.length > 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">MLS Results</h2>
               </div>
-              <div className="remax-card-body">
-                <div className="grid gap-6">
-                  {mlsResults.map((item) => (
-                    <div key={item.mlsId} className="border border-gray-200 rounded-lg p-6 bg-gray-50">
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <h3 className="font-semibold text-lg mb-2">{item.address}</h3>
-                          <p className="remax-text-body">{item.city}, {item.state} {item.zip}</p>
-                          <p className="text-2xl font-bold text-green-600 mt-2">{item.price}</p>
+            )}
+
+            {/* Public Records Section */}
+            {publicRecords && (
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <FileText className="h-5 w-5 mr-2 text-green-600" />
+                  Public Records & Assessment
+                  {publicRecordsLoading && (
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600 ml-2"></div>
+                  )}
+                </h2>
+                
+                {/* Assessment Data */}
+                {publicRecords.assessment && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Tax Assessment</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-green-50 p-4 rounded-lg">
+                        <div className="text-sm text-green-600 font-medium">Assessed Value</div>
+                        <div className="text-2xl font-bold text-green-800">
+                          ${publicRecords.assessment.assessedValue?.toLocaleString() || 'N/A'}
                         </div>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="remax-text-small font-medium">Beds:</span>
-                            <span className="remax-text-small">{item.beds}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="remax-text-small font-medium">Baths:</span>
-                            <span className="remax-text-small">{item.baths}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="remax-text-small font-medium">Sqft:</span>
-                            <span className="remax-text-small">{item.sqft}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="remax-text-small font-medium">Status:</span>
-                            <span className="remax-text-small font-semibold">{item.status}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="remax-text-small font-medium">MLS ID:</span>
-                            <span className="remax-text-small font-mono">{item.mlsId}</span>
-                          </div>
+                        <div className="text-xs text-green-600">
+                          Year: {publicRecords.assessment.assessmentYear || 'N/A'}
                         </div>
                       </div>
-                      {item.salesPitch && (
-                        <div className="mt-4 p-4 bg-white border border-blue-200 rounded-lg">
-                          <h4 className="font-semibold mb-2 text-blue-800">Realtor&apos;s Sales Pitch:</h4>
-                          <p className="remax-text-body">{item.salesPitch}</p>
+                      <div className="bg-blue-50 p-4 rounded-lg">
+                        <div className="text-sm text-blue-600 font-medium">Land Value</div>
+                        <div className="text-2xl font-bold text-blue-800">
+                          ${publicRecords.assessment.landValue?.toLocaleString() || 'N/A'}
+                        </div>
+                        <div className="text-xs text-blue-600">Assessed land value</div>
+                      </div>
+                      <div className="bg-purple-50 p-4 rounded-lg">
+                        <div className="text-sm text-purple-600 font-medium">Annual Taxes</div>
+                        <div className="text-2xl font-bold text-purple-800">
+                          ${publicRecords.assessment.taxAmount?.toLocaleString() || 'N/A'}
+                        </div>
+                        <div className="text-xs text-purple-600">
+                          Rate: {publicRecords.assessment.taxRate || 'N/A'}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Building Permits */}
+                {publicRecords.permits && publicRecords.permits.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Recent Building Permits</h3>
+                    <div className="space-y-3">
+                      {publicRecords.permits.slice(0, 3).map((permit, index) => (
+                        <div key={index} className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-semibold text-gray-900">{permit.description}</div>
+                              <div className="text-sm text-gray-600">
+                                {permit.permitType} • {permit.status} • {permit.issuedDate}
+                              </div>
+                              {permit.contractor && (
+                                <div className="text-sm text-gray-500">Contractor: {permit.contractor}</div>
+                              )}
+                            </div>
+                            {permit.value && (
+                              <div className="text-right">
+                                <div className="font-semibold text-green-600">
+                                  ${permit.value.toLocaleString()}
+                                </div>
+                                <div className="text-xs text-gray-500">Permit Value</div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Flood Risk */}
+                {publicRecords.flood && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                      <Droplets className="h-5 w-5 mr-2 text-blue-500" />
+                      Flood Risk Information
+                    </h3>
+                    <div className="bg-blue-50 p-4 rounded-lg">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="font-semibold text-blue-900">
+                            Zone: {publicRecords.flood.floodZone || 'Unknown'}
+                          </div>
+                          <div className="text-sm text-blue-700">
+                            Risk Level: {publicRecords.flood.floodRisk || 'Unknown'}
+                          </div>
+                        </div>
+                        <Shield className="h-8 w-8 text-blue-600" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Demographics */}
+                {publicRecords.demographics && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center">
+                      <Users className="h-5 w-5 mr-2 text-indigo-500" />
+                      Neighborhood Data
+                    </h3>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {publicRecords.demographics.medianHouseholdIncome && (
+                        <div className="text-center p-3 bg-indigo-50 rounded-lg">
+                          <DollarSign className="h-5 w-5 text-indigo-600 mx-auto mb-1" />
+                          <div className="text-lg font-bold text-indigo-900">
+                            ${publicRecords.demographics.medianHouseholdIncome.toLocaleString()}
+                          </div>
+                          <div className="text-xs text-indigo-600">Median Income</div>
+                        </div>
+                      )}
+                      {publicRecords.demographics.medianHomeValue && (
+                        <div className="text-center p-3 bg-green-50 rounded-lg">
+                          <Home className="h-5 w-5 text-green-600 mx-auto mb-1" />
+                          <div className="text-lg font-bold text-green-900">
+                            ${publicRecords.demographics.medianHomeValue.toLocaleString()}
+                          </div>
+                          <div className="text-xs text-green-600">Median Home Value</div>
+                        </div>
+                      )}
+                      {publicRecords.demographics.walkabilityScore && (
+                        <div className="text-center p-3 bg-yellow-50 rounded-lg">
+                          <Star className="h-5 w-5 text-yellow-600 mx-auto mb-1" />
+                          <div className="text-lg font-bold text-yellow-900">
+                            {publicRecords.demographics.walkabilityScore}/100
+                          </div>
+                          <div className="text-xs text-yellow-600">Walk Score</div>
+                        </div>
+                      )}
+                      {publicRecords.demographics.crimeRate && (
+                        <div className="text-center p-3 bg-red-50 rounded-lg">
+                          <Shield className="h-5 w-5 text-red-600 mx-auto mb-1" />
+                          <div className="text-lg font-bold text-red-900">
+                            {publicRecords.demographics.crimeRate}/10
+                          </div>
+                          <div className="text-xs text-red-600">Crime Index</div>
                         </div>
                       )}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {!mlsLoading && address && mlsResults.length === 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">MLS Results</h2>
-              </div>
-              <div className="remax-card-body text-center py-8">
-                <p className="remax-text-body text-gray-600">No MLS results found for this address.</p>
-              </div>
-            </div>
-          )}
-
-          {/* AVM Section */}
-          {address && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <div className="flex justify-between items-center">
-                  <h2 className="remax-heading-3">Automated Valuation Model (AVM)</h2>
-                  {avmData?.dataSource && (
-                    <div className="text-sm text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                      {avmData.dataSource === 'real_address' ? 'Real Property Data' : 'Estimated Data'}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <div className="remax-card-body">
-                {avmLoading ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 border-solid mb-4 mx-auto"></div>
-                    <div className="remax-text-body text-green-600 font-medium">Calculating property value...</div>
-                  </div>
-                ) : avmData ? (
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {/* Valuation Summary */}
-                    <div>
-                      <h3 className="remax-heading-3 text-lg mb-4 text-green-800">Estimated Value</h3>
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-4">
-                        <div className="text-center">
-                          <div className="text-3xl font-bold text-green-800 mb-2">
-                            ${avmData.estimatedValue.toLocaleString()}
-                          </div>
-                          <div className="text-sm text-green-600">
-                            Range: ${avmData.priceRange.low.toLocaleString()} - ${avmData.priceRange.high.toLocaleString()}
-                          </div>
-                          <div className="text-sm text-green-600 mt-1">
-                            Confidence: {avmData.confidenceLevel}%
-                          </div>
-                          <div className="text-xs text-gray-500 mt-2">
-                            Valuation Date: {avmData.valuationDate}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Market Trends */}
-                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                        <h4 className="font-semibold text-gray-800 mb-2">Market Trends</h4>
-                        <div className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Monthly Change:</span>
-                            <span className={`text-sm font-medium ${avmData.marketTrends.monthlyChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                              {avmData.marketTrends.monthlyChange >= 0 ? '+' : ''}{avmData.marketTrends.monthlyChange.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Yearly Change:</span>
-                            <span className="text-sm font-medium text-green-600">
-                              +{avmData.marketTrends.yearlyChange.toFixed(1)}%
-                            </span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-sm text-gray-600">Market Direction:</span>
-                            <span className={`text-sm font-medium capitalize ${
-                              avmData.marketTrends.marketDirection === 'up' ? 'text-green-600' : 
-                              avmData.marketTrends.marketDirection === 'down' ? 'text-red-600' : 'text-gray-600'
-                            }`}>
-                              {avmData.marketTrends.marketDirection}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Comparable Sales */}
-                    <div>
-                      <h3 className="remax-heading-3 text-lg mb-4 text-green-800">Comparable Sales</h3>
-                      <div className="space-y-3">
-                        {avmData.comparables.map((comp, index) => (
-                          <div key={index} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                            <div className="flex justify-between items-start mb-2">
-                              <div>
-                                <h4 className="font-medium text-gray-800">{comp.address}</h4>
-                                <p className="text-sm text-gray-600">{comp.distance} miles away</p>
-                              </div>
-                              <div className="text-right">
-                                <div className="font-semibold text-green-600">${comp.soldPrice.toLocaleString()}</div>
-                                <div className="text-xs text-gray-500">{comp.soldDate}</div>
-                              </div>
-                            </div>
-                            <div className="text-sm text-gray-600">
-                              {comp.sqft.toLocaleString()} sq ft
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-8">
-                    <div className="remax-text-body text-gray-600">AVM data not available for this address.</div>
                   </div>
                 )}
 
-                {/* AVM Resource Reference */}
-                {(() => {
-                  const avmResource = getLinkedResource("Automated Valuation Model (AVM)");
-                  if (!avmResource) return null;
-                  
-                  return (
-                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold text-blue-800 mb-1">Learn More About AVM Technology</h4>
-                          <p className="remax-text-small text-blue-700">
-                            {avmResource.description}
-                          </p>
-                        </div>
-                        <div className="ml-4">
-                          <a 
-                            href={avmResource.url}
-                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
-                          >
-                            {avmResource.buttonText || 'Learn More'}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
-            </div>
-          )}
-
-          {/* Permit Results */}
-          {permitsLoading && (
-            <div className="remax-card text-center py-12 mb-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
-              <div className="remax-text-body text-blue-600 font-medium">Loading permit data...</div>
-            </div>
-          )}
-          
-          {!permitsLoading && permitsError && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Permit Records</h2>
-              </div>
-              <div className="remax-card-body">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-red-800">{permitsError}</p>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {!permitsLoading && !permitsError && permits.length > 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Recent Permits</h2>
-              </div>
-              <div className="remax-card-body">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-semibold">Type</th>
-                        <th className="text-left py-3 px-4 font-semibold">Year</th>
-                        <th className="text-left py-3 px-4 font-semibold">Status</th>
-                        <th className="text-left py-3 px-4 font-semibold">Permit ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {permits.map((p) => (
-                        <tr key={p.permitId} className="border-b border-gray-100">
-                          <td className="py-3 px-4">{p.type}</td>
-                          <td className="py-3 px-4">{p.year}</td>
-                          <td className="py-3 px-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              p.status === 'Approved' ? 'bg-green-100 text-green-800' :
-                              p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
-                              {p.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 font-mono text-sm">{p.permitId}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {!permitsLoading && !permitsError && address && permits.length === 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Recent Permits</h2>
-              </div>
-              <div className="remax-card-body text-center py-8">
-                <p className="remax-text-body text-gray-600">No permit records found for this address.</p>
-              </div>
-            </div>
-          )}
-
-          {/* Risk Data Section */}
-          <div className="remax-card border-l-4 border-l-red-500">
-            <div className="remax-card-header bg-red-50">
-              <h2 className="remax-heading-3 text-red-800">Risk & Insurance Data</h2>
-            </div>
-            <div className="remax-card-body">
-              {/* Insurance Claims */}
-              <div className="mb-8">
-                <h3 className="remax-heading-3 text-lg mb-4 text-red-700">Insurance Claims</h3>
-                {riskLoading ? (
-                  <div className="text-center py-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-red-600 border-solid mb-2 mx-auto"></div>
-                    <div className="remax-text-small text-red-600">Loading insurance claims...</div>
-                  </div>
-                ) : insuranceClaims && insuranceClaims.length > 0 ? (
-                  <div className="space-y-3">
-                    {insuranceClaims.map((claim, idx) => (
-                      <div key={idx} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <span className="font-semibold text-red-800">{claim.type}</span>
-                            <p className="remax-text-small text-red-600">Date: {claim.date}</p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-red-800">${claim.amount.toLocaleString()}</p>
-                            <p className="remax-text-small text-red-600">{claim.status}</p>
-                          </div>
-                        </div>
-                      </div>
+                {/* Data Sources */}
+                <div className="mt-6 pt-4 border-t border-gray-200">
+                  <h4 className="text-sm font-medium text-gray-500 mb-2">Data Sources</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {Object.entries(publicRecords.sources).map(([source, info]) => (
+                      <span
+                        key={source}
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          info.status === 'success'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
+                        {source}: {info.status}
+                      </span>
                     ))}
                   </div>
-                ) : (
-                  <div className="text-center py-4">
-                    <p className="remax-text-body text-gray-600 italic">No insurance claims data available.</p>
+                </div>
+              </div>
+            )}
+
+            {/* AVM Section */}
+            {avmData && (
+              <div className="bg-white rounded-xl shadow-lg p-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <TrendingUp className="h-5 w-5 mr-2 text-green-600" />
+                  Property Valuation (AVM v2.0)
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <div className="text-center p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
+                    <div className="text-3xl font-bold text-green-700">
+                      ${avmData.estimatedValue?.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">Estimated Value</div>
+                    <div className="text-xs text-gray-500 mt-2">
+                      Confidence: {avmData.confidenceLevel}%
+                    </div>
+                  </div>
+                  
+                  <div className="text-center p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <div className="text-lg font-semibold text-blue-700">
+                      ${avmData.priceRange?.low?.toLocaleString()} - ${avmData.priceRange?.high?.toLocaleString()}
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">Price Range</div>
+                    <div className="text-xs text-gray-500 mt-2">±8% variation</div>
+                  </div>
+                  
+                  <div className="text-center p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
+                    <div className="text-lg font-semibold text-purple-700">
+                      {avmData.marketTrends?.yearlyChange > 0 ? '+' : ''}{avmData.marketTrends?.yearlyChange?.toFixed(1)}%
+                    </div>
+                    <div className="text-sm text-gray-600 mt-1">Annual Change</div>
+                    <div className="text-xs text-gray-500 mt-2">
+                      {avmData.marketTrends?.marketDirection} trend
+                    </div>
+                  </div>
+                </div>
+
+                {/* Valuation Methods */}
+                {avmData.valuationMethods && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Valuation Breakdown</h3>
+                    <div className="space-y-3">
+                      {avmData.valuationMethods.map((method: any, index: number) => (
+                        <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                          <div>
+                            <span className="font-medium text-gray-900">{method.method}</span>
+                            <span className="text-sm text-gray-600 ml-2">({method.weight})</span>
+                          </div>
+                          <span className="font-semibold text-gray-900">
+                            ${method.value?.toLocaleString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
-                
-                {/* LexisNexis Reference */}
-                {(() => {
-                  const clueResource = getLinkedResource("LexisNexis C.L.U.E.® Property");
-                  if (!clueResource) return null;
-                  
-                  return (
-                    <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold text-gray-800 mb-1">Get {clueResource.name.replace('LexisNexis ', '')}</h4>
-                          <p className="remax-text-small text-gray-600">
-                            {clueResource.description}
-                          </p>
-                        </div>
-                        <div className="ml-4">
-                          <a 
-                            href={clueResource.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
-                          >
-                            {clueResource.buttonText || 'Access Resource'}
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })()}
-              </div>
 
-              {/* Fire and Flood Risk */}
-              <div className="grid md:grid-cols-2 gap-6 mb-8">
-                {/* Fire Risk */}
-                <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                  <h3 className="remax-heading-3 text-lg mb-4 text-orange-800">Fire Risk Assessment</h3>
-                  {riskLoading ? (
-                    <div className="text-center py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-orange-600 border-solid mb-2 mx-auto"></div>
-                      <div className="remax-text-small text-orange-600">Loading fire risk data...</div>
+                {/* Comparable Properties */}
+                {avmData.comparables && avmData.comparables.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Comparable Sales</h3>
+                    <div className="space-y-3">
+                      {avmData.comparables.map((comp: any, index: number) => (
+                        <div key={index} className="border border-gray-200 rounded-lg p-4">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-medium text-gray-900">{comp.address}</div>
+                              <div className="text-sm text-gray-600">
+                                {comp.sqft?.toLocaleString()} sq ft • {comp.distance} miles away
+                              </div>
+                              <div className="text-xs text-gray-500">Sold: {comp.soldDate}</div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-semibold text-green-600">
+                                ${comp.soldPrice?.toLocaleString()}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                ${Math.round(comp.soldPrice / comp.sqft)}/sq ft
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ) : fireRisk ? (
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Risk Score:</span>
-                        <span className="remax-text-small font-semibold">{fireRisk.score}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Last Inspection:</span>
-                        <span className="remax-text-small">{fireRisk.lastInspection}</span>
-                      </div>
-                      <div className="mt-3">
-                        <span className="remax-text-small font-medium">Notes:</span>
-                        <p className="remax-text-small mt-1">{fireRisk.notes}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="remax-text-body text-gray-600 italic">No fire risk data available.</p>
-                  )}
-                </div>
+                  </div>
+                )}
 
-                {/* Flood Risk */}
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                  <h3 className="remax-heading-3 text-lg mb-4 text-blue-800">Flood Risk</h3>
-                  {riskLoading ? (
-                    <div className="text-center py-4">
-                      <div className="animate-spin rounded-full h-6 w-6 border-t-4 border-blue-600 border-solid mb-2 mx-auto"></div>
-                      <div className="remax-text-small text-blue-600">Loading flood risk data...</div>
-                    </div>
-                  ) : floodRisk ? (
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Flood Zone:</span>
-                        <span className="remax-text-small font-semibold">{floodRisk.zone}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Risk Level:</span>
-                        <span className="remax-text-small">{floodRisk.riskLevel}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Last Flood:</span>
-                        <span className="remax-text-small">{floodRisk.lastFlood || 'No recorded events'}</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="remax-text-body text-gray-600 italic">No flood risk data available.</p>
-                  )}
+                <div className="mt-4 text-xs text-gray-500">
+                  {avmData.accuracy} • Model Version: {avmData.modelVersion || '2.0'} • 
+                  Data Source: {avmData.dataSource === 'real_address' ? 'Real Property Data' : 'Estimated'}
                 </div>
               </div>
+            )}
+          </div>
 
-                {/* CoreLogic Reference */}
-                {(() => {
-                  const cotalityResource = getLinkedResource("Cotality Property Risk Reports");
-                  if (!cotalityResource) return null;
+          {/* Right Column - Risk & Investment Data */}
+          <div className="space-y-6">
+            {/* Risk Data Section */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                <Shield className="h-5 w-5 mr-2 text-red-600" />
+                Risk Assessment
+              </h2>
+              {property?.riskData && (
+                <div className="space-y-4 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-700">Wildfire Risk</span>
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-2 ${
+                        property.riskData.cotality.wildfireRiskScore >= 7 ? 'bg-red-500' : 
+                        property.riskData.cotality.wildfireRiskScore >= 4 ? 'bg-yellow-500' : 'bg-green-500'
+                      }`}></div>
+                      <span className="text-sm font-semibold">{property.riskData.cotality.wildfireRiskScore}/10</span>
+                    </div>
+                  </div>
                   
-                  return (
-                    <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold text-gray-800 mb-1">Get {cotalityResource.name}</h4>
-                          <p className="remax-text-small text-gray-600">
-                            {cotalityResource.description}
-                          </p>
-                        </div>
-                        <div className="ml-4">
-                          <a 
-                            href={cotalityResource.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="remax-btn-outline text-sm px-4 py-2 whitespace-nowrap"
-                          >
-                            {cotalityResource.buttonText || 'Access Resource'}
-                          </a>
-                        </div>
-                      </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-700">Flood Risk</span>
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-2 ${
+                        property.riskData.cotality.floodRiskScore >= 7 ? 'bg-red-500' : 
+                        property.riskData.cotality.floodRiskScore >= 4 ? 'bg-yellow-500' : 'bg-green-500'
+                      }`}></div>
+                      <span className="text-sm font-semibold">{property.riskData.cotality.floodRiskScore}/10</span>
                     </div>
-                  );
-                })()}
-
-              {/* Cotality Data Display */}
-              {!riskLoading && cotality && (
-                <div className="mt-4 bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
-                  <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">Cotality Risk Details</h3>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Wildfire Risk:</span>
-                        <span className="remax-text-small font-semibold">{cotality.wildfireRiskScore}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Flood Risk:</span>
-                        <span className="remax-text-small font-semibold">{cotality.floodRiskScore}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="remax-text-small font-medium">Earthquake Risk:</span>
-                        <span className="remax-text-small font-semibold">{cotality.earthquakeRiskScore}</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="mb-2">
-                        <span className="remax-text-small font-medium">Property ID:</span>
-                        <p className="remax-text-small font-mono">{cotality.cotalityPropertyId}</p>
-                      </div>
+                  </div>
+                  
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-700">Earthquake Risk</span>
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full mr-2 ${
+                        property.riskData.cotality.earthquakeRiskScore >= 7 ? 'bg-red-500' : 
+                        property.riskData.cotality.earthquakeRiskScore >= 4 ? 'bg-yellow-500' : 'bg-green-500'
+                      }`}></div>
+                      <span className="text-sm font-semibold">{property.riskData.cotality.earthquakeRiskScore}/10</span>
                     </div>
                   </div>
                 </div>
-              )}
 
-              {/* Data Sources */}
-              <div className="text-center">
-                <p className="remax-text-small text-gray-500 italic">
-                  Risk data sourced from{' '}
-                  {(() => {
-                    const cotalityResource = getLinkedResource("Cotality Property Risk Reports");
-                    const clueResource = getLinkedResource("LexisNexis C.L.U.E.® Property");
-                    
-                    return (
-                      <>
-                        {cotalityResource && (
-                          <a 
-                            href={cotalityResource.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-blue-600 hover:text-blue-800 underline"
-                          >
-                            Cotality
-                          </a>
-                        )}
-                        {cotalityResource && clueResource && ' and '}
-                        {clueResource && (
-                          <a 
-                            href={clueResource.url} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
-                            className="text-blue-600 hover:text-blue-800 underline"
-                          >
-                            LexisNexis C.L.U.E.®
-                          </a>
-                        )}
-                      </>
-                    );
-                  })()}
-                </p>
+                {/* Insurance Claims */}
+                {property.riskData.insuranceClaims.length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-3">Insurance Claims History</h3>
+                    <div className="space-y-3">
+                      {property.riskData.insuranceClaims.map((claim, index) => (
+                        <div key={index} className="border-l-4 border-orange-400 pl-4 py-2 bg-orange-50">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <div className="font-medium text-orange-900">{claim.type}</div>
+                              <div className="text-sm text-orange-700">{claim.date}</div>
+                              {claim.description && (
+                                <div className="text-xs text-orange-600 mt-1">{claim.description}</div>
+                              )}
+                            </div>
+                            <div className="text-right">
+                              <div className="font-semibold text-orange-900">${claim.amount.toLocaleString()}</div>
+                              <div className="text-xs text-orange-600">{claim.status}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="text-xs text-gray-500">
+                  Risk data provided by Cotality • 
+                  <a href={property.riskData.cotality.reportUrl} target="_blank" rel="noopener noreferrer" 
+                     className="text-blue-600 hover:underline ml-1">
+                    View Full Report
+                  </a>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -1062,7 +917,7 @@ const PropertyDetailsClient: React.FC = () => {
       <div ref={printableRef} style={{ display: 'none' }}>
         <h1>HOUSE/MAX Property Report</h1>
         {address && <h2>{address}</h2>}
-        {mlsResults.length > 0 && (
+        {/* mlsResults.length > 0 && (
           <div className="section mls">
             <h3>MLS Results</h3>
             {mlsResults.map((item) => (
@@ -1075,7 +930,7 @@ const PropertyDetailsClient: React.FC = () => {
               </div>
             ))}
           </div>
-        )}
+        )} */}
         {avmData && (
           <div className="section avm">
             <h3>Automated Valuation Model (AVM)</h3>
@@ -1099,7 +954,7 @@ const PropertyDetailsClient: React.FC = () => {
             </div>
           </div>
         )}
-        {permits.length > 0 && (
+        {/* permits.length > 0 && (
           <div className="section permits">
             <h3>Recent Permits</h3>
             <table>
@@ -1123,8 +978,8 @@ const PropertyDetailsClient: React.FC = () => {
               </tbody>
             </table>
           </div>
-        )}
-        <div className="section risk">
+        )} */}
+        {/* <div className="section risk">
           <h3>Risk & Insurance Data</h3>
           {insuranceClaims && insuranceClaims.length > 0 && (
             <div>
@@ -1161,7 +1016,7 @@ const PropertyDetailsClient: React.FC = () => {
               <b>Report URL:</b> <a href={cotality.reportUrl}>{cotality.reportUrl}</a>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="footnote">
           <b>Disclaimer:</b> This report is for informational purposes only. Data may be incomplete or out of date. Always verify with official sources.<br />
           &copy; {new Date().getFullYear()} HOUSE/MAX
