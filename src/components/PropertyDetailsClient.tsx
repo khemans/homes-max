@@ -138,13 +138,7 @@ function getPermitLinks(address: string) {
   return [];
 }
 
-// Permit record type
-interface PermitRecord {
-  type: string;
-  year: number;
-  status: string;
-  permitId: string;
-}
+
 
 // Add types for risk data
 interface InsuranceClaim {
@@ -254,10 +248,7 @@ const PropertyDetailsClient: React.FC = () => {
   const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
   const [mlsLoading, setMlsLoading] = useState(false);
   
-  // Permit integration (mock)
-  const [permits, setPermits] = useState<PermitRecord[]>([]);
-  const [permitsLoading, setPermitsLoading] = useState(false);
-  const [permitsError, setPermitsError] = useState("");
+
 
   // Add state for risk data
   const [insuranceClaims, setInsuranceClaims] = useState<InsuranceClaim[] | null>(null);
@@ -334,14 +325,7 @@ const PropertyDetailsClient: React.FC = () => {
         .then(data => setMlsResults(data.results || []))
         .finally(() => setMlsLoading(false));
       
-      // Also fetch permit data
-      setPermitsLoading(true);
-      setPermitsError("");
-      fetch(`/api/permits?address=${encodeURIComponent(address)}`)
-        .then(res => res.json())
-        .then(data => setPermits(data.permits || []))
-        .catch(() => setPermitsError("Could not fetch permit data."))
-        .finally(() => setPermitsLoading(false));
+
 
       // Fetch risk data
       setRiskLoading(true);
@@ -394,7 +378,6 @@ const PropertyDetailsClient: React.FC = () => {
         .finally(() => setPublicRecordsLoading(false));
     } else {
       setMlsResults([]);
-      setPermits([]);
       setInsuranceClaims(null);
       setFireRisk(null);
       setFloodRisk(null);
@@ -930,77 +913,7 @@ const PropertyDetailsClient: React.FC = () => {
             </div>
           )}
 
-          {/* Permit Results */}
-          {permitsLoading && (
-            <div className="remax-card text-center py-12 mb-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600 border-solid mb-4 mx-auto"></div>
-              <div className="remax-text-body text-blue-600 font-medium">Loading permit data...</div>
-            </div>
-          )}
-          
-          {!permitsLoading && permitsError && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Permit Records</h2>
-              </div>
-              <div className="remax-card-body">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                  <p className="text-red-800">{permitsError}</p>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {!permitsLoading && !permitsError && permits.length > 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Recent Permits</h2>
-              </div>
-              <div className="remax-card-body">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-semibold">Type</th>
-                        <th className="text-left py-3 px-4 font-semibold">Year</th>
-                        <th className="text-left py-3 px-4 font-semibold">Status</th>
-                        <th className="text-left py-3 px-4 font-semibold">Permit ID</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {permits.map((p) => (
-                        <tr key={p.permitId} className="border-b border-gray-100">
-                          <td className="py-3 px-4">{p.type}</td>
-                          <td className="py-3 px-4">{p.year}</td>
-                          <td className="py-3 px-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              p.status === 'Approved' ? 'bg-green-100 text-green-800' :
-                              p.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
-                              {p.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 font-mono text-sm">{p.permitId}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          {!permitsLoading && !permitsError && address && permits.length === 0 && (
-            <div className="remax-card mb-8">
-              <div className="remax-card-header">
-                <h2 className="remax-heading-3">Recent Permits</h2>
-              </div>
-              <div className="remax-card-body text-center py-8">
-                <p className="remax-text-body text-gray-600">No permit records found for this address.</p>
-              </div>
-            </div>
-          )}
+
 
           {/* Risk Data Section */}
           <div className="remax-card border-l-4 border-l-red-500">
@@ -1291,31 +1204,66 @@ const PropertyDetailsClient: React.FC = () => {
             </div>
           </div>
         )}
-        {permits.length > 0 && (
-          <div className="section permits">
-            <h3>Recent Permits</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Year</th>
-                  <th>Status</th>
-                  <th>Permit ID</th>
-                </tr>
-              </thead>
-              <tbody>
-                {permits.map((p) => (
-                  <tr key={p.permitId}>
-                    <td>{p.type}</td>
-                    <td>{p.year}</td>
-                    <td>{p.status}</td>
-                    <td>{p.permitId}</td>
-                  </tr>
+
+        {publicRecords && (
+          <div className="section public-records">
+            <h3>Public Records</h3>
+            
+            {/* Property Assessment */}
+            {publicRecords.assessment && (
+              <div>
+                <b>Property Assessment:</b><br />
+                {publicRecords.assessment.assessedValue && `• Assessed Value: $${publicRecords.assessment.assessedValue.toLocaleString()}`}<br />
+                {publicRecords.assessment.landValue && `• Land Value: $${publicRecords.assessment.landValue.toLocaleString()}`}<br />
+                {publicRecords.assessment.taxAmount && `• Annual Tax: $${publicRecords.assessment.taxAmount.toLocaleString()}`}<br />
+                <br />
+              </div>
+            )}
+
+            {/* Building Permits */}
+            {publicRecords.permits && publicRecords.permits.length > 0 && (
+              <div>
+                <b>Recent Building Permits:</b><br />
+                {publicRecords.permits.slice(0, 5).map((permit, index) => (
+                  <div key={index}>
+                    • <b>{permit.permitType}</b> ({permit.permitNumber})<br />
+                    &nbsp;&nbsp;Issued: {permit.issueDate}<br />
+                    {permit.contractor && `&nbsp;&nbsp;Contractor: ${permit.contractor}`}<br />
+                    {permit.value && `&nbsp;&nbsp;Value: $${permit.value.toLocaleString()}`}<br />
+                    <br />
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            )}
+
+            {/* Flood Information */}
+            {publicRecords.flood && (
+              <div>
+                <b>FEMA Flood Information:</b><br />
+                {publicRecords.flood.zone && `• Flood Zone: ${publicRecords.flood.zone}`}<br />
+                {publicRecords.flood.riskLevel && `• Flood Risk: ${publicRecords.flood.riskLevel}`}<br />
+                {publicRecords.flood.insuranceRequired !== undefined && `• Insurance Required: ${publicRecords.flood.insuranceRequired ? 'Yes' : 'No'}`}<br />
+                <br />
+              </div>
+            )}
+
+            {/* Demographics */}
+            {publicRecords.demographics && (
+              <div>
+                <b>Area Demographics:</b><br />
+                {publicRecords.demographics.medianIncome && `• Median Income: $${publicRecords.demographics.medianIncome.toLocaleString()}`}<br />
+                {publicRecords.demographics.walkScore && `• Walk Score: ${publicRecords.demographics.walkScore}/100`}<br />
+                {publicRecords.demographics.crimeRate && `• Crime Rate: ${publicRecords.demographics.crimeRate}`}<br />
+                <br />
+              </div>
+            )}
+
+            <div style={{fontSize: '10px', color: '#666'}}>
+              Data sources: US Census Bureau, FEMA Flood Maps, Local Government Records, OpenStreetMap
+            </div>
           </div>
         )}
+
         <div className="section risk">
           <h3>Risk & Insurance Data</h3>
           {insuranceClaims && insuranceClaims.length > 0 && (
