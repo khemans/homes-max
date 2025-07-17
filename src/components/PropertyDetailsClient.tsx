@@ -276,6 +276,34 @@ const PropertyDetailsClient: React.FC = () => {
     reportUrl: string;
   } | null>(null);
 
+  // Add state for public records data
+  const [publicRecords, setPublicRecords] = useState<{
+    assessment?: {
+      assessedValue?: number;
+      landValue?: number;
+      taxAmount?: number;
+    };
+    demographics?: {
+      medianIncome?: number;
+      walkScore?: number;
+      crimeRate?: string;
+    };
+    permits?: {
+      permitType: string;
+      permitNumber: string;
+      contractor?: string;
+      issueDate: string;
+      value?: number;
+    }[];
+    flood?: {
+      zone?: string;
+      riskLevel?: string;
+      insuranceRequired?: boolean;
+    };
+  } | null>(null);
+  const [publicRecordsLoading, setPublicRecordsLoading] = useState(false);
+  const [publicRecordsError, setPublicRecordsError] = useState("");
+
   // Add state for saved property
   const [isSaved, setIsSaved] = useState(false);
 
@@ -346,6 +374,24 @@ const PropertyDetailsClient: React.FC = () => {
           setAvmData(null);
         })
         .finally(() => setAvmLoading(false));
+
+      // Fetch public records data
+      setPublicRecordsLoading(true);
+      setPublicRecordsError("");
+      fetch(`/api/public-records?address=${encodeURIComponent(address)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            setPublicRecords(data.data);
+          } else {
+            setPublicRecordsError(data.error || "Could not fetch public records data.");
+          }
+        })
+        .catch(error => {
+          console.error('Public Records API Error:', error);
+          setPublicRecordsError("Could not fetch public records data.");
+        })
+        .finally(() => setPublicRecordsLoading(false));
     } else {
       setMlsResults([]);
       setPermits([]);
@@ -354,6 +400,7 @@ const PropertyDetailsClient: React.FC = () => {
       setFloodRisk(null);
               setCotality(null);
       setAvmData(null);
+      setPublicRecords(null);
     }
   }, [address]);
 
@@ -710,6 +757,175 @@ const PropertyDetailsClient: React.FC = () => {
                     </div>
                   );
                 })()}
+              </div>
+            </div>
+          )}
+
+          {/* Public Records Section */}
+          {address && (
+            <div className="remax-card mb-8">
+              <div className="remax-card-header">
+                <div className="flex justify-between items-center">
+                  <h2 className="remax-heading-3">Public Records</h2>
+                  <div className="text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-full">
+                    Free Government Data
+                  </div>
+                </div>
+              </div>
+              <div className="remax-card-body">
+                {publicRecordsLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 border-solid mb-4 mx-auto"></div>
+                    <div className="remax-text-body text-green-600 font-medium">Loading public records...</div>
+                  </div>
+                ) : publicRecordsError ? (
+                  <div className="text-center py-8">
+                    <div className="mb-4">
+                      <svg className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div className="remax-text-body text-gray-600 mb-2">Public records data not available</div>
+                    <div className="text-sm text-gray-500">{publicRecordsError}</div>
+                  </div>
+                ) : publicRecords ? (
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {/* Property Assessment */}
+                    {publicRecords.assessment && (
+                      <div>
+                        <h3 className="remax-heading-3 text-lg mb-4 text-blue-800">Property Assessment</h3>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 space-y-2">
+                          {publicRecords.assessment.assessedValue && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Assessed Value:</span>
+                              <span className="text-sm font-semibold">${publicRecords.assessment.assessedValue.toLocaleString()}</span>
+                            </div>
+                          )}
+                          {publicRecords.assessment.landValue && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Land Value:</span>
+                              <span className="text-sm">${publicRecords.assessment.landValue.toLocaleString()}</span>
+                            </div>
+                          )}
+                          {publicRecords.assessment.taxAmount && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Annual Taxes:</span>
+                              <span className="text-sm">${publicRecords.assessment.taxAmount.toLocaleString()}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Demographics */}
+                    {publicRecords.demographics && (
+                      <div>
+                        <h3 className="remax-heading-3 text-lg mb-4 text-purple-800">Neighborhood Demographics</h3>
+                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 space-y-2">
+                          {publicRecords.demographics.medianIncome && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Median Income:</span>
+                              <span className="text-sm">${publicRecords.demographics.medianIncome.toLocaleString()}</span>
+                            </div>
+                          )}
+                          {publicRecords.demographics.walkScore && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Walk Score:</span>
+                              <span className="text-sm">{publicRecords.demographics.walkScore}/100</span>
+                            </div>
+                          )}
+                          {publicRecords.demographics.crimeRate && (
+                            <div className="flex justify-between">
+                              <span className="text-sm font-medium">Crime Rate:</span>
+                              <span className="text-sm">{publicRecords.demographics.crimeRate}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Building Permits */}
+                    {publicRecords.permits && publicRecords.permits.length > 0 && (
+                      <div className="md:col-span-2">
+                        <h3 className="remax-heading-3 text-lg mb-4 text-orange-800">Recent Building Permits</h3>
+                        <div className="space-y-3">
+                          {publicRecords.permits.slice(0, 3).map((permit, index: number) => (
+                            <div key={index} className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <span className="font-semibold text-orange-800">{permit.permitType}</span>
+                                  <p className="text-sm text-orange-600">Permit: {permit.permitNumber}</p>
+                                  {permit.contractor && (
+                                    <p className="text-sm text-orange-600">Contractor: {permit.contractor}</p>
+                                  )}
+                                </div>
+                                <div className="text-right">
+                                  <div className="text-sm font-semibold text-orange-800">{permit.issueDate}</div>
+                                  {permit.value && (
+                                    <div className="text-sm text-orange-600">${permit.value.toLocaleString()}</div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Flood Data */}
+                    {publicRecords.flood && (
+                      <div className="md:col-span-2">
+                        <h3 className="remax-heading-3 text-lg mb-4 text-blue-800">FEMA Flood Information</h3>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 grid md:grid-cols-3 gap-4">
+                          {publicRecords.flood.zone && (
+                            <div>
+                              <span className="text-sm font-medium text-blue-800">Flood Zone:</span>
+                              <p className="text-sm text-blue-700">{publicRecords.flood.zone}</p>
+                            </div>
+                          )}
+                          {publicRecords.flood.riskLevel && (
+                            <div>
+                              <span className="text-sm font-medium text-blue-800">Risk Level:</span>
+                              <p className="text-sm text-blue-700">{publicRecords.flood.riskLevel}</p>
+                            </div>
+                          )}
+                          {publicRecords.flood.insuranceRequired && (
+                            <div>
+                              <span className="text-sm font-medium text-blue-800">Insurance Required:</span>
+                              <p className="text-sm text-blue-700">{publicRecords.flood.insuranceRequired ? 'Yes' : 'No'}</p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="mb-4">
+                      <svg className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <div className="remax-text-body text-gray-600 mb-2">No public records data available</div>
+                    <div className="text-sm text-gray-500">Public records data may not be available for this address.</div>
+                  </div>
+                )}
+
+                {/* Data Sources Information */}
+                <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <div className="text-center">
+                    <h4 className="font-semibold text-gray-800 mb-2">Data Sources</h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Public records data sourced from free government APIs including:
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-500">
+                      <span className="bg-white px-2 py-1 rounded">US Census Bureau</span>
+                      <span className="bg-white px-2 py-1 rounded">FEMA Flood Maps</span>
+                      <span className="bg-white px-2 py-1 rounded">Local Government Records</span>
+                      <span className="bg-white px-2 py-1 rounded">OpenStreetMap</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
