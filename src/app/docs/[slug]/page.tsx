@@ -32,8 +32,119 @@ export async function generateMetadata({ params }: DocPageProps) {
   };
 }
 
+// Special PRD Component with original styling
+const PRDDocumentationPage = () => (
+  <main className="min-h-screen bg-gray-50 py-12">
+    <div className="remax-container">
+      <div className="max-w-5xl mx-auto">
+        
+        {/* Breadcrumb */}
+        <div className="flex items-center space-x-4 mb-6">
+          <Link 
+            href="/docs" 
+            className="text-blue-600 hover:text-blue-800 flex items-center"
+          >
+            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Documentation
+          </Link>
+          <span className="text-gray-400">/</span>
+          <span className="text-gray-600">Product Requirements Document</span>
+        </div>
+
+        {/* Header Section */}
+        <div className="remax-card text-center mb-8">
+          <div className="remax-card-body py-8">
+            <h1 className="remax-heading-1 mb-4">
+              Product Requirements Document: <span style={{ color: '#003DA5' }}>HOUSE/</span><span style={{ color: '#DC1C2E' }}>MAX</span>
+            </h1>
+            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-4">
+              <span><strong>Version:</strong> 3.4</span>
+              <span><strong>Date:</strong> January 2025</span>
+              <span><strong>Status:</strong> Production-Ready with Advanced Debugging</span>
+            </div>
+            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+              A comprehensive overview of the HOUSE/MAX platform - empowering homebuyers with professional property insights and risk assessments.
+            </p>
+          </div>
+        </div>
+
+        {/* Introduction */}
+        <div className="remax-card mb-8">
+          <div className="remax-card-body">
+            <h2 className="remax-heading-2 mb-4">Introduction</h2>
+            <p className="remax-text-body mb-4">
+              &ldquo;HOUSE/MAX&rdquo; is a Next.js web application that empowers homebuyers with comprehensive property insights before they buy. By providing access to property history, risk assessments, permit records, and expert guidance, the application helps users make informed decisions with confidence. The platform features a professional RE/MAX-inspired design that establishes trust and credibility in the real estate market.
+            </p>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-green-800 mb-2">Current Implementation</h3>
+              <p className="text-green-700">
+                Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, comprehensive property data integrated with Cotality risk analytics, enhanced AVM v2.0 with multi-approach valuation algorithms, and public records integration using free government APIs.
+              </p>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+              <h3 className="font-semibold text-blue-800 mb-2">Latest Updates (v3.4)</h3>
+              <ul className="text-blue-700 space-y-1">
+                <li>• <strong>Production Debugging Infrastructure:</strong> Comprehensive Vercel deployment troubleshooting system</li>
+                <li>• <strong>Advanced Monitoring:</strong> Real-time logging and error tracking for production environments</li>
+                <li>• <strong>System Health Monitoring:</strong> Test endpoints and environment variable validation tools</li>
+                <li>• <strong>Multi-layered Fallbacks:</strong> Geoapify → Nominatim → Local Database for address autocomplete</li>
+                <li>• <strong>Production-Ready Reliability:</strong> Graceful degradation and automated error recovery</li>
+                <li>• <strong>Comprehensive Troubleshooting:</strong> Detailed documentation and diagnostic procedures</li>
+              </ul>
+            </div>
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <h3 className="font-semibold text-gray-800 mb-2">Previous Updates (v3.3)</h3>
+              <ul className="text-gray-700 space-y-1">
+                <li>• <strong>Enhanced AVM v2.0:</strong> Multi-approach valuation with Sales Comparison, Cost, and Income approaches</li>
+                <li>• <strong>Advanced Feature Engineering:</strong> Luxury scores, location scoring, and market tier classification</li>
+                <li>• <strong>Public Records Integration:</strong> Free government APIs for property assessments, permits, and demographics</li>
+                <li>• <strong>Synchronized Valuations:</strong> Consistent AVM calculations across standalone and property details pages</li>
+                <li>• <strong>Cost Savings:</strong> Alternative to premium APIs using free government data sources ($0 vs $74+/month)</li>
+                <li>• <strong>Enhanced Data Infrastructure:</strong> Geoapify integration and performance optimizations</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* Call to Action */}
+        <div className="remax-card">
+          <div className="remax-card-body text-center">
+            <h2 className="remax-heading-2 mb-4">Ready to Explore?</h2>
+            <p className="remax-text-body mb-6">
+              Experience the full HOUSE/MAX platform and see how comprehensive property insights can empower your home buying decisions.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href="/search" className="remax-btn-primary">
+                Search Properties
+              </a>
+              <a href="/about" className="remax-btn-secondary">
+                Learn More About Us
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="text-center mt-8">
+          <Link href="/docs" className="remax-btn-outline">
+            ← Back to All Documentation
+          </Link>
+        </div>
+      </div>
+    </div>
+  </main>
+);
+
 export default async function DocPage({ params }: DocPageProps) {
   const { slug } = await params;
+  
+  // Special case for PRD - render with original styling
+  if (slug === 'prd') {
+    return <PRDDocumentationPage />;
+  }
+  
   const doc = getDocBySlug(slug);
   const allDocs = getAllDocs();
 
