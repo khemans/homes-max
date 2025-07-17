@@ -11,11 +11,11 @@ const PRDPage = () => (
             <h1 className="remax-heading-1 mb-4">
               Product Requirements Document: <span style={{ color: '#003DA5' }}>HOUSE/</span><span style={{ color: '#DC1C2E' }}>MAX</span>
             </h1>
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-4">
-              <span><strong>Version:</strong> 3.1</span>
-              <span><strong>Date:</strong> January 2025</span>
-              <span><strong>Status:</strong> MVP Deployed on Vercel</span>
-            </div>
+                         <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-4">
+               <span><strong>Version:</strong> 3.2</span>
+               <span><strong>Date:</strong> January 2025</span>
+               <span><strong>Status:</strong> MVP Deployed on Vercel</span>
+             </div>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
               A comprehensive overview of the HOUSE/MAX platform - empowering homebuyers with professional property insights and risk assessments.
             </p>
@@ -36,12 +36,14 @@ const PRDPage = () => (
               </p>
             </div>
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h3 className="font-semibold text-blue-800 mb-2">Recent Updates (v3.1)</h3>
+              <h3 className="font-semibold text-blue-800 mb-2">Recent Updates (v3.2)</h3>
               <ul className="text-blue-700 space-y-1">
                 <li>• Complete migration from CoreLogic to Cotality for risk assessment data</li>
                 <li>• Updated all branding and references to reflect Cotality&rsquo;s new identity</li>
                 <li>• Enhanced data integration with Cotality&rsquo;s &ldquo;Intelligence Beyond Bounds&rdquo; platform</li>
                 <li>• Improved risk assessment display with new Cotality branding</li>
+                <li>• Added comprehensive PRD presentation page for stakeholder demonstrations</li>
+                <li>• Defined future development roadmap with enhanced API integrations</li>
               </ul>
             </div>
           </div>
@@ -301,6 +303,107 @@ const PRDPage = () => (
                   <li>• Cotality API integration</li>
                   <li>• Vercel deployment platform</li>
                 </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Future Development Roadmap */}
+        <div className="remax-card mb-8">
+          <div className="remax-card-body">
+            <h2 className="remax-heading-2 mb-4">Future Development Roadmap (v3.2+)</h2>
+            
+            <div className="mb-6">
+              <h3 className="remax-heading-3 mb-4">Next Phase Development Priorities</h3>
+              
+              {/* Enhanced API Integrations */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-800 mb-3 text-lg">Enhanced API Integrations</h4>
+                
+                <div className="space-y-4">
+                  {/* Cotality API Enhancement */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h5 className="font-semibold text-blue-800 mb-2">Cotality API Enhancement</h5>
+                    <p className="text-blue-700 mb-2">Direct API integration for real-time risk assessment data</p>
+                    <ul className="text-blue-600 text-sm space-y-1">
+                      <li>• Implement server-side API calls for improved performance</li>
+                      <li>• Add comprehensive property risk scoring</li>
+                      <li>• Enable dynamic risk report generation</li>
+                      <li>• Integrate property-specific insurance recommendations</li>
+                    </ul>
+                  </div>
+                  
+                  {/* LexisNexis C.L.U.E. */}
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h5 className="font-semibold text-green-800 mb-2">LexisNexis C.L.U.E. Property Integration</h5>
+                    <p className="text-green-700 mb-2">Comprehensive Loss Underwriting Exchange (C.L.U.E.) property reports</p>
+                    <ul className="text-green-600 text-sm space-y-1">
+                      <li>• Historical insurance claims data</li>
+                      <li>• Property loss history and patterns</li>
+                      <li>• Enhanced due diligence capabilities for buyers and professionals</li>
+                    </ul>
+                  </div>
+                  
+                  {/* Government Data APIs */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                    <h5 className="font-semibold text-orange-800 mb-2">Government Data APIs</h5>
+                    <p className="text-orange-700 mb-2">Multi-jurisdictional permit and compliance data integration</p>
+                    <ul className="text-orange-600 text-sm space-y-1">
+                      <li>• <strong>State-Level Integration:</strong> Connect with state databases for comprehensive permit records</li>
+                      <li>• <strong>County-Level Integration:</strong> Direct access to county permit and zoning databases</li>
+                      <li>• <strong>City-Level Integration:</strong> Municipal permit tracking and code compliance records</li>
+                      <li>• <strong>Multi-Jurisdictional Search:</strong> Unified search across all government levels</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Technical Implementation Goals */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-gray-800 mb-3 text-lg">Technical Implementation Goals</h4>
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <ul className="space-y-2 text-gray-700">
+                    <li className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Server-side API architecture for secure data handling</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Real-time data synchronization and caching</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Enhanced search and filtering capabilities</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Professional API rate limiting and error handling</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <svg className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Comprehensive data validation and accuracy checks</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              {/* Timeline */}
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <h4 className="font-semibold text-red-800 mb-2">Development Timeline</h4>
+                <p className="text-red-700">
+                  <strong>Q1-Q2 2025:</strong> Initial API integrations with Cotality and LexisNexis C.L.U.E.<br/>
+                  <strong>Q3 2025:</strong> Full government data integration across state, county, and municipal levels
+                </p>
               </div>
             </div>
           </div>
