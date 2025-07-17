@@ -44,6 +44,15 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
 }>> {
   const apiKey = process.env.GEOAPIFY_API_KEY;
   
+  // Debug logging for Vercel deployment
+  console.log('Geoapify API Debug:', {
+    apiKeyPresent: !!apiKey,
+    apiKeyLength: apiKey ? apiKey.length : 0,
+    query,
+    limit,
+    environment: process.env.NODE_ENV
+  });
+  
   if (!apiKey) {
     console.warn('Geoapify API key not found, falling back to database suggestions');
     return getAddressSuggestions(query, limit);
@@ -51,24 +60,49 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
 
   try {
     const encodedQuery = encodeURIComponent(query);
-    const response = await fetch(
-      `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodedQuery}&limit=${limit}&format=json&apiKey=${apiKey}`,
-      {
-        headers: {
-          'User-Agent': 'HOUSE-MAX-Property-Search/1.0'
-        }
+    const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodedQuery}&limit=${limit}&format=json&apiKey=${apiKey}`;
+    
+    console.log('Making Geoapify request:', {
+      url: url.replace(apiKey, 'API_KEY_HIDDEN'),
+      query: encodedQuery
+    });
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'HOUSE-MAX-Property-Search/1.0'
       }
-    );
+    });
+
+    console.log('Geoapify response:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok
+    });
 
     if (!response.ok) {
-      console.warn('Geoapify autocomplete failed:', response.status);
+      console.warn('Geoapify autocomplete failed:', response.status, response.statusText);
+      
+      // Log response body for debugging
+      try {
+        const errorBody = await response.text();
+        console.warn('Geoapify error body:', errorBody);
+      } catch (e) {
+        console.warn('Could not read Geoapify error response');
+      }
+      
       return getAddressSuggestions(query, limit);
     }
 
     const data = await response.json();
     
+    console.log('Geoapify response data:', {
+      hasResults: !!(data.results),
+      resultsCount: data.results ? data.results.length : 0,
+      firstResult: data.results && data.results.length > 0 ? data.results[0] : null
+    });
+    
     if (data.results && Array.isArray(data.results)) {
-      return data.results.map((result: GeoapifyResult) => {
+      const suggestions = data.results.map((result: GeoapifyResult) => {
         const address = result.housenumber && result.street 
           ? `${result.housenumber} ${result.street}`
           : result.address_line1 || result.formatted.split(',')[0];
@@ -87,8 +121,12 @@ async function getGeoapifyAddressSuggestions(query: string, limit: number = 10):
       }).filter((suggestion: { address: string; city: string; state: string }) => 
         suggestion.address && suggestion.city && suggestion.state
       );
+      
+      console.log('Processed Geoapify suggestions:', suggestions.length);
+      return suggestions;
     }
 
+    console.log('No valid results from Geoapify, falling back to database');
     return getAddressSuggestions(query, limit);
   } catch (error) {
     console.error('Geoapify autocomplete error:', error);
@@ -228,14 +266,43 @@ export async function GET(req: NextRequest) {
   const validate = searchParams.get('validate') === 'true';
   const suggestions = searchParams.get('suggestions') === 'true';
   
+  // Debug logging for Vercel deployment
+  console.log('Address Search API called:', {
+    query,
+    validate,
+    suggestions,
+    url: req.url,
+    userAgent: req.headers.get('user-agent'),
+    method: req.method
+  });
+  
   // Handle address suggestions for autocomplete
   if (suggestions) {
-    const suggestionList = await getGeoapifyAddressSuggestions(query);
-    return NextResponse.json({
-      suggestions: suggestionList,
-      count: suggestionList.length,
-      source: process.env.GEOAPIFY_API_KEY ? 'geoapify' : 'database'
-    });
+    console.log('Processing address suggestions request');
+    try {
+      const suggestionList = await getGeoapifyAddressSuggestions(query);
+      const response = {
+        suggestions: suggestionList,
+        count: suggestionList.length,
+        source: process.env.GEOAPIFY_API_KEY ? 'geoapify' : 'database'
+      };
+      
+      console.log('Returning suggestions response:', {
+        count: response.count,
+        source: response.source,
+        hasGeoapifyKey: !!process.env.GEOAPIFY_API_KEY
+      });
+      
+      return NextResponse.json(response);
+    } catch (error) {
+      console.error('Error in suggestions handler:', error);
+      return NextResponse.json({
+        suggestions: [],
+        count: 0,
+        error: 'Internal server error',
+        source: 'error'
+      }, { status: 500 });
+    }
   }
   
   // Handle property search in our database

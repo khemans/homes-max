@@ -77,11 +77,36 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
     setLoading(true);
     try {
       const response = await fetch(`/api/address-search?q=${encodeURIComponent(searchQuery)}&suggestions=true`);
+      
+      // Log response for debugging on Vercel
+      console.log('AddressAutocomplete API Response:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        url: response.url
+      });
+      
       if (response.ok) {
         const data = await response.json();
+        console.log('AddressAutocomplete API Data:', data);
         setSuggestions(data.suggestions || []);
         setIsOpen(data.suggestions && data.suggestions.length > 0);
         setHighlightedIndex(-1);
+      } else {
+        console.error('AddressAutocomplete API Error:', {
+          status: response.status,
+          statusText: response.statusText
+        });
+        
+        // Try to get error message from response
+        try {
+          const errorData = await response.text();
+          console.error('AddressAutocomplete API Error Details:', errorData);
+        } catch (e) {
+          console.error('Could not parse error response');
+        }
+        
+        setSuggestions([]);
       }
     } catch (error) {
       console.error('Error fetching address suggestions:', error);
