@@ -123,7 +123,7 @@ function generateComparables(targetProperty: PropertyData, count: number = 3): A
   });
   
   // Prioritize comparable selection
-  let selectedProps: Array<typeof withDistances[0]> = [];
+  const selectedProps: Array<typeof withDistances[0]> = [];
   
   // 1. First priority: Same city (exact city match)
   const sameCity = withDistances.filter(prop => 
