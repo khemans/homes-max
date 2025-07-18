@@ -8,10 +8,14 @@ async function getPRDContent() {
   const prdPath = path.join(process.cwd(), 'PRD.md');
   const fileContents = fs.readFileSync(prdPath, 'utf8');
   
+  // Remove the redundant header section (first 8 lines) to avoid duplication
+  const lines = fileContents.split('\n');
+  const contentWithoutHeader = lines.slice(8).join('\n'); // Skip first 8 lines (title, version, author, etc.)
+  
   // Process markdown to HTML
   const processedContent = await remark()
     .use(html, { sanitize: false })
-    .process(fileContents);
+    .process(contentWithoutHeader);
   
   return processedContent.toString();
 }
