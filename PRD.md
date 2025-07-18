@@ -1,10 +1,10 @@
 # Product Requirements Document: HOUSE/MAX
 
-**Version:** 3.4  
+**Version:** 3.5  
 **Date:** January 2025  
 **Author:** AI Assistant (with User Collaboration)  
 **Product Name:** HOUSE/MAX  
-**Current Status:** Production-Ready Deployment with Advanced Debugging & Troubleshooting
+**Current Status:** Production-Ready Deployment with Public Records Expansion Roadmap
 
 ---
 
@@ -14,7 +14,26 @@
 
 **Current Implementation:** Fully functional MVP deployed on Vercel with professional RE/MAX design system, search functionality, interactive maps, risk assessments, comprehensive property data integrated with Cotality risk analytics, enhanced AVM v2.0 with multi-approach valuation algorithms, and public records integration using free government APIs.
 
-**Recent Updates (v3.4):**
+**Recent Updates (v3.5):**
+- **Public Records Expansion Roadmap Integration:**
+  - Comprehensive 4-phase roadmap for transforming basic public records into industry-leading property intelligence platform
+  - Phase 1: Foundation (Tax, permits, ownership, zoning) - Q1 2025
+  - Phase 2: Safety & Environment (Crime, hazards, emergency services) - Q1-Q2 2025
+  - Phase 3: Community Intelligence (Transportation, utilities, services) - Q2 2025
+  - Phase 4: Market Intelligence (Sales history, comparables, forecasting) - Q2-Q3 2025
+  - Detailed technical architecture for API integration and data caching strategies
+  - Success metrics and KPIs for data coverage, user engagement, and performance
+  - Comprehensive government API resource mapping for federal, state, county, and municipal integration
+- **Enhanced User Stories & Feature Planning:**
+  - Added 14 new user stories for planned public records expansion features
+  - Detailed feature specifications for enhanced property intelligence and community analytics
+  - Professional CMA tools and AI-powered market forecasting capabilities
+- **Documentation & Strategic Planning:**
+  - Updated PRD with comprehensive future development priorities
+  - Enhanced government API integration documentation
+  - Strategic timeline for 2025 public records platform transformation
+
+**Previous Updates (v3.4):**
 - **Production Deployment & Debugging Infrastructure:**
   - Comprehensive Vercel deployment troubleshooting system
   - Advanced logging and monitoring for production environments
@@ -88,8 +107,9 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 
 ---
 
-## 4. User Stories (Implemented)
+## 4. User Stories
 
+### **Implemented ✅**
 - ✅ As a homebuyer, I want to access comprehensive property data including Cotality risk assessments and permit history
 - ✅ As a homebuyer, I want to understand property rights, easements, and legal considerations in clear terms
 - ✅ As a homebuyer, I want to research building permits and code compliance records
@@ -99,6 +119,22 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - ✅ As a user, I want a professional, trustworthy platform that instills confidence
 - ✅ As a user, I want to access Cotality's advanced risk analytics and property intelligence
 - ✅ As a user, I want detailed wildfire, flood, and earthquake risk assessments for properties
+
+### **Planned - Public Records Expansion 🔄**
+- 🔄 As a homebuyer, I want to see complete ownership history and deed information to understand property transfers
+- 🔄 As a homebuyer, I want to access 5-10 years of property tax history to understand tax trends and exemptions
+- 🔄 As a homebuyer, I want to see real building permit data with contractor verification and inspection records
+- 🔄 As a homebuyer, I want to understand zoning restrictions and what I can/cannot do with the property
+- 🔄 As a homebuyer, I want comprehensive crime statistics and safety data for the neighborhood
+- 🔄 As a homebuyer, I want environmental hazard information including soil contamination and air quality data
+- 🔄 As a homebuyer, I want school ratings and detailed education information for properties with families
+- 🔄 As a homebuyer, I want transportation data including public transit, walkability, and commute analysis
+- 🔄 As a homebuyer, I want utility cost estimates and service reliability information
+- 🔄 As a homebuyer, I want comprehensive market analysis with sales history and comparable properties
+- 🔄 As a real estate investor, I want rental market data and investment analysis tools
+- 🔄 As a real estate professional, I want professional-grade comparable market analysis (CMA) generation
+- 🔄 As a user, I want AI-powered market forecasting and property value predictions
+- 🔄 As a user, I want interactive data visualizations for trends and comparisons
 
 ---
 
@@ -186,6 +222,31 @@ Empower homebuyers with comprehensive property insights and risk assessments, pr
 - **Mobile-Responsive Navigation:** Hamburger menu for mobile devices
 - **Professional Footer:** Comprehensive site information and legal disclaimers
 - **Consistent Branding:** RE/MAX colors and typography throughout
+
+### 5.6. Planned Public Records Enhancements 🔄
+
+**Enhanced Property Intelligence (Phase 1-2):**
+- **Comprehensive Ownership Records:** Complete deed history, mortgage information, and lien tracking
+- **Advanced Tax Analytics:** 5-10 year tax history with trend analysis and exemption tracking
+- **Real Building Permit Integration:** Live government API data with contractor verification and inspection records
+- **Zoning & Land Use Information:** Current zoning, allowed uses, variance history, and building restrictions
+- **Environmental Risk Assessment:** EPA contamination sites, air quality monitoring, radon risk, and soil analysis
+- **Enhanced Crime & Safety Data:** Detailed crime statistics, emergency service response times, and safety scoring
+
+**Community Intelligence Platform (Phase 3-4):**
+- **School & Education Analytics:** Comprehensive school ratings, test scores, district boundaries, and special programs
+- **Transportation Intelligence:** Public transit integration, traffic analysis, walkability enhancement, and commute data
+- **Utility & Infrastructure Analysis:** Provider details, service reliability, cost estimates, and renewable energy options
+- **Healthcare & Services Mapping:** Hospital quality ratings, healthcare density, and public services accessibility
+- **Market Intelligence & Forecasting:** Sales history integration, rental market analysis, price predictions, and investment metrics
+- **Professional CMA Tools:** Automated comparable market analysis and professional reporting capabilities
+
+**Advanced Features & Visualizations:**
+- **Interactive Data Visualizations:** Charts for tax trends, crime patterns, market movements, and risk assessments
+- **AI-Powered Analytics:** Machine learning for market forecasting, risk prediction, and property value estimation
+- **Professional Reporting Tools:** Enhanced printable reports with comprehensive data integration
+- **Comparative Analysis:** Side-by-side property comparisons and neighborhood analysis tools
+- **Real-Time Alerts:** Notifications for new permits, market changes, and risk updates
 
 ---
 
@@ -456,33 +517,166 @@ homes-max/
 
 ## 15. Future Development Roadmap (v3.2+)
 
-### Next Phase Development Priorities
+### **Public Records Expansion Initiative**
 
-**Enhanced API Integrations:**
-- **Cotality API Enhancement:** Direct API integration for real-time risk assessment data
-  - Implement server-side API calls for improved performance
-  - Add comprehensive property risk scoring
-  - Enable dynamic risk report generation
-  - Integrate property-specific insurance recommendations
+**Vision:** Transform HOUSE/MAX's basic Public Records section into a comprehensive property intelligence platform powered by real government APIs and advanced data analytics.
 
-- **LexisNexis C.L.U.E. Property Integration:** 
-  - Comprehensive Loss Underwriting Exchange (C.L.U.E.) property reports
-  - Historical insurance claims data
-  - Property loss history and patterns
-  - Enhanced due diligence capabilities for buyers and professionals
+### **Phase 1: Foundation (Q1 2025 - Months 1-2)**
+**Priority: High Impact, Low Complexity**
 
-- **Government Data APIs:**
-  - **State-Level Integration:** Connect with state databases for comprehensive permit records
-  - **County-Level Integration:** Direct access to county permit and zoning databases
-  - **City-Level Integration:** Municipal permit tracking and code compliance records
-  - **Multi-Jurisdictional Search:** Unified search across all government levels
+**Real Property Tax Integration:**
+- Connect to county assessor APIs for enhanced tax data
+- Implement 5-10 year tax history with exemption information
+- Add special assessments and property tax forecasting
+- Target APIs: Los Angeles County Assessor, NYC Department of Buildings
 
-**Technical Implementation Goals:**
-- Server-side API architecture for secure data handling
-- Real-time data synchronization and caching
-- Enhanced search and filtering capabilities
-- Professional API rate limiting and error handling
-- Comprehensive data validation and accuracy checks
+**Actual Building Permit Data:**
+- Replace mock permit data with real city/county APIs
+- Start with major metros (LA, NYC, Miami, Chicago)
+- Implement permit history, status tracking, and inspection records
+- Add contractor verification and license validation
+
+**Enhanced Ownership Records:**
+- County recorder API integration for deed information
+- Mortgage and lien data from public records
+- Owner occupancy status and ownership history
+- Property transfer history and chain of title
+
+**Zoning Information Integration:**
+- Municipal zoning database connections
+- Current zoning classification and allowed uses
+- Variance history and special permits
+- Setback requirements and building restrictions
+
+### **Phase 2: Safety & Environment (Q1-Q2 2025 - Months 3-4)**
+**Priority: Medium Impact, Medium Complexity**
+
+**Enhanced Crime Statistics:**
+- Local police department API integration
+- Crime type breakdown and trend analysis
+- Safety scores and neighborhood risk assessment
+- Recent incident mapping (anonymized block-level)
+
+**Environmental Hazard Data:**
+- EPA Superfund sites and contamination records
+- Air quality monitoring and historical data
+- Radon risk assessment by geographic area
+- Soil contamination and underground storage tank records
+
+**Emergency Services Enhancement:**
+- Fire station response times and ISO ratings
+- Hospital proximity and quality ratings
+- Police coverage and community programs
+- Emergency service reliability metrics
+
+**School Information Integration:**
+- Department of Education API integration
+- School ratings, test scores, and special programs
+- District information and boundary mapping
+- Private school and college proximity data
+
+### **Phase 3: Community Intelligence (Q2 2025 - Months 5-6)**
+**Priority: Medium Impact, High Value**
+
+**Transportation Data Enhancement:**
+- Public transit integration with agency APIs
+- Traffic pattern analysis and commute data
+- Walkability enhancements beyond basic Walk Score
+- Airport proximity and noise level assessment
+
+**Utility Information Integration:**
+- Utility provider details and service reliability
+- Average monthly costs by property type
+- Renewable energy options and grid information
+- Internet and cellular coverage analysis
+
+**Healthcare & Services Mapping:**
+- Hospital quality ratings and specialties
+- Healthcare provider density analysis
+- Public services mapping and accessibility
+- Recreation facilities and community programs
+
+**Shopping & Amenities Analysis:**
+- Grocery store access and quality ratings
+- Shopping center proximity and anchor stores
+- Restaurant density and cuisine variety
+- Entertainment and cultural facility mapping
+
+### **Phase 4: Market Intelligence (Q2-Q3 2025 - Months 7-8)**
+**Priority: High Value, High Complexity**
+
+**Sales History Integration:**
+- MLS data partnerships for comprehensive sales history
+- County recorder data for transaction details
+- Market trend analysis and price forecasting
+- Days on market and price reduction analysis
+
+**Rental Market Data:**
+- Rental listing API integration
+- Rent vs buy analysis and investment metrics
+- Vacancy rate tracking and market conditions
+- Rental property performance indicators
+
+**Market Forecasting Enhancement:**
+- Price prediction models using machine learning
+- Market condition indicators and risk assessment
+- Investment grade scoring and ROI analysis
+- Comparative market analysis automation
+
+**Comparable Sales Analysis:**
+- Advanced comp selection algorithms
+- Automated adjustment calculations
+- Similarity scoring and market positioning
+- Professional-grade CMA generation
+
+### **Enhanced API Integrations (Ongoing)**
+
+**Cotality API Enhancement:**
+- Direct API integration for real-time risk assessment data
+- Implement server-side API calls for improved performance
+- Add comprehensive property risk scoring
+- Enable dynamic risk report generation
+- Integrate property-specific insurance recommendations
+
+**LexisNexis C.L.U.E. Property Integration:**
+- Comprehensive Loss Underwriting Exchange (C.L.U.E.) property reports
+- Historical insurance claims data
+- Property loss history and patterns
+- Enhanced due diligence capabilities for buyers and professionals
+
+**Government Data APIs:**
+- **Federal APIs:** US Census Bureau, EPA, FEMA, HUD
+- **State-Level Integration:** Connect with state databases for comprehensive permit records
+- **County-Level Integration:** Direct access to county permit and zoning databases
+- **City-Level Integration:** Municipal permit tracking and code compliance records
+- **Multi-Jurisdictional Search:** Unified search across all government levels
+
+### **Technical Implementation Strategy**
+
+**API Integration Architecture:**
+```typescript
+// Centralized service architecture
+class PublicRecordsServiceV2 {
+  private taxService: PropertyTaxService;
+  private permitService: BuildingPermitService;
+  private ownershipService: OwnershipService;
+  private environmentalService: EnvironmentalService;
+  private marketService: MarketDataService;
+}
+```
+
+**Data Caching Strategy:**
+- Property data: 24-hour TTL with Redis caching
+- Market data: 1-hour TTL with memory + Redis
+- Environmental data: 30-day TTL with database storage
+- Permit data: 6-hour TTL with Redis caching
+
+**Error Handling & Fallbacks:**
+- Primary source: Real-time API
+- Fallback 1: Cached data (up to 30 days old)
+- Fallback 2: Historical average
+- Fallback 3: Regional estimate
+- Final fallback: Data unavailable message
 
 **Production Infrastructure & Debugging (v3.4):**
 - **Advanced Monitoring & Logging:**
@@ -501,7 +695,31 @@ homes-max/
   - Performance monitoring and optimization
   - Comprehensive troubleshooting documentation and procedures
 
-**Timeline:** Q1-Q2 2025 for initial API integrations, with full government data integration by Q3 2025.
+### **Success Metrics & KPIs**
+
+**Data Coverage Metrics:**
+- Permit Data Coverage: Target 95% for major metro areas
+- Tax Data Accuracy: Target 99% accuracy for assessment data
+- Environmental Data Completeness: Target 90% coverage for risk factors
+- Market Data Freshness: Target <24 hour latency for market conditions
+
+**User Engagement Metrics:**
+- Data Section Usage: Track which sections are most accessed
+- Report Generation: Monitor printable report usage
+- User Satisfaction: Survey data quality perception
+- Retention: Track user return rates for property research
+
+**Performance Metrics:**
+- API Response Times: Target <3 seconds for complete data load
+- Error Rates: Target <5% for any individual data source
+- Cache Hit Rates: Target >80% for frequently accessed data
+- Cost Efficiency: Monitor API costs vs data value provided
+
+**Timeline:** 
+- Q1 2025: Phases 1-2 (Foundation & Safety/Environment)
+- Q2 2025: Phases 3-4 (Community Intelligence & Market Intelligence)
+- Q3 2025: Full government data integration and AI/ML enhancements
+- Q4 2025: Advanced features and professional tools launch
 
 ---
 
@@ -607,16 +825,35 @@ This section provides links to all APIs, tools, technologies, and services integ
 
 ### **Free Government Data Sources**
 
-#### **Local Government APIs**
-- **Building Permits:** Municipal and county permit databases
-- **Property Tax Records:** Local assessor databases
-- **Zoning Information:** City and county zoning APIs
-- **Code Compliance:** Municipal code enforcement records
+#### **Federal Government APIs (Current & Planned)**
+- **US Census Bureau API:** https://www.census.gov/data/developers/ - Demographics, economics, housing data
+- **EPA APIs:** https://www.epa.gov/developers/ - Superfund sites, air quality, contamination data
+- **FEMA Flood Maps API:** https://www.fema.gov/flood-maps/national-flood-hazard-layer - Flood zones and risk
+- **HUD APIs:** https://www.huduser.gov/portal/pdrdatas_landing.html - Housing and urban development data
+
+#### **State-Level APIs (Planned Integration)**
+- **California:** https://data.ca.gov/ - State property and permit databases
+- **Texas:** https://data.texas.gov/ - State government data portal
+- **Florida:** https://www.floridahasarighttoknow.com/ - State public records
+- **New York:** https://data.ny.gov/ - State data portal and APIs
+
+#### **Municipal Government APIs (Planned)**
+- **Los Angeles:** https://data.lacity.org/ - Building permits, assessments, zoning
+- **New York City:** https://opendata.cityofnewyork.us/ - Comprehensive city data
+- **Chicago:** https://data.cityofchicago.org/ - Municipal records and permits
+- **Miami-Dade:** https://gis-mdc.opendata.arcgis.com/ - County property data
+
+#### **County-Level Integration (Planned)**
+- **Building Permits:** Municipal and county permit databases with real-time updates
+- **Property Tax Records:** County assessor databases with historical data
+- **Zoning Information:** City and county zoning APIs with variance tracking
+- **Code Compliance:** Municipal code enforcement records and violation tracking
+- **Deed Records:** County recorder databases for ownership and transaction history
 
 #### **Crime Data APIs**
-- **FBI Crime Data:** https://ucr.fbi.gov/crime-in-the-u.s
-- **Local Police Departments:** City-specific crime statistics APIs
-- **Purpose:** Neighborhood safety assessments
+- **FBI Crime Data:** https://ucr.fbi.gov/crime-in-the-u.s - National crime statistics
+- **Local Police Departments:** City-specific crime statistics APIs and incident mapping
+- **Purpose:** Comprehensive neighborhood safety assessments and risk scoring
 
 ### **Alternative Premium Services (For Reference)**
 
