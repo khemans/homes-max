@@ -100,6 +100,17 @@ interface DemographicsData {
 class PublicRecordsService {
   private readonly TIMEOUT = 10000; // 10 seconds
 
+  // Generate a deterministic hash from address string
+  private getAddressHash(address: string): number {
+    let hash = 0;
+    for (let i = 0; i < address.length; i++) {
+      const char = address.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash);
+  }
+
   // 1. Geocoding service (free tier)
   async geocodeAddress(address: string): Promise<{lat: number, lng: number} | null> {
     try {
@@ -207,12 +218,15 @@ class PublicRecordsService {
       if (coordinates) {
         const { lat, lng } = coordinates;
         
+        // Use deterministic values based on address hash to prevent changing values
+        const addressHash = this.getAddressHash(address);
+        
         // California example (many counties have open data)
         if (lat > 32 && lat < 42 && lng > -124 && lng < -114) {
           return {
-            assessedValue: 850000 + Math.random() * 500000,
-            landValue: 400000 + Math.random() * 200000,
-            improvementValue: 450000 + Math.random() * 300000,
+            assessedValue: 850000 + (addressHash % 500000),
+            landValue: 400000 + (addressHash % 200000),
+            improvementValue: 450000 + (addressHash % 300000),
             assessmentYear: 2024,
             taxRate: 1.25,
             taxAmount: 12500
@@ -222,9 +236,9 @@ class PublicRecordsService {
         // Texas example
         if (lat > 25 && lat < 37 && lng > -107 && lng < -93) {
           return {
-            assessedValue: 650000 + Math.random() * 400000,
-            landValue: 300000 + Math.random() * 150000,
-            improvementValue: 350000 + Math.random() * 250000,
+            assessedValue: 650000 + (addressHash % 400000),
+            landValue: 300000 + (addressHash % 150000),
+            improvementValue: 350000 + (addressHash % 250000),
             assessmentYear: 2024,
             taxRate: 2.1,
             taxAmount: 15400
@@ -234,9 +248,9 @@ class PublicRecordsService {
         // Colorado/Denver example (for our Denver properties)
         if (lat > 37 && lat < 41 && lng > -109 && lng < -102) {
           return {
-            assessedValue: 525000 + Math.random() * 300000,
-            landValue: 200000 + Math.random() * 100000,
-            improvementValue: 325000 + Math.random() * 200000,
+            assessedValue: 525000 + (addressHash % 300000),
+            landValue: 200000 + (addressHash % 100000),
+            improvementValue: 325000 + (addressHash % 200000),
             assessmentYear: 2024,
             taxRate: 0.85,
             taxAmount: 4800
@@ -246,11 +260,14 @@ class PublicRecordsService {
       
       // Fallback: Generate reasonable assessment data based on address pattern
       // This ensures we always provide some assessment data even without coordinates
+      // Use deterministic values based on address hash to prevent changing values
+      const addressHash = this.getAddressHash(address);
+      
       if (address.toLowerCase().includes('denver') || address.toLowerCase().includes('colorado') || address.toLowerCase().includes(' co')) {
         return {
-          assessedValue: 550000 + Math.random() * 250000,
-          landValue: 180000 + Math.random() * 80000,
-          improvementValue: 370000 + Math.random() * 170000,
+          assessedValue: 550000 + (addressHash % 250000),
+          landValue: 180000 + (addressHash % 80000),
+          improvementValue: 370000 + (addressHash % 170000),
           assessmentYear: 2024,
           taxRate: 0.85,
           taxAmount: 5100
@@ -259,9 +276,9 @@ class PublicRecordsService {
       
       // General US fallback
       return {
-        assessedValue: 450000 + Math.random() * 350000,
-        landValue: 200000 + Math.random() * 150000,
-        improvementValue: 250000 + Math.random() * 200000,
+        assessedValue: 450000 + (addressHash % 350000),
+        landValue: 200000 + (addressHash % 150000),
+        improvementValue: 250000 + (addressHash % 200000),
         assessmentYear: 2024,
         taxRate: 1.2,
         taxAmount: 6500

@@ -113,7 +113,7 @@ const PropertyDetailsClient: React.FC = () => {
     if (address) {
       fetchPropertyData(address);
     }
-  }, [address, fetchPropertyData]);
+  }, [address]); // Removed fetchPropertyData from dependencies to prevent re-fetching
 
   // Check if property is saved
   useEffect(() => {
