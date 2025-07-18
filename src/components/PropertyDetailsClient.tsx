@@ -75,7 +75,19 @@ const PropertyDetailsClient: React.FC = () => {
   
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || searchParams.get("query");
+  
+  // Debug logging
+  if (config.development.enableConsoleLogging) {
+    console.log('PropertyDetailsClient - Query:', query);
+  }
+  
   const { address, keywords } = parseQuery(query);
+  
+  // Debug logging
+  if (config.development.enableConsoleLogging) {
+    console.log('PropertyDetailsClient - Parsed address:', address);
+    console.log('PropertyDetailsClient - Keywords:', keywords);
+  }
 
   // State for UI interactions
   const [isSaved, setIsSaved] = useState(false);
@@ -105,39 +117,47 @@ const PropertyDetailsClient: React.FC = () => {
 
   // Check if property is saved
   useEffect(() => {
-    if (address) {
-             const saved = localStorage.getItem('savedProperties');
-       if (saved) {
-         const savedProperties = JSON.parse(saved) as Array<{address: string}>;
-         setIsSaved(savedProperties.some((prop) => prop.address === address));
+    if (address && typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('savedProperties');
+        if (saved) {
+          const savedProperties = JSON.parse(saved) as Array<{address: string}>;
+          setIsSaved(savedProperties.some((prop) => prop.address === address));
+        }
+      } catch (error) {
+        console.warn('Failed to access localStorage:', error);
       }
     }
   }, [address]);
 
   // Save/unsave property
   const handleSave = () => {
-    if (!address) return;
+    if (!address || typeof window === 'undefined') return;
     
-         const saved = localStorage.getItem('savedProperties');
-     let savedProperties = saved ? JSON.parse(saved) as Array<{address: string}> : [];
-     
-     if (isSaved) {
-       // Remove from saved
-       savedProperties = savedProperties.filter((prop) => prop.address !== address);
-       setIsSaved(false);
-     } else {
-      // Add to saved
-      const propertyData = {
-        address,
-        savedAt: new Date().toISOString(),
-        mlsData: mlsResults[0] || null,
-        avmData: avmResult
-      };
-      savedProperties.push(propertyData);
-      setIsSaved(true);
+    try {
+      const saved = localStorage.getItem('savedProperties');
+      let savedProperties = saved ? JSON.parse(saved) as Array<{address: string}> : [];
+      
+      if (isSaved) {
+        // Remove from saved
+        savedProperties = savedProperties.filter((prop) => prop.address !== address);
+        setIsSaved(false);
+      } else {
+        // Add to saved
+        const propertyData = {
+          address,
+          savedAt: new Date().toISOString(),
+          mlsData: mlsResults[0] || null,
+          avmData: avmResult
+        };
+        savedProperties.push(propertyData);
+        setIsSaved(true);
+      }
+      
+      localStorage.setItem('savedProperties', JSON.stringify(savedProperties));
+    } catch (error) {
+      console.warn('Failed to save property:', error);
     }
-    
-    localStorage.setItem('savedProperties', JSON.stringify(savedProperties));
   };
 
   // Print handler

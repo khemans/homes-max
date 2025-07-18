@@ -244,17 +244,31 @@ export const usePropertyData = (): UsePropertyDataReturn => {
     }
   }, 'fetchCoordinates');
 
-  const fetchPropertyData = (address: string) => {
+  const fetchPropertyData = async (address: string) => {
     if (!address) return;
     
-    // Fetch all data in parallel
-    Promise.all([
-      fetchMLS(address),
-      fetchAVM(address),
-      fetchPublicRecords(address),
-      fetchRiskData(address),
-      fetchCoordinates(address)
-    ]);
+    const config = getConfig();
+    
+    if (config.development.enableConsoleLogging) {
+      console.log('fetchPropertyData - Starting data fetch for:', address);
+    }
+    
+    try {
+      // Fetch all data in parallel, but handle errors individually
+      await Promise.allSettled([
+        fetchMLS(address),
+        fetchAVM(address),
+        fetchPublicRecords(address),
+        fetchRiskData(address),
+        fetchCoordinates(address)
+      ]);
+      
+      if (config.development.enableConsoleLogging) {
+        console.log('fetchPropertyData - All fetches completed for:', address);
+      }
+    } catch (error) {
+      console.error('fetchPropertyData - Error fetching data for:', address, error);
+    }
   };
 
   return {
