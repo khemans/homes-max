@@ -10,7 +10,7 @@ interface DocPageProps {
 }
 
 export async function generateStaticParams() {
-  const docs = getAllDocs();
+  const docs = await getAllDocs();
   return docs.map((doc) => ({
     slug: doc.slug,
   }));
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: DocPageProps) {
   const { slug } = await params;
-  const doc = getDocBySlug(slug);
+  const doc = await getDocBySlug(slug);
   
   if (!doc) {
     return {
@@ -35,8 +35,8 @@ export async function generateMetadata({ params }: DocPageProps) {
 export default async function DocPage({ params }: DocPageProps) {
   const { slug } = await params;
   
-  const doc = getDocBySlug(slug);
-  const allDocs = getAllDocs();
+  const doc = await getDocBySlug(slug);
+  const allDocs = await getAllDocs();
 
   if (!doc) {
     notFound();

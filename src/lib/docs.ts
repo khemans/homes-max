@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import matter from 'gray-matter';
-import { marked } from 'marked';
+import { remark } from 'remark';
+import html from 'remark-html';
 
 export interface DocFile {
   slug: string;
@@ -46,31 +46,33 @@ const DOCS_CONFIG = {
   }
 };
 
-export function getAllDocs(): DocFile[] {
+export async function getAllDocs(): Promise<DocFile[]> {
   const docsDirectory = process.cwd();
   const files: DocFile[] = [];
 
-  Object.entries(DOCS_CONFIG).forEach(([filename, config]) => {
+  for (const [filename, config] of Object.entries(DOCS_CONFIG)) {
     const filePath = path.join(docsDirectory, filename);
     
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, 'utf8');
       const stats = fs.statSync(filePath);
-      const { data, content } = matter(fileContent);
       
-      // Convert markdown to HTML synchronously
-      const htmlContent = marked(content, { async: false }) as string;
+      // Convert markdown to HTML directly (no frontmatter processing needed)
+      const processedContent = await remark()
+        .use(html, { sanitize: false })
+        .process(fileContent);
+      const htmlContent = processedContent.toString();
       
       files.push({
         slug: filename.replace('.md', '').toLowerCase().replace(/_/g, '-'),
-        title: data.title || config.title,
-        description: data.description || config.description,
+        title: config.title,
+        description: config.description,
         content: htmlContent,
         lastModified: stats.mtime,
         size: formatFileSize(stats.size)
       });
     }
-  });
+  }
 
   // Sort by configured order
   return files.sort((a, b) => {
@@ -80,8 +82,8 @@ export function getAllDocs(): DocFile[] {
   });
 }
 
-export function getDocBySlug(slug: string): DocFile | null {
-  const docs = getAllDocs();
+export async function getDocBySlug(slug: string): Promise<DocFile | null> {
+  const docs = await getAllDocs();
   return docs.find(doc => doc.slug === slug) || null;
 }
 
@@ -92,8 +94,9 @@ function formatFileSize(bytes: number): string {
   return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
 }
 
-export function generateDocNavigation() {
-  return getAllDocs().map(doc => ({
+export async function generateDocNavigation() {
+  const docs = await getAllDocs();
+  return docs.map(doc => ({
     title: doc.title,
     slug: doc.slug,
     description: doc.description

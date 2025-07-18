@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { getAllDocs } from '@/lib/docs';
 
-export default function DocsPage() {
-  const docs = getAllDocs();
+export default async function DocsPage() {
+  const docs = await getAllDocs();
 
   return (
     <main className="min-h-screen bg-gray-50 py-12">
