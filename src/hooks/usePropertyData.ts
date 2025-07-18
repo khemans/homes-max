@@ -113,9 +113,12 @@ export const usePropertyData = (): UsePropertyDataReturn => {
       const response = await fetch(`${config.api.endpoints.avm}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
       
+      // Extract the actual data from the API response wrapper
+      const avmData = data.success ? data.data : data;
+      
       // Cache results
-      cache.set(cacheKey, data);
-      setAvmResult(data);
+      cache.set(cacheKey, avmData);
+      setAvmResult(avmData);
     } catch {
       setAvmError('Failed to load AVM data');
       setAvmResult(null);
@@ -143,9 +146,12 @@ export const usePropertyData = (): UsePropertyDataReturn => {
       const response = await fetch(`${config.api.endpoints.publicRecords}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
       
+      // Extract the actual data from the API response wrapper
+      const publicRecordsData = data.success ? data.data : data;
+      
       // Cache results
-      cache.set(cacheKey, data);
-      setPublicRecords(data);
+      cache.set(cacheKey, publicRecordsData);
+      setPublicRecords(publicRecordsData);
     } catch {
       setPublicRecordsError('Failed to load public records');
       setPublicRecords(null);
