@@ -252,10 +252,10 @@ const PropertyDetailsClient: React.FC = () => {
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600 mb-2">
-                            ${listing.price.toLocaleString()}
+                            ${listing.price?.toLocaleString() || 'N/A'}
                           </div>
                           <div className="text-sm text-gray-600 mb-4">
-                            {listing.bedrooms} bed • {listing.bathrooms} bath • {listing.sqft.toLocaleString()} sq ft
+                            {listing.bedrooms} bed • {listing.bathrooms} bath • {listing.sqft?.toLocaleString() || 'N/A'} sq ft
                           </div>
                           <div className="text-xs text-gray-500">
                             {listing.status} • {listing.daysOnMarket} days on market
@@ -286,7 +286,7 @@ const PropertyDetailsClient: React.FC = () => {
               <div className="remax-card-body">
                 <div className="text-center mb-6">
                   <div className="text-3xl font-bold text-green-600 mb-2">
-                    ${avmResult.avmValue.toLocaleString()}
+                    ${avmResult.avmValue?.toLocaleString() || 'N/A'}
                   </div>
                   <div className="text-sm text-gray-600">
                     Confidence: {avmResult.confidence} • Last Updated: {avmResult.lastUpdated}
@@ -298,7 +298,7 @@ const PropertyDetailsClient: React.FC = () => {
                     <div className="space-y-2">
                       {avmResult.comparables.map((comp, index) => (
                         <div key={index} className="text-sm text-gray-700">
-                          • {comp.address} - ${comp.soldPrice.toLocaleString()} ({comp.soldDate}) - {comp.sqft.toLocaleString()} sq ft - {comp.distance} miles away
+                          • {comp.address} - ${comp.soldPrice?.toLocaleString() || 'N/A'} ({comp.soldDate}) - {comp.sqft?.toLocaleString() || 'N/A'} sq ft - {comp.distance} miles away
                         </div>
                       ))}
                     </div>
@@ -359,10 +359,10 @@ const PropertyDetailsClient: React.FC = () => {
               {mlsResults.slice(0, 1).map((listing, index) => (
                 <div key={index}>
                   <b>Address:</b> {listing.address}, {listing.city}, {listing.state} {listing.zip}<br />
-                  <b>Price:</b> ${listing.price.toLocaleString()}<br />
+                  <b>Price:</b> ${listing.price?.toLocaleString() || 'N/A'}<br />
                   <b>Bedrooms:</b> {listing.bedrooms}<br />
                   <b>Bathrooms:</b> {listing.bathrooms}<br />
-                  <b>Square Feet:</b> {listing.sqft.toLocaleString()}<br />
+                  <b>Square Feet:</b> {listing.sqft?.toLocaleString() || 'N/A'}<br />
                   <b>Year Built:</b> {listing.yearBuilt}<br />
                   <b>Property Type:</b> {listing.propertyType}<br />
                   <b>Status:</b> {listing.status}<br />
@@ -382,7 +382,7 @@ const PropertyDetailsClient: React.FC = () => {
           {avmResult && (
             <div className="section avm">
               <h3>AVM Valuation</h3>
-              <b>Estimated Value:</b> ${avmResult.avmValue.toLocaleString()}<br />
+              <b>Estimated Value:</b> ${avmResult.avmValue?.toLocaleString() || 'N/A'}<br />
               <b>Confidence:</b> {avmResult.confidence}<br />
               <b>Last Updated:</b> {avmResult.lastUpdated}<br />
               {avmResult.comparables && avmResult.comparables.length > 0 && (
@@ -390,7 +390,7 @@ const PropertyDetailsClient: React.FC = () => {
                   <b>Comparable Sales:</b><br />
                   {avmResult.comparables.map((comp, index) => (
                     <div key={index}>
-                      • {comp.address} - ${comp.soldPrice.toLocaleString()} ({comp.soldDate}) - {comp.sqft.toLocaleString()} sq ft - {comp.distance} miles away<br />
+                      • {comp.address} - ${comp.soldPrice?.toLocaleString() || 'N/A'} ({comp.soldDate}) - {comp.sqft?.toLocaleString() || 'N/A'} sq ft - {comp.distance} miles away<br />
                     </div>
                   ))}
                 </div>
@@ -465,7 +465,7 @@ const PropertyDetailsClient: React.FC = () => {
                 <ul>
                   {insuranceClaims.map((claim, idx) => (
                     <li key={idx}>
-                      {claim.type} claim on {claim.date} for ${claim.amount.toLocaleString()} ({claim.status})
+                      {claim.type} claim on {claim.date} for ${claim.amount?.toLocaleString() || 'N/A'} ({claim.status})
                     </li>
                   ))}
                 </ul>

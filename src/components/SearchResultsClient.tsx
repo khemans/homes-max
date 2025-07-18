@@ -263,7 +263,7 @@ const SearchResultsClient: React.FC = () => {
                         <div className="remax-text-small text-gray-600">Baths</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-semibold text-blue-600">{property.sqft.toLocaleString()}</div>
+                        <div className="text-xl font-semibold text-blue-600">{property.sqft?.toLocaleString() || 'N/A'}</div>
                         <div className="remax-text-small text-gray-600">Sq Ft</div>
                       </div>
                     </div>

@@ -25,7 +25,7 @@ const PropertyPublicRecords: React.FC<PropertyPublicRecordsProps> = ({ publicRec
                   <div>
                     <div className="text-sm text-blue-600 font-medium">Assessed Value</div>
                     <div className="text-lg font-semibold text-blue-800">
-                      ${publicRecords.assessment.assessedValue.toLocaleString()}
+                      ${publicRecords.assessment.assessedValue?.toLocaleString() || 'N/A'}
                     </div>
                   </div>
                 )}
@@ -33,7 +33,7 @@ const PropertyPublicRecords: React.FC<PropertyPublicRecordsProps> = ({ publicRec
                   <div>
                     <div className="text-sm text-blue-600 font-medium">Land Value</div>
                     <div className="text-lg font-semibold text-blue-800">
-                      ${publicRecords.assessment.landValue.toLocaleString()}
+                      ${publicRecords.assessment.landValue?.toLocaleString() || 'N/A'}
                     </div>
                   </div>
                 )}
@@ -41,7 +41,7 @@ const PropertyPublicRecords: React.FC<PropertyPublicRecordsProps> = ({ publicRec
                   <div>
                     <div className="text-sm text-blue-600 font-medium">Annual Tax</div>
                     <div className="text-lg font-semibold text-blue-800">
-                      ${publicRecords.assessment.taxAmount.toLocaleString()}
+                      ${publicRecords.assessment.taxAmount?.toLocaleString() || 'N/A'}
                     </div>
                   </div>
                 )}
@@ -65,7 +65,7 @@ const PropertyPublicRecords: React.FC<PropertyPublicRecordsProps> = ({ publicRec
                     <div className="text-right">
                       <div className="text-sm text-green-700">Issued: {permit.issueDate}</div>
                       {permit.value && (
-                        <div className="text-sm text-green-700">Value: ${permit.value.toLocaleString()}</div>
+                        <div className="text-sm text-green-700">Value: ${permit.value?.toLocaleString() || 'N/A'}</div>
                       )}
                     </div>
                   </div>
@@ -130,7 +130,7 @@ const PropertyPublicRecords: React.FC<PropertyPublicRecordsProps> = ({ publicRec
                   <div>
                     <div className="text-sm text-purple-600 font-medium">Median Income</div>
                     <div className="text-lg font-semibold text-purple-800">
-                      ${publicRecords.demographics.medianIncome.toLocaleString()}
+                      ${publicRecords.demographics.medianIncome?.toLocaleString() || 'N/A'}
                     </div>
                   </div>
                 )}

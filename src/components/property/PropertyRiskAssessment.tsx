@@ -34,7 +34,7 @@ const PropertyRiskAssessment: React.FC<PropertyRiskAssessmentProps> = ({
                 <div key={idx} className="bg-red-50 border border-red-200 rounded-lg p-3">
                   <div className="font-medium text-red-800">{claim.type} Claim</div>
                   <div className="text-sm text-red-700">
-                    Date: {claim.date} | Amount: ${claim.amount.toLocaleString()} | Status: {claim.status}
+                    Date: {claim.date} | Amount: ${claim.amount?.toLocaleString() || 'N/A'} | Status: {claim.status}
                   </div>
                 </div>
               ))}
