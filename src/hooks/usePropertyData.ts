@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { Coordinates, MLSResult, AVMResult, PublicRecordsData, InsuranceClaim, FireRisk, FloodRisk, CotalityData } from '@/types/property';
+import { getConfig } from '@/config/app';
+import { getMockCoords } from '@/config/mockData';
+import { cache, APICache } from '@/utils/cache';
+import { measureAsync } from '@/utils/performance';
 
 interface UsePropertyDataReturn {
   // State
@@ -30,27 +34,11 @@ interface UsePropertyDataReturn {
   fetchPropertyData: (address: string) => void;
 }
 
-// Helper to get mock coordinates for known addresses
-function getMockCoords(address: string): Coordinates | null {
-  if (!address) return null;
-  const lower = address.toLowerCase();
-  if (lower.includes("123 main st")) return { lat: 37.779, lng: -122.4194 };
-  if (lower.includes("456 oak ave")) return { lat: 37.781, lng: -122.417 };
-  // Denver metro area coordinates
-  if (lower.includes("1234 larimer st")) return { lat: 39.7505, lng: -104.9963 };
-  if (lower.includes("5678 colfax ave")) return { lat: 39.7402, lng: -104.9847 };
-  if (lower.includes("9012 broadway")) return { lat: 39.7213, lng: -104.9877 };
-  if (lower.includes("3456 speer blvd")) return { lat: 39.7325, lng: -105.0087 };
-  if (lower.includes("7890 alameda ave")) return { lat: 39.7156, lng: -104.9876 };
-  if (lower.includes("2345 colorado blvd")) return { lat: 39.7234, lng: -104.9456 };
-  if (lower.includes("6789 evans ave")) return { lat: 39.6789, lng: -104.9876 };
-  if (lower.includes("1122 hampden ave")) return { lat: 39.6543, lng: -104.9876 };
-  if (lower.includes("3344 mississippi ave")) return { lat: 39.7234, lng: -104.9234 };
-  if (lower.includes("5566 yale ave")) return { lat: 39.7123, lng: -104.9345 };
-  return null;
-}
+
 
 export const usePropertyData = (): UsePropertyDataReturn => {
+  const config = getConfig();
+  
   // State
   const [mlsResults, setMlsResults] = useState<MLSResult[]>([]);
   const [avmResult, setAvmResult] = useState<AVMResult | null>(null);
@@ -75,27 +63,58 @@ export const usePropertyData = (): UsePropertyDataReturn => {
   const [riskError, setRiskError] = useState('');
   const [geoError, setGeoError] = useState('');
 
-  const fetchMLS = async (address: string) => {
+  const fetchMLS = measureAsync(async (address: string) => {
+    if (!config.features.enableAVM) return;
+    
     setMlsLoading(true);
     setMlsError('');
+    
+    // Check cache first
+    const cacheKey = APICache.getMLSKey(address);
+    const cached = cache.get<MLSResult[]>(cacheKey);
+    if (cached) {
+      setMlsResults(cached);
+      setMlsLoading(false);
+      return;
+    }
+    
     try {
-      const response = await fetch(`/api/mls?address=${encodeURIComponent(address)}`);
+      const response = await fetch(`${config.api.endpoints.mls}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
-      setMlsResults(data.results || []);
+      const results = data.results || [];
+      
+      // Cache results
+      cache.set(cacheKey, results);
+      setMlsResults(results);
     } catch {
       setMlsError('Failed to load MLS data');
       setMlsResults([]);
     } finally {
       setMlsLoading(false);
     }
-  };
+  }, 'fetchMLS');
 
-  const fetchAVM = async (address: string) => {
+  const fetchAVM = measureAsync(async (address: string) => {
+    if (!config.features.enableAVM) return;
+    
     setAvmLoading(true);
     setAvmError('');
+    
+    // Check cache first
+    const cacheKey = APICache.getAVMKey(address);
+    const cached = cache.get<AVMResult>(cacheKey);
+    if (cached) {
+      setAvmResult(cached);
+      setAvmLoading(false);
+      return;
+    }
+    
     try {
-      const response = await fetch(`/api/avm?address=${encodeURIComponent(address)}`);
+      const response = await fetch(`${config.api.endpoints.avm}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
+      
+      // Cache results
+      cache.set(cacheKey, data);
       setAvmResult(data);
     } catch {
       setAvmError('Failed to load AVM data');
@@ -103,14 +122,29 @@ export const usePropertyData = (): UsePropertyDataReturn => {
     } finally {
       setAvmLoading(false);
     }
-  };
+  }, 'fetchAVM');
 
-  const fetchPublicRecords = async (address: string) => {
+  const fetchPublicRecords = measureAsync(async (address: string) => {
+    if (!config.features.enablePublicRecords) return;
+    
     setPublicRecordsLoading(true);
     setPublicRecordsError('');
+    
+    // Check cache first
+    const cacheKey = APICache.getPublicRecordsKey(address);
+    const cached = cache.get<PublicRecordsData>(cacheKey);
+    if (cached) {
+      setPublicRecords(cached);
+      setPublicRecordsLoading(false);
+      return;
+    }
+    
     try {
-      const response = await fetch(`/api/public-records?address=${encodeURIComponent(address)}`);
+      const response = await fetch(`${config.api.endpoints.publicRecords}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
+      
+      // Cache results
+      cache.set(cacheKey, data);
       setPublicRecords(data);
     } catch {
       setPublicRecordsError('Failed to load public records');
@@ -118,14 +152,38 @@ export const usePropertyData = (): UsePropertyDataReturn => {
     } finally {
       setPublicRecordsLoading(false);
     }
-  };
+  }, 'fetchPublicRecords');
 
-  const fetchRiskData = async (address: string) => {
+  const fetchRiskData = measureAsync(async (address: string) => {
+    if (!config.features.enableRiskAssessment) return;
+    
     setRiskLoading(true);
     setRiskError('');
+    
+    // Check cache first
+    const cacheKey = APICache.getRiskKey(address);
+    const cached = cache.get<{
+      insuranceClaims?: InsuranceClaim[];
+      fireRisk?: FireRisk;
+      floodRisk?: FloodRisk;
+      cotality?: CotalityData;
+    }>(cacheKey);
+    if (cached) {
+      setInsuranceClaims(cached.insuranceClaims || []);
+      setFireRisk(cached.fireRisk || null);
+      setFloodRisk(cached.floodRisk || null);
+      setCotality(cached.cotality || null);
+      setRiskLoading(false);
+      return;
+    }
+    
     try {
-      const response = await fetch(`/api/risk?address=${encodeURIComponent(address)}`);
+      const response = await fetch(`${config.api.endpoints.risk}?address=${encodeURIComponent(address)}`);
       const data = await response.json();
+      
+      // Cache results
+      cache.set(cacheKey, data);
+      
       setInsuranceClaims(data.insuranceClaims || []);
       setFireRisk(data.fireRisk || null);
       setFloodRisk(data.floodRisk || null);
@@ -139,9 +197,11 @@ export const usePropertyData = (): UsePropertyDataReturn => {
     } finally {
       setRiskLoading(false);
     }
-  };
+  }, 'fetchRiskData');
 
-  const fetchCoordinates = async (address: string) => {
+  const fetchCoordinates = measureAsync(async (address: string) => {
+    if (!config.features.enableMapIntegration) return;
+    
     // Use mock coords for known addresses
     const mock = getMockCoords(address);
     if (mock) {
@@ -150,14 +210,27 @@ export const usePropertyData = (): UsePropertyDataReturn => {
       return;
     }
     
+    // Check cache first
+    const cacheKey = APICache.getAddressSearchKey(address);
+    const cached = cache.get<Coordinates>(cacheKey);
+    if (cached) {
+      setCoords(cached);
+      setGeoError("");
+      return;
+    }
+    
     // Otherwise, geocode using our enhanced address search API
     setGeoLoading(true);
     setGeoError("");
     try {
-      const response = await fetch(`/api/address-search?q=${encodeURIComponent(address)}&validate=true`);
+      const response = await fetch(`${config.api.endpoints.addressSearch}?q=${encodeURIComponent(address)}&validate=true`);
       const data = await response.json();
       if (data.geocoding && data.geocoding.lat && data.geocoding.lng) {
-        setCoords({ lat: data.geocoding.lat, lng: data.geocoding.lng });
+        const coords = { lat: data.geocoding.lat, lng: data.geocoding.lng };
+        
+        // Cache coordinates
+        cache.set(cacheKey, coords);
+        setCoords(coords);
         setGeoError("");
       } else {
         setCoords(null);
@@ -169,7 +242,7 @@ export const usePropertyData = (): UsePropertyDataReturn => {
     } finally {
       setGeoLoading(false);
     }
-  };
+  }, 'fetchCoordinates');
 
   const fetchPropertyData = (address: string) => {
     if (!address) return;

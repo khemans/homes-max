@@ -6,6 +6,9 @@ import PropertyMapSection from "./property/PropertyMapSection";
 import PropertyRiskAssessment from "./property/PropertyRiskAssessment";
 import PropertyPublicRecords from "./property/PropertyPublicRecords";
 import { usePropertyData } from "@/hooks/usePropertyData";
+import { getConfig } from "@/config/app";
+import ErrorBoundary from "./ErrorBoundary";
+import { useRenderPerformance } from "@/utils/performance";
 
 // Helper functions for query parsing and property saving
 const infoSections = [
@@ -66,6 +69,9 @@ function parseQuery(query: string | null) {
 }
 
 const PropertyDetailsClient: React.FC = () => {
+  const config = getConfig();
+  useRenderPerformance('PropertyDetailsClient');
+  
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const { address, keywords } = parseQuery(query);
@@ -168,26 +174,38 @@ const PropertyDetailsClient: React.FC = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
-      <div className="remax-container">
-        
-        {/* Map Section */}
-        <PropertyMapSection
-          coords={coords}
-          address={address}
-          geoLoading={geoLoading}
-          geoError={geoError}
-          mlsResults={mlsResults}
-        />
+    <ErrorBoundary>
+      <main className="min-h-screen bg-gray-50 py-8">
+        <div className="remax-container">
+          
+          {/* Map Section */}
+          {config.features.enableMapIntegration && (
+            <ErrorBoundary fallback={
+              <div className="max-w-4xl mx-auto mb-8">
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-yellow-800">
+                  <h3 className="font-semibold mb-2">Map Temporarily Unavailable</h3>
+                  <p>The map feature is currently experiencing issues. Property data is still available below.</p>
+                </div>
+              </div>
+            }>
+              <PropertyMapSection
+                coords={coords}
+                address={address}
+                geoLoading={geoLoading}
+                geoError={geoError}
+                mlsResults={mlsResults}
+              />
+            </ErrorBoundary>
+          )}
 
-        {/* Property Details Section */}
-        <div className="max-w-4xl mx-auto">
-          <PropertyHeader
-            address={address}
-            onPrint={handlePrint}
-            onSave={handleSave}
-            isSaved={isSaved}
-          />
+          {/* Property Details Section */}
+          <div className="max-w-4xl mx-auto">
+            <PropertyHeader
+              address={address}
+              onPrint={config.features.enablePrintReports ? handlePrint : undefined}
+              onSave={config.features.enablePropertySaving ? handleSave : undefined}
+              isSaved={isSaved}
+            />
 
           {/* MLS Results */}
           {mlsResults.length > 0 && (
@@ -463,6 +481,7 @@ const PropertyDetailsClient: React.FC = () => {
         </div>
       </div>
     </main>
+    </ErrorBoundary>
   );
 };
 
