@@ -108,6 +108,13 @@ const PropertyDetailsClient: React.FC = () => {
     fetchPropertyData
   } = usePropertyData();
 
+  // Debug logging for AVM data
+  if (config.development.enableConsoleLogging) {
+    console.log('PropertyDetailsClient - AVM Result:', avmResult);
+    console.log('PropertyDetailsClient - MLS Results:', mlsResults);
+    console.log('PropertyDetailsClient - Public Records:', publicRecords);
+  }
+
   // Fetch data when address changes
   useEffect(() => {
     if (address) {
