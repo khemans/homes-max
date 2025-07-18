@@ -314,6 +314,155 @@ export const realPropertiesDatabase: PropertyData[] = [
     }
   },
 
+  // More Denver properties
+  {
+    property: {
+      address: "2840 Colfax Ave",
+      city: "Denver",
+      state: "CO",
+      zip: "80206",
+      price: "$875,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1950,
+      status: "Active",
+      mlsId: "MLS-CO-007",
+      salesPitch: "Historic charm meets modern luxury on vibrant Colfax! Fully renovated Victorian with original details, chef's kitchen, and rooftop deck with city views. Perfect for urban living!",
+      yearBuilt: 1895,
+      lotSize: "0.15 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 39.7402, lng: -104.9847 }
+    },
+    permits: [
+      { type: "Full Renovation", year: 2023, status: "Finaled", permitId: "DEN-2023-8901", cost: 125000, contractor: "Denver Historic Renovations", description: "Complete renovation preserving historic character" },
+      { type: "Electrical Upgrade", year: 2023, status: "Finaled", permitId: "DEN-2023-8902", cost: 18000, contractor: "Front Range Electric", description: "Updated electrical system to modern standards" },
+      { type: "Rooftop Deck", year: 2023, status: "Finaled", permitId: "DEN-2023-8903", cost: 25000, contractor: "Mile High Decks", description: "Custom rooftop deck with city views" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 3.2, lastInspection: "2023-09-10", notes: "Low fire risk due to urban location" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CO-2840",
+        wildfireRiskScore: 3,
+        floodRiskScore: 1,
+        earthquakeRiskScore: 4,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  {
+    property: {
+      address: "1534 Larimer St",
+      city: "Denver",
+      state: "CO",
+      zip: "80202",
+      price: "$1,250,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1650,
+      status: "Pending",
+      mlsId: "MLS-CO-008",
+      salesPitch: "Modern loft living in historic LoDo! Exposed brick, soaring ceilings, and industrial details. Walking distance to Union Station, sports venues, and Denver's best restaurants.",
+      yearBuilt: 1902,
+      lotSize: "0.08 acres",
+      propertyType: "Loft",
+      coordinates: { lat: 39.7505, lng: -104.9963 }
+    },
+    permits: [
+      { type: "Loft Conversion", year: 2018, status: "Finaled", permitId: "DEN-2018-5432", cost: 200000, contractor: "Urban Loft Builders", description: "Convert historic warehouse to luxury loft" },
+      { type: "HVAC Install", year: 2018, status: "Finaled", permitId: "DEN-2018-5433", cost: 35000, contractor: "Colorado Comfort", description: "Install modern HVAC system" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-03-15", type: "Plumbing", amount: 3500, status: "Paid", description: "Pipe burst in winter cold snap" }
+      ],
+      fireRisk: { score: 4.1, lastInspection: "2023-07-20", notes: "Standard urban fire risk" },
+      floodRisk: { zone: "AE", riskLevel: "Moderate", lastFlood: "2013-09-12" },
+      cotality: {
+        cotalityPropertyId: "CL-CO-1534",
+        wildfireRiskScore: 2,
+        floodRiskScore: 6,
+        earthquakeRiskScore: 4,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  {
+    property: {
+      address: "4521 Broadway",
+      city: "Denver",
+      state: "CO",
+      zip: "80216",
+      price: "$625,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1780,
+      status: "For Sale",
+      mlsId: "MLS-CO-009",
+      salesPitch: "Charming bungalow in up-and-coming Highland neighborhood! Original hardwood floors, updated kitchen, and large backyard perfect for entertaining. Great investment opportunity!",
+      yearBuilt: 1925,
+      lotSize: "0.18 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 39.7213, lng: -104.9877 }
+    },
+    permits: [
+      { type: "Kitchen Remodel", year: 2022, status: "Finaled", permitId: "DEN-2022-6789", cost: 45000, contractor: "Denver Kitchen Co", description: "Modern kitchen with granite counters" },
+      { type: "Bathroom Remodel", year: 2021, status: "Finaled", permitId: "DEN-2021-9876", cost: 18000, contractor: "Bath Pro Denver", description: "Updated master bathroom" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-12-15", type: "Wind", amount: 4200, status: "Paid", description: "Tree damage from bomb cyclone" }
+      ],
+      fireRisk: { score: 5.8, lastInspection: "2023-06-15", notes: "Moderate fire risk" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CO-4521",
+        wildfireRiskScore: 4,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 4,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  {
+    property: {
+      address: "890 Speer Blvd",
+      city: "Denver",
+      state: "CO",
+      zip: "80204",
+      price: "$2,100,000",
+      beds: 4,
+      baths: 4,
+      sqft: 3200,
+      status: "Active",
+      mlsId: "MLS-CO-010",
+      salesPitch: "Luxury high-rise living with stunning mountain and city views! Premium finishes, chef's kitchen, and private balcony. Building amenities include gym, concierge, and rooftop pool.",
+      yearBuilt: 2019,
+      lotSize: "0.02 acres",
+      propertyType: "Condo",
+      coordinates: { lat: 39.7325, lng: -105.0087 }
+    },
+    permits: [
+      { type: "Custom Built-ins", year: 2023, status: "Finaled", permitId: "DEN-2023-1111", cost: 22000, contractor: "Custom Millwork Denver", description: "Built-in entertainment center and wine storage" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 2.1, lastInspection: "2023-11-01", notes: "Excellent fire suppression system" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CO-890",
+        wildfireRiskScore: 1,
+        floodRiskScore: 1,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
   // Seattle, Washington
   {
     property: {

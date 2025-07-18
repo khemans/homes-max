@@ -73,7 +73,7 @@ const PropertyDetailsClient: React.FC = () => {
   useRenderPerformance('PropertyDetailsClient');
   
   const searchParams = useSearchParams();
-  const query = searchParams.get("q");
+  const query = searchParams.get("q") || searchParams.get("query");
   const { address, keywords } = parseQuery(query);
 
   // State for UI interactions

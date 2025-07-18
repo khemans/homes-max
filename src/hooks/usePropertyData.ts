@@ -64,7 +64,7 @@ export const usePropertyData = (): UsePropertyDataReturn => {
   const [geoError, setGeoError] = useState('');
 
   const fetchMLS = measureAsync(async (address: string) => {
-    if (!config.features.enableAVM) return;
+    // MLS is core functionality - always enabled
     
     setMlsLoading(true);
     setMlsError('');
