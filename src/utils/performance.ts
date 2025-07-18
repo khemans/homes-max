@@ -1,4 +1,5 @@
 import { getConfig } from '@/config/app';
+import React from 'react';
 
 interface PerformanceEntry {
   name: string;
@@ -251,5 +252,4 @@ export const trackMemoryUsage = () => {
   });
 };
 
-// Import React for the hook
-import React from 'react'; 
+ 

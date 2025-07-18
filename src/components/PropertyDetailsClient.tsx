@@ -9,6 +9,7 @@ import { usePropertyData } from "@/hooks/usePropertyData";
 import { getConfig } from "@/config/app";
 import ErrorBoundary from "./ErrorBoundary";
 import { useRenderPerformance } from "@/utils/performance";
+import { createErrorHandler } from "@/utils/diagnostics";
 
 // Helper functions for query parsing and property saving
 const infoSections = [
@@ -174,7 +175,7 @@ const PropertyDetailsClient: React.FC = () => {
   };
 
   return (
-    <ErrorBoundary>
+    <ErrorBoundary onError={createErrorHandler('PropertyDetailsClient')}>
       <main className="min-h-screen bg-gray-50 py-8">
         <div className="remax-container">
           
