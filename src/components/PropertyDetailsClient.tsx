@@ -252,7 +252,7 @@ const PropertyDetailsClient: React.FC = () => {
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold text-green-600 mb-2">
-                            ${listing.price?.toLocaleString() || 'N/A'}
+                            {listing.price || 'N/A'}
                           </div>
                           <div className="text-sm text-gray-600 mb-4">
                             {listing.bedrooms} bed • {listing.bathrooms} bath • {listing.sqft?.toLocaleString() || 'N/A'} sq ft
@@ -359,7 +359,7 @@ const PropertyDetailsClient: React.FC = () => {
               {mlsResults.slice(0, 1).map((listing, index) => (
                 <div key={index}>
                   <b>Address:</b> {listing.address}, {listing.city}, {listing.state} {listing.zip}<br />
-                  <b>Price:</b> ${listing.price?.toLocaleString() || 'N/A'}<br />
+                  <b>Price:</b> {listing.price || 'N/A'}<br />
                   <b>Bedrooms:</b> {listing.bedrooms}<br />
                   <b>Bathrooms:</b> {listing.bathrooms}<br />
                   <b>Square Feet:</b> {listing.sqft?.toLocaleString() || 'N/A'}<br />
