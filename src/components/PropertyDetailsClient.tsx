@@ -10,6 +10,7 @@ import { getConfig } from "@/config/app";
 import ErrorBoundary from "./ErrorBoundary";
 import { useRenderPerformance } from "@/utils/performance";
 import { createErrorHandler } from "@/utils/diagnostics";
+import { generateParcelLink } from "@/utils/parcelLinks";
 
 // Helper functions for query parsing and property saving
 const infoSections = [
@@ -274,8 +275,40 @@ const PropertyDetailsClient: React.FC = () => {
                           <p className="text-sm text-gray-700">{listing.description}</p>
                         </div>
                       )}
-                      <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
-                        Realtor: {listing.realtor} • {listing.brokeragePhone}
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex justify-between items-center">
+                          <div className="text-xs text-gray-500">
+                            Realtor: {listing.realtor} • {listing.brokeragePhone}
+                          </div>
+                          <div>
+                            {(() => {
+                              const parcelLink = generateParcelLink({
+                                address: listing.address,
+                                city: listing.city,
+                                state: listing.state,
+                                zip: listing.zip
+                              });
+                              return (
+                                <a
+                                  href={parcelLink.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={`text-xs font-medium px-3 py-1 rounded-full ${
+                                    parcelLink.available 
+                                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
+                                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                  }`}
+                                  title={parcelLink.instructions || `View official ${parcelLink.countyName} property records`}
+                                >
+                                  <svg className="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                  </svg>
+                                  {parcelLink.available ? 'County Records' : 'Search Records'}
+                                </a>
+                              );
+                            })()}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ))}
