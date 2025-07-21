@@ -886,6 +886,766 @@ export const realPropertiesDatabase: PropertyData[] = [
         reportUrl: "https://www.cotality.com/products/underwriting-center"
       }
     }
+  },
+
+  // ===== MAJOR EXPANSION: Additional Cities and Properties =====
+  
+  // Chicago, Illinois - Lincoln Park
+  {
+    property: {
+      address: "2156 N Cleveland Ave",
+      city: "Chicago",
+      state: "IL",
+      zip: "60614",
+      price: "$875,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1850,
+      status: "Active",
+      mlsId: "MLS-CHI-001",
+      salesPitch: "Beautiful Victorian-era home in Lincoln Park with original hardwood floors, exposed brick, and private garden. Walk to lakefront and DePaul University.",
+      yearBuilt: 1895,
+      lotSize: "0.12 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 41.9244, lng: -87.6365 }
+    },
+    permits: [
+      { type: "Roof Replacement", year: 2023, status: "Finaled", permitId: "CHI-2023-045", cost: 18000, contractor: "Windy City Roofing" },
+      { type: "Basement Finishing", year: 2022, status: "Finaled", permitId: "CHI-2022-187", cost: 35000, contractor: "Chicago Build Co" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-02-28", type: "Water", amount: 12000, status: "Paid", description: "Burst pipe damage during polar vortex" }
+      ],
+      fireRisk: { score: 3.5, lastInspection: "2023-08-20", notes: "Low fire risk, well-maintained electrical systems" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-CHI-2156",
+        wildfireRiskScore: 1,
+        floodRiskScore: 4,
+        earthquakeRiskScore: 2,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Seattle, Washington - Capitol Hill  
+  {
+    property: {
+      address: "1532 15th Ave E",
+      city: "Seattle", 
+      state: "WA",
+      zip: "98112",
+      price: "$1,125,000",
+      beds: 4,
+      baths: 2,
+      sqft: 2100,
+      status: "Active",
+      mlsId: "MLS-SEA-001",
+      salesPitch: "Charming Craftsman home in trendy Capitol Hill! Original character with modern updates, stunning mountain views, and walkable to Pike Place Market.",
+      yearBuilt: 1912,
+      lotSize: "0.14 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 47.6235, lng: -122.3141 }
+    },
+    permits: [
+      { type: "Seismic Retrofit", year: 2023, status: "Finaled", permitId: "SEA-2023-098", cost: 25000, contractor: "Pacific Northwest Structural" },
+      { type: "Solar Install", year: 2022, status: "Finaled", permitId: "SEA-2022-234", cost: 22000, contractor: "Emerald City Solar" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2021-07-15", type: "Storm", amount: 8500, status: "Paid", description: "Wind damage to roof and gutters" }
+      ],
+      fireRisk: { score: 4.2, lastInspection: "2023-07-10", notes: "Moderate risk due to old electrical in original structure" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-SEA-1532",
+        wildfireRiskScore: 3,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 8,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Phoenix, Arizona - Scottsdale
+  {
+    property: {
+      address: "8425 E Shea Blvd",
+      city: "Scottsdale",
+      state: "AZ", 
+      zip: "85260",
+      price: "$695,000",
+      beds: 3,
+      baths: 3,
+      sqft: 2200,
+      status: "Active",
+      mlsId: "MLS-PHX-001",
+      salesPitch: "Desert contemporary home with panoramic mountain views! Private pool, desert landscaping, and energy-efficient design. Resort-style living in North Scottsdale.",
+      yearBuilt: 2005,
+      lotSize: "0.18 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 33.5889, lng: -111.8906 }
+    },
+    permits: [
+      { type: "Pool Renovation", year: 2023, status: "Finaled", permitId: "SCT-2023-112", cost: 28000, contractor: "Desert Pool Specialists" },
+      { type: "HVAC Replacement", year: 2022, status: "Finaled", permitId: "SCT-2022-087", cost: 15000, contractor: "Arizona Comfort Systems" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-08-15", type: "Hail", amount: 9500, status: "Paid", description: "Roof damage from summer monsoon" }
+      ],
+      fireRisk: { score: 6.8, lastInspection: "2023-09-05", notes: "Elevated wildfire risk during dry seasons" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-PHX-8425",
+        wildfireRiskScore: 7,
+        floodRiskScore: 1,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Atlanta, Georgia - Buckhead
+  {
+    property: {
+      address: "3245 Peachtree Rd NE",
+      city: "Atlanta",
+      state: "GA",
+      zip: "30326",
+      price: "$825,000",
+      beds: 4,
+      baths: 3,
+      sqft: 2650,
+      status: "Active", 
+      mlsId: "MLS-ATL-001",
+      salesPitch: "Elegant traditional home in prestigious Buckhead! Hardwood floors throughout, gourmet kitchen, private backyard. Minutes from Lenox Square and fine dining.",
+      yearBuilt: 1978,
+      lotSize: "0.22 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 33.8439, lng: -84.3694 }
+    },
+    permits: [
+      { type: "Kitchen Renovation", year: 2023, status: "Finaled", permitId: "ATL-2023-156", cost: 52000, contractor: "Southern Elegance Builders" },
+      { type: "Deck Addition", year: 2022, status: "Finaled", permitId: "ATL-2022-203", cost: 18000, contractor: "Georgia Outdoor Living" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-04-12", type: "Storm", amount: 14000, status: "Paid", description: "Tornado damage to roof and windows" }
+      ],
+      fireRisk: { score: 3.8, lastInspection: "2023-06-30", notes: "Low to moderate risk, well-maintained property" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-ATL-3245",
+        wildfireRiskScore: 2,
+        floodRiskScore: 3,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Portland, Oregon - Pearl District
+  {
+    property: {
+      address: "1425 NW Flanders St",
+      city: "Portland",
+      state: "OR",
+      zip: "97209",
+      price: "$745,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1450,
+      status: "Active",
+      mlsId: "MLS-PDX-001",
+      salesPitch: "Modern loft-style condo in the heart of Pearl District! Floor-to-ceiling windows, exposed concrete, rooftop terrace. Walk to galleries, breweries, and parks.",
+      yearBuilt: 2008,
+      lotSize: "N/A",
+      propertyType: "Condominium",
+      coordinates: { lat: 45.5287, lng: -122.6890 }
+    },
+    permits: [
+      { type: "Balcony Renovation", year: 2023, status: "Finaled", permitId: "PDX-2023-078", cost: 12000, contractor: "Pacific Northwest Builders" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 2.1, lastInspection: "2023-08-15", notes: "Low fire risk, modern building with sprinkler systems" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-PDX-1425",
+        wildfireRiskScore: 5,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 7,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Nashville, Tennessee - Music Row
+  {
+    property: {
+      address: "1820 Broadway",
+      city: "Nashville",
+      state: "TN",
+      zip: "37203",
+      price: "$465,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1680,
+      status: "Active",
+      mlsId: "MLS-NSH-001",
+      salesPitch: "Historic home near Music Row! Original character meets modern convenience, walking distance to downtown honky-tonks and recording studios. Perfect for music lovers!",
+      yearBuilt: 1925,
+      lotSize: "0.08 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 36.1515, lng: -86.7978 }
+    },
+    permits: [
+      { type: "Electrical Update", year: 2023, status: "Finaled", permitId: "NSH-2023-089", cost: 9500, contractor: "Music City Electric" },
+      { type: "Bathroom Remodel", year: 2022, status: "Finaled", permitId: "NSH-2022-145", cost: 22000, contractor: "Tennessee Home Improvement" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2021-12-15", type: "Storm", amount: 6800, status: "Paid", description: "Tornado damage to fence and siding" }
+      ],
+      fireRisk: { score: 4.5, lastInspection: "2023-05-20", notes: "Moderate risk due to age of electrical systems" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-NSH-1820",
+        wildfireRiskScore: 2,
+        floodRiskScore: 4,
+        earthquakeRiskScore: 2,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Austin, Texas - South Austin
+  {
+    property: {
+      address: "2134 S Lamar Blvd",
+      city: "Austin",
+      state: "TX",
+      zip: "78704",
+      price: "$585,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1820,
+      status: "Active",
+      mlsId: "MLS-AUS-001",
+      salesPitch: "Hip South Austin bungalow! Totally renovated with modern finishes, large deck for entertaining, walking distance to food trucks and live music venues. Keep Austin Weird!",
+      yearBuilt: 1942,
+      lotSize: "0.11 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 30.2498, lng: -97.7773 }
+    },
+    permits: [
+      { type: "Full Renovation", year: 2023, status: "Finaled", permitId: "AUS-2023-234", cost: 85000, contractor: "Hill Country Renovations" },
+      { type: "Deck Addition", year: 2023, status: "Finaled", permitId: "AUS-2023-245", cost: 15000, contractor: "Texas Outdoor Living" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 3.2, lastInspection: "2023-09-10", notes: "Low risk, completely updated electrical and plumbing" },
+      floodRisk: { zone: "AE", riskLevel: "Moderate", lastFlood: "2018-10-15" },
+      cotality: {
+        cotalityPropertyId: "CL-AUS-2134",
+        wildfireRiskScore: 4,
+        floodRiskScore: 6,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Minneapolis, Minnesota - Uptown
+  {
+    property: {
+      address: "2845 Hennepin Ave S",
+      city: "Minneapolis",
+      state: "MN",
+      zip: "55408",
+      price: "$425,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1650,
+      status: "Active",
+      mlsId: "MLS-MSP-001",
+      salesPitch: "Charming duplex in vibrant Uptown! Live in one unit, rent the other. Original hardwood, updated kitchens, near Lake Calhoun and trendy restaurants.",
+      yearBuilt: 1915,
+      lotSize: "0.09 acres",
+      propertyType: "Duplex",
+      coordinates: { lat: 44.9435, lng: -93.2982 }
+    },
+    permits: [
+      { type: "Furnace Replacement", year: 2023, status: "Finaled", permitId: "MSP-2023-167", cost: 12000, contractor: "Minnesota Heating & Cooling" },
+      { type: "Window Replacement", year: 2022, status: "Finaled", permitId: "MSP-2022-089", cost: 18000, contractor: "Twin Cities Windows" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-01-20", type: "Water", amount: 8500, status: "Paid", description: "Frozen pipe burst during cold snap" }
+      ],
+      fireRisk: { score: 4.1, lastInspection: "2023-07-25", notes: "Moderate risk, older electrical systems in original structure" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-MSP-2845",
+        wildfireRiskScore: 1,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // San Diego, California - Mission Beach
+  {
+    property: {
+      address: "3456 Ocean Front Walk",
+      city: "San Diego",
+      state: "CA",
+      zip: "92109",
+      price: "$1,850,000",
+      beds: 3,
+      baths: 3,
+      sqft: 1980,
+      status: "Active",
+      mlsId: "MLS-SD-001",
+      salesPitch: "Oceanfront paradise! Direct beach access, panoramic Pacific views, completely renovated with high-end finishes. Investment opportunity with vacation rental potential.",
+      yearBuilt: 1968,
+      lotSize: "0.06 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 32.7706, lng: -117.2527 }
+    },
+    permits: [
+      { type: "Complete Renovation", year: 2023, status: "Finaled", permitId: "SD-2023-445", cost: 125000, contractor: "Coastal Construction Co" },
+      { type: "Seawall Repair", year: 2022, status: "Finaled", permitId: "SD-2022-234", cost: 35000, contractor: "Pacific Marine Construction" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-08-30", type: "Water", amount: 22000, status: "Paid", description: "Storm surge damage during hurricane" }
+      ],
+      fireRisk: { score: 3.8, lastInspection: "2023-08-30", notes: "Moderate risk, updated electrical systems" },
+      floodRisk: { zone: "VE", riskLevel: "High", lastFlood: "2022-08-30" },
+      cotality: {
+        cotalityPropertyId: "CL-SD-3456",
+        wildfireRiskScore: 5,
+        floodRiskScore: 9,
+        earthquakeRiskScore: 7,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Las Vegas, Nevada - Summerlin
+  {
+    property: {
+      address: "11234 Red Rock Canyon Rd",
+      city: "Las Vegas",
+      state: "NV",
+      zip: "89135",
+      price: "$565,000",
+      beds: 4,
+      baths: 3,
+      sqft: 2350,
+      status: "Active",
+      mlsId: "MLS-LV-001",
+      salesPitch: "Spectacular desert home with Red Rock Canyon views! Pool, spa, and outdoor kitchen perfect for entertaining. Guard-gated community with golf course access.",
+      yearBuilt: 2002,
+      lotSize: "0.16 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 36.1547, lng: -115.3267 }
+    },
+    permits: [
+      { type: "Pool Resurfacing", year: 2023, status: "Finaled", permitId: "LV-2023-189", cost: 8500, contractor: "Desert Pool Pros" },
+      { type: "Solar Installation", year: 2022, status: "Finaled", permitId: "LV-2022-267", cost: 28000, contractor: "Nevada Solar Solutions" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 5.5, lastInspection: "2023-06-15", notes: "Moderate wildfire risk during dry periods" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-LV-11234",
+        wildfireRiskScore: 6,
+        floodRiskScore: 1,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Raleigh, North Carolina - Downtown
+  {
+    property: {
+      address: "525 N Person St",
+      city: "Raleigh",
+      state: "NC",
+      zip: "27604",
+      price: "$385,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1420,
+      status: "Active",
+      mlsId: "MLS-RAL-001",
+      salesPitch: "Modern downtown condo in the heart of Raleigh! Walking distance to NC State, museums, and restaurants. Rooftop terrace with city views and fitness center.",
+      yearBuilt: 2018,
+      lotSize: "N/A",
+      propertyType: "Condominium",
+      coordinates: { lat: 35.7835, lng: -78.6442 }
+    },
+    permits: [],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 1.8, lastInspection: "2023-09-20", notes: "Very low risk, modern construction with sprinkler systems" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-RAL-525",
+        wildfireRiskScore: 2,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Salt Lake City, Utah - The Avenues
+  {
+    property: {
+      address: "867 2nd Avenue",
+      city: "Salt Lake City",
+      state: "UT",
+      zip: "84103",
+      price: "$675,000",
+      beds: 4,
+      baths: 2,
+      sqft: 2100,
+      status: "Active",
+      mlsId: "MLS-SLC-001",
+      salesPitch: "Historic home in the prestigious Avenues! Stunning mountain views, original hardwood floors, walking distance to downtown and world-class skiing just 30 minutes away.",
+      yearBuilt: 1908,
+      lotSize: "0.13 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 40.7837, lng: -111.8840 }
+    },
+    permits: [
+      { type: "Foundation Repair", year: 2023, status: "Finaled", permitId: "SLC-2023-123", cost: 18000, contractor: "Mountain West Foundation" },
+      { type: "Heating System Upgrade", year: 2022, status: "Finaled", permitId: "SLC-2022-176", cost: 14000, contractor: "Utah HVAC Pros" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-09-10", type: "Earthquake", amount: 5500, status: "Paid", description: "Minor foundation settling" }
+      ],
+      fireRisk: { score: 3.9, lastInspection: "2023-08-05", notes: "Moderate risk, historic wiring updated recently" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-SLC-867",
+        wildfireRiskScore: 6,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 7,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Richmond, Virginia - Fan District
+  {
+    property: {
+      address: "2012 Monument Ave",
+      city: "Richmond",
+      state: "VA",
+      zip: "23220",
+      price: "$425,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1780,
+      status: "Active",
+      mlsId: "MLS-RIC-001",
+      salesPitch: "Beautiful Fan District townhouse! Historic charm with modern updates, original mantels and moldings, walking distance to VCU and trendy Carytown shopping.",
+      yearBuilt: 1925,
+      lotSize: "0.05 acres",
+      propertyType: "Townhouse",
+      coordinates: { lat: 37.5537, lng: -77.4755 }
+    },
+    permits: [
+      { type: "Kitchen Renovation", year: 2023, status: "Finaled", permitId: "RIC-2023-089", cost: 32000, contractor: "Virginia Heritage Builders" },
+      { type: "Roof Repair", year: 2022, status: "Finaled", permitId: "RIC-2022-145", cost: 8500, contractor: "Capital City Roofing" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 3.6, lastInspection: "2023-07-15", notes: "Low to moderate risk, well-maintained historic property" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-RIC-2012",
+        wildfireRiskScore: 1,
+        floodRiskScore: 3,
+        earthquakeRiskScore: 2,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Kansas City, Missouri - Crossroads Arts District
+  {
+    property: {
+      address: "1623 Grand Blvd",
+      city: "Kansas City",
+      state: "MO",
+      zip: "64108",
+      price: "$285,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1350,
+      status: "Active",
+      mlsId: "MLS-KC-001",
+      salesPitch: "Urban loft in the vibrant Crossroads! Converted warehouse with exposed brick, industrial fixtures, and skyline views. Heart of the arts district with galleries and restaurants.",
+      yearBuilt: 1920,
+      lotSize: "N/A",
+      propertyType: "Condominium",
+      coordinates: { lat: 39.0921, lng: -94.5814 }
+    },
+    permits: [
+      { type: "Loft Conversion", year: 2021, status: "Finaled", permitId: "KC-2021-234", cost: 65000, contractor: "Crossroads Development" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-05-25", type: "Storm", amount: 4500, status: "Paid", description: "Hail damage to skylights" }
+      ],
+      fireRisk: { score: 4.2, lastInspection: "2023-06-30", notes: "Moderate risk, converted industrial space with updated systems" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-KC-1623",
+        wildfireRiskScore: 1,
+        floodRiskScore: 4,
+        earthquakeRiskScore: 2,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Tucson, Arizona - Foothills
+  {
+    property: {
+      address: "7845 N Oracle Rd",
+      city: "Tucson",
+      state: "AZ",
+      zip: "85704",
+      price: "$485,000",
+      beds: 3,
+      baths: 3,
+      sqft: 2000,
+      status: "Active",
+      mlsId: "MLS-TUC-001",
+      salesPitch: "Desert contemporary with Catalina Mountains views! Pool, spa, and xeriscaped gardens. Energy-efficient design perfect for Arizona living. Minutes from hiking trails.",
+      yearBuilt: 1998,
+      lotSize: "0.21 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 32.3420, lng: -110.9754 }
+    },
+    permits: [
+      { type: "Pool Equipment Upgrade", year: 2023, status: "Finaled", permitId: "TUC-2023-156", cost: 12000, contractor: "Desert Pool & Spa" },
+      { type: "Solar Panel Addition", year: 2022, status: "Finaled", permitId: "TUC-2022-234", cost: 24000, contractor: "Arizona Solar Solutions" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 7.1, lastInspection: "2023-09-15", notes: "High wildfire risk during dry seasons, defensible space maintained" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-TUC-7845",
+        wildfireRiskScore: 8,
+        floodRiskScore: 1,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Oklahoma City, Oklahoma - Bricktown
+  {
+    property: {
+      address: "325 E Sheridan Ave",
+      city: "Oklahoma City",
+      state: "OK",
+      zip: "73104",
+      price: "$225,000",
+      beds: 2,
+      baths: 2,
+      sqft: 1180,
+      status: "Active",
+      mlsId: "MLS-OKC-001",
+      salesPitch: "Modern condo in historic Bricktown! Converted warehouse with exposed brick, walking distance to Thunder games and canal entertainment district. Urban living at its best!",
+      yearBuilt: 1925,
+      lotSize: "N/A",
+      propertyType: "Condominium",
+      coordinates: { lat: 35.4638, lng: -97.5062 }
+    },
+    permits: [
+      { type: "Unit Renovation", year: 2022, status: "Finaled", permitId: "OKC-2022-178", cost: 25000, contractor: "Sooner State Renovations" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-04-15", type: "Storm", amount: 8500, status: "Paid", description: "Tornado damage to common areas" }
+      ],
+      fireRisk: { score: 3.8, lastInspection: "2023-08-20", notes: "Moderate risk, historic building with updated fire suppression" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-OKC-325",
+        wildfireRiskScore: 3,
+        floodRiskScore: 4,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Buffalo, New York - Elmwood Village
+  {
+    property: {
+      address: "745 Elmwood Ave",
+      city: "Buffalo",
+      state: "NY",
+      zip: "14222",
+      price: "$195,000",
+      beds: 3,
+      baths: 1,
+      sqft: 1450,
+      status: "Active",
+      mlsId: "MLS-BUF-001",
+      salesPitch: "Charming Victorian in trendy Elmwood Village! Original details, hardwood floors, walking distance to shops and restaurants. Great investment opportunity!",
+      yearBuilt: 1895,
+      lotSize: "0.08 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 42.9126, lng: -78.8779 }
+    },
+    permits: [
+      { type: "Furnace Replacement", year: 2023, status: "Finaled", permitId: "BUF-2023-145", cost: 8500, contractor: "Buffalo Heating Solutions" },
+      { type: "Electrical Update", year: 2022, status: "Finaled", permitId: "BUF-2022-234", cost: 12000, contractor: "Empire State Electric" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2022-12-23", type: "Water", amount: 6500, status: "Paid", description: "Pipe freeze during blizzard" }
+      ],
+      fireRisk: { score: 4.3, lastInspection: "2023-07-10", notes: "Moderate risk, older home with updated electrical" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-BUF-745",
+        wildfireRiskScore: 1,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 1,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Albuquerque, New Mexico - Old Town
+  {
+    property: {
+      address: "2134 Central Ave SW",
+      city: "Albuquerque",
+      state: "NM",
+      zip: "87104",
+      price: "$315,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1620,
+      status: "Active",
+      mlsId: "MLS-ABQ-001",
+      salesPitch: "Adobe-style home near Historic Old Town! Authentic Southwestern architecture with vigas, kiva fireplace, and walled courtyard. Walking distance to plaza and museums.",
+      yearBuilt: 1965,
+      lotSize: "0.12 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 35.0842, lng: -106.6596 }
+    },
+    permits: [
+      { type: "Roof Replacement", year: 2023, status: "Finaled", permitId: "ABQ-2023-189", cost: 16000, contractor: "High Desert Roofing" },
+      { type: "Swamp Cooler Install", year: 2022, status: "Finaled", permitId: "ABQ-2022-267", cost: 4500, contractor: "Desert Air Systems" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 5.8, lastInspection: "2023-08-30", notes: "Moderate to high wildfire risk during dry seasons" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-ABQ-2134",
+        wildfireRiskScore: 6,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 2,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Boise, Idaho - North End
+  {
+    property: {
+      address: "1532 N 13th St",
+      city: "Boise",
+      state: "ID",
+      zip: "83702",
+      price: "$445,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1780,
+      status: "Active",
+      mlsId: "MLS-BOI-001",
+      salesPitch: "Charming Craftsman in desirable North End! Original character with modern updates, walking distance to Hyde Park and foothills hiking trails. Mountain views!",
+      yearBuilt: 1920,
+      lotSize: "0.11 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 43.6245, lng: -116.2068 }
+    },
+    permits: [
+      { type: "Kitchen Remodel", year: 2023, status: "Finaled", permitId: "BOI-2023-234", cost: 28000, contractor: "Treasure Valley Builders" },
+      { type: "Basement Finishing", year: 2022, status: "Finaled", permitId: "BOI-2022-145", cost: 22000, contractor: "Idaho Home Improvements" }
+    ],
+    riskData: {
+      insuranceClaims: [],
+      fireRisk: { score: 6.2, lastInspection: "2023-09-05", notes: "Moderate to high wildfire risk during summer months" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-BOI-1532",
+        wildfireRiskScore: 7,
+        floodRiskScore: 2,
+        earthquakeRiskScore: 4,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
+  },
+
+  // Little Rock, Arkansas - Heights
+  {
+    property: {
+      address: "2845 Kavanaugh Blvd",
+      city: "Little Rock",
+      state: "AR",
+      zip: "72205",
+      price: "$285,000",
+      beds: 3,
+      baths: 2,
+      sqft: 1560,
+      status: "Active",
+      mlsId: "MLS-LR-001",
+      salesPitch: "Updated ranch in the Heights! Open floor plan, hardwood floors, large backyard perfect for entertaining. Close to downtown and River Market District.",
+      yearBuilt: 1968,
+      lotSize: "0.16 acres",
+      propertyType: "Single Family",
+      coordinates: { lat: 34.7565, lng: -92.3102 }
+    },
+    permits: [
+      { type: "HVAC Replacement", year: 2023, status: "Finaled", permitId: "LR-2023-156", cost: 11000, contractor: "Arkansas Climate Control" },
+      { type: "Deck Addition", year: 2022, status: "Finaled", permitId: "LR-2022-189", cost: 8500, contractor: "Ozark Outdoor Living" }
+    ],
+    riskData: {
+      insuranceClaims: [
+        { date: "2023-03-31", type: "Storm", amount: 7500, status: "Paid", description: "Tornado damage to roof and gutters" }
+      ],
+      fireRisk: { score: 3.4, lastInspection: "2023-06-20", notes: "Low to moderate risk, well-maintained property" },
+      floodRisk: { zone: "X", riskLevel: "Low", lastFlood: null },
+      cotality: {
+        cotalityPropertyId: "CL-LR-2845",
+        wildfireRiskScore: 2,
+        floodRiskScore: 4,
+        earthquakeRiskScore: 3,
+        reportUrl: "https://www.cotality.com/products/underwriting-center"
+      }
+    }
   }
 ];
 
