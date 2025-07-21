@@ -476,31 +476,39 @@ export async function GET(request: NextRequest) {
       const state = matchedProperty.property.state;
       
       const avmData = {
-        estimatedValue: enhancedValue,
-        confidenceLevel,
-        valuationDate: new Date().toISOString().split('T')[0],
-        priceRange: {
-          low: Math.floor(enhancedValue * 0.92),
-          high: Math.floor(enhancedValue * 1.08)
-        },
+        // Frontend expects this structure (matches AVMResult interface)
+        avmValue: Math.round(enhancedValue),
+        confidence: `${confidenceLevel}%`,
+        lastUpdated: new Date().toISOString().split('T')[0],
         comparables: generateComparables(matchedProperty, 3),
-        marketTrends: generateMarketTrends(state),
-        propertyDetails: {
-          bedrooms: matchedProperty.property.beds,
-          bathrooms: matchedProperty.property.baths,
-          sqft: matchedProperty.property.sqft,
-          lotSize: matchedProperty.property.lotSize,
-          propertyType: matchedProperty.property.propertyType,
-          yearBuilt: matchedProperty.property.yearBuilt
-        },
-        dataSource: 'real_address',
-        accuracy: 'High - Enhanced ML-based valuation model',
-        modelVersion: '2.0',
-        valuationMethods: [
-          { method: 'Sales Comparison', weight: '60%', value: calculateAdjustedSalesComparison(matchedProperty, optimalComparables) },
-          { method: 'Cost Approach', weight: '20%', value: calculateCostApproach(calculatePropertyFeatures(matchedProperty)) },
-          { method: 'Income Approach', weight: '20%', value: calculateIncomeApproach(calculatePropertyFeatures(matchedProperty)) }
-        ]
+        
+        // Additional detailed data for debugging and future features
+        _detailed: {
+          estimatedValue: enhancedValue,
+          confidenceLevel,
+          valuationDate: new Date().toISOString().split('T')[0],
+          priceRange: {
+            low: Math.floor(enhancedValue * 0.92),
+            high: Math.floor(enhancedValue * 1.08)
+          },
+          marketTrends: generateMarketTrends(state),
+          propertyDetails: {
+            bedrooms: matchedProperty.property.beds,
+            bathrooms: matchedProperty.property.baths,
+            sqft: matchedProperty.property.sqft,
+            lotSize: matchedProperty.property.lotSize,
+            propertyType: matchedProperty.property.propertyType,
+            yearBuilt: matchedProperty.property.yearBuilt
+          },
+          dataSource: 'real_address',
+          accuracy: 'High - Enhanced ML-based valuation model',
+          modelVersion: '2.0',
+          valuationMethods: [
+            { method: 'Sales Comparison', weight: '60%', value: calculateAdjustedSalesComparison(matchedProperty, optimalComparables) },
+            { method: 'Cost Approach', weight: '20%', value: calculateCostApproach(calculatePropertyFeatures(matchedProperty)) },
+            { method: 'Income Approach', weight: '20%', value: calculateIncomeApproach(calculatePropertyFeatures(matchedProperty)) }
+          ]
+        }
       };
       
       return NextResponse.json({
@@ -537,18 +545,26 @@ function generateEnhancedEstimate(address: string) {
   return NextResponse.json({
     success: true,
     data: {
-      estimatedValue: baseValue,
-      confidenceLevel,
-      valuationDate: new Date().toISOString().split('T')[0],
-      priceRange: {
-        low: Math.floor(baseValue * 0.85),
-        high: Math.floor(baseValue * 1.15)
-      },
+      // Frontend expects this structure (matches AVMResult interface)
+      avmValue: Math.round(baseValue),
+      confidence: `${confidenceLevel}%`,
+      lastUpdated: new Date().toISOString().split('T')[0],
       comparables: [],
-      marketTrends: generateMarketTrends(state),
-      dataSource: 'estimated',
-      accuracy: 'Moderate - Regional market estimates',
-      modelVersion: '2.0'
+      
+      // Additional detailed data
+      _detailed: {
+        estimatedValue: baseValue,
+        confidenceLevel,
+        valuationDate: new Date().toISOString().split('T')[0],
+        priceRange: {
+          low: Math.floor(baseValue * 0.85),
+          high: Math.floor(baseValue * 1.15)
+        },
+        marketTrends: generateMarketTrends(state),
+        dataSource: 'estimated',
+        accuracy: 'Moderate - Regional market estimates',
+        modelVersion: '2.0'
+      }
     },
     searchAddress: address,
     note: 'Enhanced estimation model - actual property data not available'
