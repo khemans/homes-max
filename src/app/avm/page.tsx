@@ -4,23 +4,29 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AddressAutocomplete from '../../components/AddressAutocomplete';
 
-// AVM data interface with enhanced properties
+// AVM data interface - matches both API response format and detailed data
 interface AVMData {
-  estimatedValue: number;
-  confidenceLevel: number;
-  valuationDate: string;
-  priceRange: {
+  // Primary API format (matches AVMResult interface)
+  avmValue?: number;
+  confidence?: string;
+  lastUpdated?: string;
+  
+  // Detailed format (from API _detailed field)
+  estimatedValue?: number;
+  confidenceLevel?: number;
+  valuationDate?: string;
+  priceRange?: {
     low: number;
     high: number;
   };
-  comparables: {
+  comparables?: {
     address: string;
     soldPrice: number;
     soldDate: string;
     sqft: number;
     distance: number;
   }[];
-  marketTrends: {
+  marketTrends?: {
     monthlyChange: number;
     yearlyChange: number;
     marketDirection: 'up' | 'down' | 'stable';
@@ -41,6 +47,37 @@ interface AVMData {
     weight: string;
     value: number;
   }[];
+  
+  // Support for detailed data structure
+  _detailed?: {
+    estimatedValue?: number;
+    confidenceLevel?: number;
+    valuationDate?: string;
+    priceRange?: {
+      low: number;
+      high: number;
+    };
+    comparables?: {
+      address: string;
+      soldPrice: number;
+      soldDate: string;
+      sqft: number;
+      distance: number;
+    }[];
+    marketTrends?: {
+      monthlyChange: number;
+      yearlyChange: number;
+      marketDirection: 'up' | 'down' | 'stable';
+    };
+    propertyDetails?: {
+      bedrooms: number;
+      bathrooms: number;
+      sqft: number;
+      lotSize: string;
+      propertyType: string;
+      yearBuilt: number;
+    };
+  };
 }
 
 // Helper to generate mock AVM data (reused from PropertyDetailsClient)
@@ -241,16 +278,16 @@ const AVMPage = () => {
                     <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-4">
                       <div className="text-center">
                         <div className="text-4xl font-bold text-green-800 mb-2">
-                          ${avmData.estimatedValue.toLocaleString()}
+                          ${(avmData.avmValue || avmData.estimatedValue || avmData._detailed?.estimatedValue)?.toLocaleString() || 'N/A'}
                         </div>
                         <div className="text-sm text-green-600">
-                          Range: ${avmData.priceRange.low.toLocaleString()} - ${avmData.priceRange.high.toLocaleString()}
+                          Range: ${(avmData.priceRange?.low || avmData._detailed?.priceRange?.low)?.toLocaleString() || 'N/A'} - ${(avmData.priceRange?.high || avmData._detailed?.priceRange?.high)?.toLocaleString() || 'N/A'}
                         </div>
                         <div className="text-sm text-green-600 mt-1">
-                          Confidence: {avmData.confidenceLevel}%
+                          Confidence: {avmData.confidence || (avmData.confidenceLevel ? `${avmData.confidenceLevel}%` : avmData._detailed?.confidenceLevel ? `${avmData._detailed.confidenceLevel}%` : 'N/A')}
                         </div>
                         <div className="text-xs text-gray-500 mt-2">
-                          Valuation Date: {avmData.valuationDate}
+                          Valuation Date: {avmData.lastUpdated || avmData.valuationDate || avmData._detailed?.valuationDate || 'N/A'}
                         </div>
                         {avmData.dataSource && (
                           <div className="text-xs text-blue-600 mt-1">
@@ -265,50 +302,52 @@ const AVMPage = () => {
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                         <h4 className="font-semibold text-blue-800 mb-2">Property Details</h4>
                         <div className="grid grid-cols-2 gap-2 text-sm">
-                          <div className="text-gray-600">Bedrooms: <span className="font-medium">{avmData.propertyDetails.bedrooms}</span></div>
-                          <div className="text-gray-600">Bathrooms: <span className="font-medium">{avmData.propertyDetails.bathrooms}</span></div>
-                          <div className="text-gray-600">Square Feet: <span className="font-medium">{avmData.propertyDetails.sqft.toLocaleString()}</span></div>
-                          <div className="text-gray-600">Year Built: <span className="font-medium">{avmData.propertyDetails.yearBuilt}</span></div>
-                          <div className="text-gray-600">Lot Size: <span className="font-medium">{avmData.propertyDetails.lotSize}</span></div>
-                          <div className="text-gray-600">Type: <span className="font-medium">{avmData.propertyDetails.propertyType}</span></div>
+                          <div className="text-gray-600">Bedrooms: <span className="font-medium">{avmData.propertyDetails.bedrooms || 'N/A'}</span></div>
+                          <div className="text-gray-600">Bathrooms: <span className="font-medium">{avmData.propertyDetails.bathrooms || 'N/A'}</span></div>
+                          <div className="text-gray-600">Square Feet: <span className="font-medium">{avmData.propertyDetails.sqft?.toLocaleString() || 'N/A'}</span></div>
+                          <div className="text-gray-600">Year Built: <span className="font-medium">{avmData.propertyDetails.yearBuilt || 'N/A'}</span></div>
+                          <div className="text-gray-600">Lot Size: <span className="font-medium">{avmData.propertyDetails.lotSize || 'N/A'}</span></div>
+                          <div className="text-gray-600">Type: <span className="font-medium">{avmData.propertyDetails.propertyType || 'N/A'}</span></div>
                         </div>
                       </div>
                     )}
                     
                     {/* Market Trends */}
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                      <h4 className="font-semibold text-gray-800 mb-2">Market Trends</h4>
-                      <div className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-600">Monthly Change:</span>
-                          <span className={`text-sm font-medium ${avmData.marketTrends.monthlyChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                            {avmData.marketTrends.monthlyChange >= 0 ? '+' : ''}{avmData.marketTrends.monthlyChange.toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-600">Yearly Change:</span>
-                          <span className="text-sm font-medium text-green-600">
-                            +{avmData.marketTrends.yearlyChange.toFixed(1)}%
-                          </span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-sm text-gray-600">Market Direction:</span>
-                          <span className={`text-sm font-medium capitalize ${
-                            avmData.marketTrends.marketDirection === 'up' ? 'text-green-600' : 
-                            avmData.marketTrends.marketDirection === 'down' ? 'text-red-600' : 'text-gray-600'
-                          }`}>
-                            {avmData.marketTrends.marketDirection}
-                          </span>
+                    {(avmData.marketTrends || avmData._detailed?.marketTrends) && (
+                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <h4 className="font-semibold text-gray-800 mb-2">Market Trends</h4>
+                        <div className="space-y-2">
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Monthly Change:</span>
+                            <span className={`text-sm font-medium ${((avmData.marketTrends?.monthlyChange || avmData._detailed?.marketTrends?.monthlyChange) || 0) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                              {((avmData.marketTrends?.monthlyChange || avmData._detailed?.marketTrends?.monthlyChange) || 0) >= 0 ? '+' : ''}{(avmData.marketTrends?.monthlyChange || avmData._detailed?.marketTrends?.monthlyChange)?.toFixed(1) || '0.0'}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Yearly Change:</span>
+                            <span className="text-sm font-medium text-green-600">
+                              +{(avmData.marketTrends?.yearlyChange || avmData._detailed?.marketTrends?.yearlyChange)?.toFixed(1) || '0.0'}%
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Market Direction:</span>
+                            <span className={`text-sm font-medium capitalize ${
+                              (avmData.marketTrends?.marketDirection || avmData._detailed?.marketTrends?.marketDirection) === 'up' ? 'text-green-600' : 
+                              (avmData.marketTrends?.marketDirection || avmData._detailed?.marketTrends?.marketDirection) === 'down' ? 'text-red-600' : 'text-gray-600'
+                            }`}>
+                              {avmData.marketTrends?.marketDirection || avmData._detailed?.marketTrends?.marketDirection || 'stable'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Comparable Sales */}
                   <div>
                     <h3 className="remax-heading-3 text-lg mb-4 text-green-800">Comparable Sales</h3>
                     <div className="space-y-3">
-                      {avmData.comparables.map((comp, index) => (
+                      {(avmData.comparables || avmData._detailed?.comparables || []).map((comp, index) => (
                         <div key={index} className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                           <div className="flex justify-between items-start mb-2">
                             <div>
@@ -316,12 +355,12 @@ const AVMPage = () => {
                               <p className="text-sm text-gray-600">{comp.distance} miles away</p>
                             </div>
                             <div className="text-right">
-                              <div className="font-semibold text-green-600">${comp.soldPrice.toLocaleString()}</div>
-                              <div className="text-xs text-gray-500">{comp.soldDate}</div>
+                              <div className="font-semibold text-green-600">${comp.soldPrice?.toLocaleString() || 'N/A'}</div>
+                              <div className="text-xs text-gray-500">{comp.soldDate || 'N/A'}</div>
                             </div>
                           </div>
                           <div className="text-sm text-gray-600">
-                            {comp.sqft.toLocaleString()} sq ft
+                            {comp.sqft?.toLocaleString() || 'N/A'} sq ft
                           </div>
                         </div>
                       ))}
