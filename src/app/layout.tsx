@@ -32,7 +32,7 @@ export default function RootLayout({
         <footer className="bg-gray-900 text-white">
           <div className="remax-container">
             {/* Main Footer Content */}
-            <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+            <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
               {/* Company Info */}
               <div className="md:col-span-1">
                 <div className="flex items-center space-x-2 mb-4">
@@ -72,13 +72,25 @@ export default function RootLayout({
 
               {/* Project Documentation */}
               <div>
-                <h3 className="text-lg font-semibold mb-4">About Project</h3>
+                <h3 className="text-lg font-semibold mb-4">📚 Documentation</h3>
                 <ul className="space-y-2 text-sm">
-                  <li><Link href="/docs" className="text-gray-400 hover:text-white transition-colors">📚 Documentation</Link></li>
-                  <li><Link href="/prd" className="text-gray-400 hover:text-white transition-colors">📋 PRD</Link></li>
-                  <li><Link href="/docs/avm-accuracy-improvements" className="text-gray-400 hover:text-white transition-colors">🔧 AVM v2.0</Link></li>
+                  <li><Link href="/prd" className="text-gray-400 hover:text-white transition-colors">📋 Product Requirements</Link></li>
+                  <li><Link href="/docs" className="text-gray-400 hover:text-white transition-colors">📖 All Documentation</Link></li>
+                  <li><Link href="/docs/testing-guide" className="text-gray-400 hover:text-white transition-colors">🧪 Testing Guide</Link></li>
+                  <li><Link href="/docs/county-parcel-links" className="text-gray-400 hover:text-white transition-colors">🗺️ County Links</Link></li>
+                  <li><Link href="/docs/free-data-integration-roadmap" className="text-gray-400 hover:text-white transition-colors">🔮 Future Roadmap</Link></li>
+                </ul>
+              </div>
+
+              {/* Technical Guides */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">🛠️ Technical</h3>
+                <ul className="space-y-2 text-sm">
+                  <li><Link href="/docs/avm-accuracy-improvements" className="text-gray-400 hover:text-white transition-colors">💰 AVM v2.0</Link></li>
                   <li><Link href="/docs/public-records-integration" className="text-gray-400 hover:text-white transition-colors">🏛️ Public Records</Link></li>
                   <li><Link href="/docs/vercel-troubleshooting" className="text-gray-400 hover:text-white transition-colors">🚀 Deployment</Link></li>
+                  <li><Link href="/docs/geoapify-setup" className="text-gray-400 hover:text-white transition-colors">🌍 API Setup</Link></li>
+                  <li><Link href="/docs/public-records-expansion-roadmap" className="text-gray-400 hover:text-white transition-colors">📈 Expansion Plan</Link></li>
                 </ul>
               </div>
 

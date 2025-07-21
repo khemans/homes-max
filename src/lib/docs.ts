@@ -14,35 +14,60 @@ export interface DocFile {
 
 // Configuration for markdown files
 const DOCS_CONFIG = {
+  'PROJECT_STATUS.md': {
+    title: 'Project Status - Production Complete',
+    description: '🎉 Complete project status showing all implemented features and achievements',
+    order: 1
+  },
   'PRD.md': {
     title: 'Product Requirements Document',
     description: 'Complete product specification and technical requirements for HOUSE/MAX platform',
-    order: 1
+    order: 2
   },
   'README.md': {
-    title: 'Project Overview',
-    description: 'Getting started guide and project introduction',
-    order: 2
+    title: 'Project Overview & Setup',
+    description: 'Getting started guide, setup instructions, and project introduction',
+    order: 3
+  },
+  'TESTING_GUIDE.md': {
+    title: 'Testing Strategy & Framework',
+    description: 'Comprehensive testing guide with utilities, strategies, and best practices',
+    order: 4
+  },
+  'FREE_DATA_INTEGRATION_ROADMAP.md': {
+    title: 'Free Data Integration Roadmap',
+    description: 'Future enhancement plan for integrating free government and open data sources',
+    order: 5
+  },
+  'COUNTY_PARCEL_LINKS.md': {
+    title: 'County Parcel Links System',
+    description: 'Dynamic county parcel page integration across 20+ major US counties',
+    order: 6
   },
   'AVM_ACCURACY_IMPROVEMENTS.md': {
     title: 'AVM v2.0 Implementation',
     description: 'Enhanced Automated Valuation Model with multi-approach algorithms',
-    order: 3
+    order: 7
   },
   'PUBLIC_RECORDS_INTEGRATION.md': {
     title: 'Public Records Integration',
     description: 'Free government API integration for property data and demographics',
-    order: 4
+    order: 8
   },
-  'GEOAPIFY_SETUP.md': {
-    title: 'Geoapify API Setup',
-    description: 'Address autocomplete and geocoding service configuration',
-    order: 5
+  'PUBLIC_RECORDS_EXPANSION_ROADMAP.md': {
+    title: 'Public Records Expansion Plan',
+    description: 'Comprehensive roadmap for expanding public records data integration',
+    order: 9
   },
   'VERCEL_TROUBLESHOOTING.md': {
     title: 'Vercel Deployment Guide',
     description: 'Production deployment troubleshooting and debugging procedures',
-    order: 6
+    order: 10
+  },
+  'GEOAPIFY_SETUP.md': {
+    title: 'Geoapify API Setup',
+    description: 'Address autocomplete and geocoding service configuration',
+    order: 11
   }
 };
 
