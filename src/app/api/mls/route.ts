@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
   // Use either address or query parameter
   const searchTerm = address || query;
 
+  // Debug logging
+  console.log('MLS API - Search term:', searchTerm);
+
   // If no search term provided, return all properties
   if (!searchTerm) {
     return NextResponse.json({ 
@@ -40,6 +43,11 @@ export async function GET(req: NextRequest) {
   // Use our enhanced search function
   const propertyResults = searchPropertiesByAddress(searchTerm);
   const results = propertyResults.map(p => p.property);
+  
+  console.log('MLS API - Enhanced search results count:', results.length);
+  if (results.length > 0) {
+    console.log('MLS API - First result:', results[0].address);
+  }
 
   // If no results from our enhanced search, fall back to basic filtering
   if (results.length === 0) {

@@ -317,36 +317,44 @@ function generateMarketTrends(state: string): { monthlyChange: number; yearlyCha
 function findAddressMatch(searchAddress: string): PropertyData | null {
   const normalizedSearch = searchAddress.toLowerCase().trim();
   
-  // First try exact match
-  let match = realPropertiesDatabase.find(property => 
-    property.property.address.toLowerCase().includes(normalizedSearch) ||
-    normalizedSearch.includes(property.property.address.toLowerCase())
-  );
+  // Debug logging
+  console.log('AVM API - Searching for:', normalizedSearch);
+  console.log('AVM API - Database properties count:', realPropertiesDatabase.length);
   
-  if (match) return match;
+  // Extract just the street address part (before first comma)
+  const streetAddress = normalizedSearch.split(',')[0].trim();
+  console.log('AVM API - Street address extracted:', streetAddress);
   
-  // Try city match
-  const searchWords = normalizedSearch.split(/[\s,]+/);
-  match = realPropertiesDatabase.find(property => {
-    const addrWords = property.property.address.toLowerCase().split(/[\s,]+/);
-    return searchWords.some(word => 
-      word.length > 2 && addrWords.some(addrWord => addrWord.includes(word))
-    );
+  // First try exact street address match
+  let match = realPropertiesDatabase.find(property => {
+    const propAddress = property.property.address.toLowerCase().trim();
+    console.log('AVM API - Comparing with:', propAddress);
+    return propAddress === streetAddress || 
+           normalizedSearch.includes(propAddress) ||
+           propAddress.includes(streetAddress);
   });
   
-  if (match) return match;
-  
-  // Try state match
-  const statePattern = /\b([A-Z]{2})\b/;
-  const searchStateMatch = searchAddress.match(statePattern);
-  if (searchStateMatch) {
-    const searchState = searchStateMatch[1];
-    match = realPropertiesDatabase.find(property => 
-      property.property.address.includes(searchState)
-    );
-    if (match) return match;
+  if (match) {
+    console.log('AVM API - Found match:', match.property.address);
+    return match;
   }
   
+  // Try broader word matching
+  const searchWords = streetAddress.split(/\s+/);
+  match = realPropertiesDatabase.find(property => {
+    const addrWords = property.property.address.toLowerCase().split(/\s+/);
+    const matchingWords = searchWords.filter(word => 
+      word.length > 2 && addrWords.some(addrWord => addrWord.includes(word) || word.includes(addrWord))
+    );
+    return matchingWords.length >= 2; // At least 2 matching words
+  });
+  
+  if (match) {
+    console.log('AVM API - Found word match:', match.property.address);
+    return match;
+  }
+  
+  console.log('AVM API - No match found');
   return null;
 }
 
