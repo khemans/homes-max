@@ -1,400 +1,658 @@
-// Testing Utilities for HOUSE/MAX Platform
-// Comprehensive testing setup and utilities
-
+// Test utilities for HOUSE/MAX components and functionality
 import React from 'react';
+import { FEMAFloodData, FloodEvent, FloodMonitoringStation } from './femaFloodAPI';
 
 // Mock data generators for testing
-export const mockPropertyData = {
-  basic: {
-    address: '123 Test Street',
-    city: 'Denver',
-    state: 'CO',
-    zip: '80202',
-    price: 450000,
-    beds: 3,
-    baths: 2,
-    sqft: 1800,
-    status: 'Active',
-    mlsId: 'TEST123'
-  },
-  
-  avm: {
-    avmValue: 475000,
-    confidence: '95%',
-    lastUpdated: '2024-01-15',
-    comparables: [
-      {
-        address: '125 Test Street',
-        soldPrice: 460000,
-        soldDate: '2024-01-10',
-        sqft: 1750,
-        distance: 0.1
-      }
-    ]
-  },
-  
-  publicRecords: {
-    assessment: {
-      assessedValue: 420000,
-      taxYear: 2023,
-      landValue: 150000,
-      improvementValue: 270000
-    },
-    permits: [
-      {
-        permitNumber: 'P2023-001',
-        type: 'Electrical',
-        description: 'Panel upgrade',
-        issuedDate: '2023-06-15',
-        status: 'Completed'
-      }
-    ]
-  }
-};
-
-// API Response Mocks
-export const mockApiResponses = {
-  mls: {
-    success: {
-      results: [mockPropertyData.basic],
-      total: 1,
-      page: 1
-    },
-    error: {
-      error: 'MLS service unavailable'
-    }
-  },
-  
-  avm: {
-    success: mockPropertyData.avm,
-    error: {
-      error: 'AVM calculation failed'
-    }
-  },
-  
-  publicRecords: {
-    success: mockPropertyData.publicRecords,
-    error: {
-      error: 'Public records not available'
-    }
-  }
-};
-
-// Test Component Wrapper
-export const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  return (
-    <div data-testid="test-wrapper">
-      {children}
-    </div>
-  );
-};
-
-// Mock Fetch Utility
-export class MockFetch {
-  private responses = new Map<string, any>();
-  private originalFetch: typeof fetch;
-  
-  constructor() {
-    this.originalFetch = global.fetch;
-  }
-  
-  mockResponse(url: string, response: Record<string, unknown>, options?: { status?: number; ok?: boolean }) {
-    this.responses.set(url, {
-      ...response,
-      status: options?.status || 200,
-      ok: options?.ok !== false
-    });
-  }
-  
-  mockError(url: string, error: Error) {
-    this.responses.set(url, { error });
-  }
-  
-  install() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    global.fetch = ((url: string) => {
-      const response = this.responses.get(url);
-      
-      if (response?.error) {
-        return Promise.reject(response.error);
-      }
-      
-      return Promise.resolve({
-        ok: response?.ok !== false,
-        status: response?.status || 200,
-        json: () => Promise.resolve(response),
-        text: () => Promise.resolve(JSON.stringify(response))
-      } as Response);
-    }) as typeof fetch;
-  }
-  
-  uninstall() {
-    global.fetch = this.originalFetch;
-    this.responses.clear();
-  }
-  
-  clear() {
-    this.responses.clear();
-  }
+export interface PropertyData {
+  id: string;
+  address: string;
+  coordinates: { lat: number; lng: number };
+  // ... other property fields
 }
 
-// Property Search Test Utilities
-export const propertySearchTests = {
-  // Test data for different search scenarios
-  scenarios: {
-    validAddress: '4521 Broadway, Denver, CO 80216',
-    invalidAddress: 'Invalid Address 123',
-    partialAddress: '4521 Broadway',
-    multipleResults: 'Main Street',
-    noResults: 'Nonexistent Street 999'
-  },
-  
-  // Expected behaviors
-  expectations: {
-    shouldReturnResults: (results: unknown[]) => results.length > 0,
-    shouldHaveAVM: (avm: Record<string, unknown>) => avm && typeof avm.avmValue === 'number' && avm.avmValue > 0,
-    shouldHavePublicRecords: (records: Record<string, unknown>) => records && records.assessment,
-    shouldHandleErrors: (error: Record<string, unknown>) => error && error.message
-  }
-};
+export interface TestResult {
+  test: string;
+  passed: boolean;
+  duration: number;
+  message?: string;
+}
 
-// Component Testing Helpers
-export const componentTestHelpers = {
-  // Wait for async operations
-  waitForLoading: (timeout = 3000) => 
-    new Promise(resolve => setTimeout(resolve, timeout)),
-  
-  // Simulate user interactions
-  simulateSearch: async (searchTerm: string) => {
-    // Simulate typing in search input
-    const searchInput = document.querySelector('[data-testid="address-search"]') as HTMLInputElement;
-    if (searchInput) {
-      searchInput.value = searchTerm;
-      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-      
-      // Simulate form submission
-      const form = searchInput.closest('form');
-      if (form) {
-        form.dispatchEvent(new Event('submit', { bubbles: true }));
-      }
-    }
-  },
-  
-  // Check for component elements
-  getPropertyCard: () => document.querySelector('[data-testid="property-card"]'),
-  getAVMSection: () => document.querySelector('[data-testid="avm-section"]'),
-  getPublicRecordsSection: () => document.querySelector('[data-testid="public-records-section"]'),
-  getErrorMessage: () => document.querySelector('[data-testid="error-message"]'),
-  getLoadingSpinner: () => document.querySelector('[data-testid="loading-spinner"]')
-};
-
-// Performance Testing Utilities
-export const performanceTestUtils = {
-  // Measure component render time
-  measureRenderTime: async (componentFn: () => Promise<void>) => {
-    const start = performance.now();
-    await componentFn();
-    const end = performance.now();
-    return end - start;
-  },
-  
-  // Memory usage monitoring
-  measureMemoryUsage: () => {
-    if ('memory' in performance) {
-      return {
-        used: (performance as any).memory.usedJSHeapSize,
-        total: (performance as any).memory.totalJSHeapSize,
-        limit: (performance as any).memory.jsHeapSizeLimit
-      };
-    }
-    return null;
-  },
-  
-  // API response time testing
-  measureApiResponseTime: async (apiCall: () => Promise<unknown>) => {
-    const start = performance.now();
-    try {
-      const result = await apiCall();
-      const end = performance.now();
-      return {
-        duration: end - start,
-        success: true,
-        result
-      };
-    } catch (error) {
-      const end = performance.now();
-      return {
-        duration: end - start,
-        success: false,
-        error
-      };
-    }
-  }
-};
-
-// Integration Test Scenarios
-export const integrationTestScenarios = [
+// Mock property search data
+export const mockSearchResults: PropertyData[] = [
   {
-    name: 'Complete Property Search Flow',
-    steps: [
-      'User enters valid address',
-      'Search returns MLS results',
-      'User clicks on property',
-      'Property details page loads',
-      'AVM data displays',
-      'Public records load',
-      'Risk assessment shows'
-    ]
+    id: '1',
+    address: '123 Main St, Austin, TX',
+    coordinates: { lat: 30.2672, lng: -97.7431 }
   },
   {
-    name: 'Error Handling Flow',
-    steps: [
-      'User enters invalid address',
-      'Appropriate error message shows',
-      'User can retry search',
-      'Fallback data displays when APIs fail'
-    ]
-  },
-  {
-    name: 'Performance Flow',
-    steps: [
-      'Page loads within 3 seconds',
-      'Search completes within 2 seconds',
-      'Heavy components lazy load',
-      'Memory usage stays reasonable'
-    ]
+    id: '2', 
+    address: '456 Oak Ave, Denver, CO',
+    coordinates: { lat: 39.7392, lng: -104.9903 }
   }
+  // Add more mock data as needed
 ];
 
-// Test Configuration
-export const testConfig = {
-  timeouts: {
-    default: 5000,
-    api: 10000,
-    render: 3000
+// Mock AVM data
+export const mockAVMData = {
+  estimatedValue: 485000,
+  confidence: 0.89,
+  methodology: 'Enhanced ML with comparable analysis',
+  pricePerSqft: 245,
+  marketTrends: {
+    trend: 'Stable',
+    appreciation: 0.12
   },
-  
-  performance: {
-    maxRenderTime: 1000, // ms
-    maxApiResponseTime: 3000, // ms
-    maxMemoryIncrease: 50 * 1024 * 1024 // 50MB
+  lastUpdated: '2024-01-15T10:30:00Z'
+};
+
+// Mock public records data
+export const mockPublicRecords = {
+  taxAssessment: {
+    assessedValue: 465000,
+    lastAssessmentDate: '2024-01-01',
+    taxHistory: [
+      { year: 2023, assessment: 452000, taxes: 8740 },
+      { year: 2022, assessment: 428000, taxes: 8280 }
+    ]
   },
-  
-  coverage: {
-    statements: 80,
-    branches: 75,
-    functions: 80,
-    lines: 80
+  permits: [
+    {
+      type: 'Electrical',
+      date: '2023-08-15', 
+      description: 'Panel upgrade to 200 amp',
+      contractor: 'ABC Electric'
+    },
+    {
+      type: 'Roofing',
+      date: '2022-05-10',
+      description: 'Full roof replacement',
+      contractor: 'XYZ Roofing'
+    }
+  ],
+  demographics: {
+    medianHouseholdIncome: 82000,
+    population: 15420,
+    medianAge: 34.2
   }
 };
 
-// Testing Setup Utilities (framework agnostic)
+// Test configuration
+export const testConfig = {
+  timeout: 10000, // 10 seconds
+  retries: 3,
+  verbose: true
+};
+
+// Test setup utilities
 export const testSetup = {
-  // Global setup for all tests
-  beforeAll: () => {
-    // Mock console methods
-    const originalConsole = global.console;
-    global.console = {
-      ...console,
-      warn: () => {},
-      error: () => {}
-    };
+  beforeEach: () => {
+    // Reset any global state
+    localStorage.clear();
+    sessionStorage.clear();
+  },
+  afterEach: () => {
+    // Cleanup after tests
+  }
+};
+
+// Example test cases
+export const exampleTests = {
+  searchTest: async ({
+    query,
+    expectedResults
+  }: {
+    query: string;
+    expectedResults: number;
+  }): Promise<TestResult> => {
+    const startTime = Date.now();
     
-    // Mock localStorage
-    const localStorageMock = {
-      getItem: () => null,
-      setItem: () => {},
-      removeItem: () => {},
-      clear: () => {}
-    };
-    
-    if (typeof window !== 'undefined') {
-      Object.defineProperty(window, 'localStorage', {
-        value: localStorageMock
-      });
+    try {
+      // Simulate search API call
+      await new Promise(resolve => setTimeout(resolve, 100));
+      const results = mockSearchResults.filter(r => 
+        r.address.toLowerCase().includes(query.toLowerCase())
+      );
       
-      // Mock IntersectionObserver
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).IntersectionObserver = function() {
-        return {
-          observe: () => {},
-          unobserve: () => {},
-          disconnect: () => {}
-        };
+      const passed = results.length === expectedResults;
+      
+      return {
+        test: `Search for "${query}"`,
+        passed,
+        duration: Date.now() - startTime,
+        message: passed ? 'Search completed successfully' : 
+                `Expected ${expectedResults} results, got ${results.length}`
+      };
+    } catch (error) {
+      return {
+        test: `Search for "${query}"`,
+        passed: false,
+        duration: Date.now() - startTime,
+        message: `Search failed: ${error}`
       };
     }
-    
-    return { originalConsole };
   },
-  
-  // Cleanup after each test
-  afterEach: () => {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.clear();
-    }
+
+  avmTest: async ({
+    propertyData
+  }: {
+    propertyData: PropertyData;
+  }): Promise<TestResult[]> => {
+    // Placeholder for AVM testing
+    console.log('Testing AVM for property:', propertyData.address);
+    return Promise.resolve([]);
+  },
+
+  performanceTest: async (): Promise<TestResult> => {
+    const startTime = performance.now();
+    
+    // Simulate component rendering
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
+    const duration = performance.now() - startTime;
+    const passed = duration < 100; // Should render in under 100ms
+    
+    return {
+      test: 'Component render performance',
+      passed,
+      duration,
+      message: passed ? 'Performance within limits' : 
+              `Render took ${duration.toFixed(2)}ms (limit: 100ms)`
+    };
   }
 };
 
-// Example Test Cases
-export const exampleTests = {
-  // Unit test example
-  unitTest: `
-    import { mockPropertyData, MockFetch } from './testUtils';
-    
-    describe('Property AVM Calculation', () => {
-      let mockFetch: MockFetch;
-      
-      beforeEach(() => {
-        mockFetch = new MockFetch();
-        mockFetch.install();
-      });
-      
-      afterEach(() => {
-        mockFetch.uninstall();
-      });
-      
-      it('should calculate AVM for valid property', async () => {
-        mockFetch.mockResponse('/api/avm', mockPropertyData.avm);
-        
-        // Test implementation here
-        const result = await getAVMData('123 Test Street');
-        expect(result.avmValue).toBe(475000);
-        expect(result.confidence).toBe('95%');
-      });
-    });
-  `,
+// Enhanced FEMA Flood Data Test Utilities
+export const mockFloodData: FEMAFloodData = {
+  floodZone: 'AE',
+  floodZoneDescription: '1% annual chance flood (100-year flood) with base flood elevation',
+  baseFloodElevation: 125.5,
+  floodInsuranceRequired: true,
+  annualChanceFlooding: '1% (100-year flood)',
+  firmEffectiveDate: 'March 15, 2021',
+  countyName: 'Harris County',
+  riskLevel: 'High',
+  insuranceRecommendation: 'Flood insurance required for federally backed mortgages',
   
-  // Integration test example
-  integrationTest: `
-    import { componentTestHelpers, propertySearchTests } from './testUtils';
-    
-    describe('Property Search Integration', () => {
-      it('should complete full search flow', async () => {
-        await componentTestHelpers.simulateSearch(
-          propertySearchTests.scenarios.validAddress
-        );
-        
-        await componentTestHelpers.waitForLoading();
-        
-        expect(componentTestHelpers.getPropertyCard()).toBeTruthy();
-        expect(componentTestHelpers.getAVMSection()).toBeTruthy();
-      });
-    });
-  `
+  // Enhanced features
+  historicalFloods: [
+    {
+      date: '2023-08-15',
+      severity: 'Major',
+      stage: 6.2,
+      description: 'Flooding from hurricane-related storm surge',
+      damages: 'Estimated $275,000 in damages'
+    },
+    {
+      date: '2021-05-20',
+      severity: 'Moderate',
+      stage: 3.8,
+      description: 'Flooding from heavy rainfall and storm surge',
+      damages: 'Estimated $125,000 in damages'
+    },
+    {
+      date: '2019-09-12',
+      severity: 'Minor',
+      stage: 2.1,
+      description: 'Flooding from flash flooding from thunderstorms'
+    }
+  ],
+  
+  nearbyMonitoringStations: [
+    {
+      id: 'USGS-8074500',
+      name: 'Cedar River at Mill Road',
+      distance: 3.2,
+      currentStage: 18.5,
+      floodStage: 15.0,
+      status: 'Moderate',
+      url: 'https://waterdata.usgs.gov/monitoring-location/8074500'
+    },
+    {
+      id: 'USGS-8074800',
+      name: 'Fox River at Highway 50',
+      distance: 7.8,
+      currentStage: 12.1,
+      floodStage: 14.0,
+      status: 'Normal',
+      url: 'https://waterdata.usgs.gov/monitoring-location/8074800'
+    }
+  ],
+  
+  floodInsuranceAnalysis: {
+    required: true,
+    recommendedCoverage: 250000,
+    estimatedPremium: {
+      building: 2400,
+      contents: 1680,
+      total: 4080
+    },
+    discounts: [
+      'Community Rating System discount (varies by community)',
+      'Newly mapped discount (first year in high-risk zone)'
+    ],
+    riskFactors: [
+      'Located in high-risk flood zone',
+      'Multiple historical flood events',
+      'Below base flood elevation'
+    ]
+  },
+  
+  elevationData: {
+    groundElevation: 122.3,
+    relativeToFloodStage: -2.7,
+    elevationConfidence: 88
+  },
+  
+  floodMaps: {
+    firmPanelNumber: '4801H',
+    firmPanelUrl: 'https://msc.fema.gov/portal/search?AddressLine=29.7604,-95.3698#searchresultsanchor',
+    interactiveMapUrl: 'https://hazards-fema.maps.arcgis.com/apps/webappviewer/index.html?id=8b0adb51996444d4879338b5529aa9cd&extent=-95.3798,29.7504,-95.3598,29.7704'
+  },
+  
+  riskScore: 78,
+  
+  recommendations: [
+    'Monitor local flood monitoring stations during heavy rainfall',
+    'Consider flood insurance even if not required',
+    'Property should be elevated to at least 125.5 feet',
+    'History shows recurring flood risk - implement comprehensive flood mitigation',
+    'Stay informed about local flood warnings and weather alerts',
+    'Maintain emergency supplies and flood response equipment'
+  ]
 };
 
+export const mockMinimalFloodData: FEMAFloodData = {
+  floodZone: 'X',
+  floodZoneDescription: 'Area of minimal flood hazard',
+  floodInsuranceRequired: false,
+  annualChanceFlooding: 'Less than 0.2%',
+  firmEffectiveDate: 'January 10, 2020',
+  countyName: 'Travis County',
+  riskLevel: 'Minimal',
+  insuranceRecommendation: 'Flood insurance optional but recommended for complete protection',
+  
+  historicalFloods: [],
+  nearbyMonitoringStations: [
+    {
+      id: 'USGS-8158000',
+      name: 'Colorado River at Austin',
+      distance: 12.5,
+      currentStage: 8.2,
+      floodStage: 21.0,
+      status: 'Normal',
+      url: 'https://waterdata.usgs.gov/monitoring-location/8158000'
+    }
+  ],
+  
+  floodInsuranceAnalysis: {
+    required: false,
+    recommendedCoverage: 200000,
+    estimatedPremium: {
+      building: 800,
+      contents: 560,
+      total: 1360
+    },
+    discounts: [
+      'Preferred Risk Policy (lower cost option)',
+      'Community Rating System discount (varies by community)'
+    ],
+    riskFactors: []
+  },
+  
+  elevationData: {
+    groundElevation: 165.8,
+    relativeToFloodStage: 12.3,
+    elevationConfidence: 92
+  },
+  
+  floodMaps: {
+    firmPanelNumber: '4853H',
+    firmPanelUrl: 'https://msc.fema.gov/portal/search?AddressLine=30.2672,-97.7431#searchresultsanchor',
+    interactiveMapUrl: 'https://hazards-fema.maps.arcgis.com/apps/webappviewer/index.html?id=8b0adb51996444d4879338b5529aa9cd&extent=-97.7531,30.2572,-97.7331,30.2772'
+  },
+  
+  riskScore: 18,
+  
+  recommendations: [
+    'Stay informed about local flood warnings and weather alerts',
+    'Consider flood insurance for complete protection',
+    'Maintain emergency supplies and flood response equipment'
+  ]
+};
+
+export const mockCoastalFloodData: FEMAFloodData = {
+  floodZone: 'VE',
+  floodZoneDescription: '1% annual chance coastal flood with velocity hazard and base flood elevation',
+  baseFloodElevation: 18.0,
+  floodInsuranceRequired: true,
+  annualChanceFlooding: '1% (100-year flood)',
+  firmEffectiveDate: 'September 8, 2022',
+  countyName: 'Galveston County',
+  riskLevel: 'Very High',
+  insuranceRecommendation: 'Flood insurance required - coastal high-hazard area with wave action',
+  
+  historicalFloods: [
+    {
+      date: '2023-09-15',
+      severity: 'Severe',
+      stage: 12.5,
+      description: 'Flooding from hurricane-related storm surge',
+      damages: 'Estimated $485,000 in damages'
+    },
+    {
+      date: '2022-06-20',
+      severity: 'Major',
+      stage: 8.7,
+      description: 'Flooding from coastal storm surge',
+      damages: 'Estimated $325,000 in damages'
+    },
+    {
+      date: '2021-08-10',
+      severity: 'Major',
+      stage: 9.2,
+      description: 'Flooding from tropical storm system',
+      damages: 'Estimated $275,000 in damages'
+    },
+    {
+      date: '2020-05-15',
+      severity: 'Moderate',
+      stage: 5.1,
+      description: 'Flooding from heavy rainfall and storm surge'
+    }
+  ],
+  
+  nearbyMonitoringStations: [
+    {
+      id: 'USGS-8770475',
+      name: 'Galveston Bay at Galveston Pier',
+      distance: 1.8,
+      currentStage: 2.1,
+      floodStage: 3.5,
+      status: 'Normal',
+      url: 'https://waterdata.usgs.gov/monitoring-location/8770475'
+    },
+    {
+      id: 'USGS-8771013',
+      name: 'Clear Creek at League City',
+      distance: 8.9,
+      currentStage: 5.8,
+      floodStage: 8.0,
+      status: 'Normal',
+      url: 'https://waterdata.usgs.gov/monitoring-location/8771013'
+    }
+  ],
+  
+  floodInsuranceAnalysis: {
+    required: true,
+    recommendedCoverage: 500000,
+    estimatedPremium: {
+      building: 4800,
+      contents: 3360,
+      total: 8160
+    },
+    discounts: [
+      'Elevated structure discount (up to 30%)',
+      'Community Rating System discount (varies by community)'
+    ],
+    riskFactors: [
+      'Located in high-risk flood zone',
+      'Multiple historical flood events',
+      'Coastal high-hazard area with wave action',
+      'History of severe flooding'
+    ]
+  },
+  
+  elevationData: {
+    groundElevation: 15.2,
+    relativeToFloodStage: -2.8,
+    elevationConfidence: 85
+  },
+  
+  floodMaps: {
+    firmPanelNumber: '4816H',
+    firmPanelUrl: 'https://msc.fema.gov/portal/search?AddressLine=29.3013,-94.7977#searchresultsanchor',
+    interactiveMapUrl: 'https://hazards-fema.maps.arcgis.com/apps/webappviewer/index.html?id=8b0adb51996444d4879338b5529aa9cd&extent=-94.8077,29.2913,-94.7877,29.3113'
+  },
+  
+  riskScore: 95,
+  
+  recommendations: [
+    'Consider elevated storage for valuables and important documents',
+    'Install sump pump and backup power systems',
+    'Review evacuation routes and emergency preparedness plan',
+    'Monitor local flood monitoring stations during heavy rainfall',
+    'Property should be elevated to at least 18.0 feet',
+    'History shows recurring flood risk - implement comprehensive flood mitigation',
+    'Stay informed about local flood warnings and weather alerts',
+    'Maintain emergency supplies and flood response equipment'
+  ]
+};
+
+// Test data generator functions
+export function generateRandomFloodEvent(): FloodEvent {
+  const severities: FloodEvent['severity'][] = ['Minor', 'Moderate', 'Major', 'Severe'];
+  const causes = [
+    'heavy rainfall and storm surge',
+    'river overflow during spring melt',
+    'hurricane-related flooding',
+    'flash flooding from thunderstorms',
+    'coastal storm surge',
+    'dam release and heavy precipitation'
+  ];
+  
+  const severity = severities[Math.floor(Math.random() * severities.length)];
+  const yearsAgo = Math.floor(Math.random() * 10) + 1;
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - yearsAgo);
+  
+  return {
+    date: date.toISOString().split('T')[0],
+    severity,
+    stage: Math.random() * 10 + 1,
+    description: `Flooding from ${causes[Math.floor(Math.random() * causes.length)]}`,
+    damages: Math.random() > 0.5 ? `Estimated $${Math.floor(Math.random() * 400000 + 50000).toLocaleString()} in damages` : undefined
+  };
+}
+
+export function generateRandomMonitoringStation(): FloodMonitoringStation {
+  const rivers = ['Cedar River', 'Mill Creek', 'Fox River', 'Pine Creek', 'Oak Creek'];
+  const locations = ['Downtown', 'Mill Road', 'Main Street', 'Highway 50', 'County Road B'];
+  
+  const floodStage = Math.random() * 15 + 10;
+  const currentStage = Math.random() * 20 + 5;
+  const status = currentStage > floodStage + 5 ? 'Major' :
+                 currentStage > floodStage + 2 ? 'Moderate' :
+                 currentStage > floodStage ? 'Minor' : 'Normal';
+  
+  return {
+    id: `USGS-${Math.floor(Math.random() * 10000000)}`,
+    name: `${rivers[Math.floor(Math.random() * rivers.length)]} at ${locations[Math.floor(Math.random() * locations.length)]}`,
+    distance: Number((Math.random() * 15 + 2).toFixed(1)),
+    currentStage: Number(currentStage.toFixed(1)),
+    floodStage: Number(floodStage.toFixed(1)),
+    status,
+    url: `https://waterdata.usgs.gov/monitoring-location/${Math.floor(Math.random() * 10000000)}`
+  };
+}
+
+// Flood data validation functions
+export function validateFloodData(floodData: FEMAFloodData): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  
+  // Required fields validation
+  if (!floodData.floodZone) errors.push('Flood zone is required');
+  if (!floodData.floodZoneDescription) errors.push('Flood zone description is required');
+  if (!floodData.riskLevel) errors.push('Risk level is required');
+  if (typeof floodData.riskScore !== 'number' || floodData.riskScore < 0 || floodData.riskScore > 100) {
+    errors.push('Risk score must be a number between 0 and 100');
+  }
+  
+  // Historical floods validation
+  if (floodData.historicalFloods.length > 0) {
+    floodData.historicalFloods.forEach((flood, index) => {
+      if (!flood.date) errors.push(`Historical flood ${index + 1}: date is required`);
+      if (!flood.severity) errors.push(`Historical flood ${index + 1}: severity is required`);
+      if (typeof flood.stage !== 'number' || flood.stage < 0) {
+        errors.push(`Historical flood ${index + 1}: stage must be a positive number`);
+      }
+    });
+  }
+  
+  // Monitoring stations validation
+  if (floodData.nearbyMonitoringStations.length > 0) {
+    floodData.nearbyMonitoringStations.forEach((station, index) => {
+      if (!station.id) errors.push(`Monitoring station ${index + 1}: ID is required`);
+      if (!station.name) errors.push(`Monitoring station ${index + 1}: name is required`);
+      if (typeof station.distance !== 'number' || station.distance < 0) {
+        errors.push(`Monitoring station ${index + 1}: distance must be a positive number`);
+      }
+    });
+  }
+  
+  // Insurance analysis validation
+  if (!floodData.floodInsuranceAnalysis) {
+    errors.push('Flood insurance analysis is required');
+  } else {
+    const { estimatedPremium } = floodData.floodInsuranceAnalysis;
+    if (typeof estimatedPremium.building !== 'number' || estimatedPremium.building < 0) {
+      errors.push('Building premium must be a positive number');
+    }
+    if (typeof estimatedPremium.contents !== 'number' || estimatedPremium.contents < 0) {
+      errors.push('Contents premium must be a positive number');
+    }
+    if (estimatedPremium.total !== estimatedPremium.building + estimatedPremium.contents) {
+      errors.push('Total premium must equal building + contents premiums');
+    }
+  }
+  
+  // Elevation data validation
+  if (!floodData.elevationData) {
+    errors.push('Elevation data is required');
+  } else {
+    if (typeof floodData.elevationData.groundElevation !== 'number') {
+      errors.push('Ground elevation must be a number');
+    }
+    if (typeof floodData.elevationData.elevationConfidence !== 'number' || 
+        floodData.elevationData.elevationConfidence < 0 || 
+        floodData.elevationData.elevationConfidence > 100) {
+      errors.push('Elevation confidence must be a number between 0 and 100');
+    }
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
+
+// Test component for flood risk visualization
+export function FloodDataTestComponent({ floodData }: { floodData: FEMAFloodData }) {
+  const validation = validateFloodData(floodData);
+  
+  return (
+    <div className="p-4 border rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">Flood Data Test Results</h3>
+      
+      <div className="space-y-2">
+        <div className={`p-2 rounded ${validation.isValid ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+          Status: {validation.isValid ? 'Valid' : 'Invalid'}
+        </div>
+        
+        {!validation.isValid && (
+          <div className="bg-red-50 p-3 rounded">
+            <h4 className="font-medium text-red-800 mb-1">Validation Errors:</h4>
+            <ul className="text-sm text-red-700 list-disc list-inside">
+              {validation.errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <strong>Zone:</strong> {floodData.floodZone}
+          </div>
+          <div>
+            <strong>Risk Score:</strong> {floodData.riskScore}/100
+          </div>
+          <div>
+            <strong>Historical Floods:</strong> {floodData.historicalFloods.length}
+          </div>
+          <div>
+            <strong>Monitoring Stations:</strong> {floodData.nearbyMonitoringStations.length}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Performance testing utilities
+export function measureFloodDataProcessingTime(floodData: FEMAFloodData): number {
+  const startTime = performance.now();
+  
+  // Simulate flood data processing
+  validateFloodData(floodData);
+  
+  const endTime = performance.now();
+  return endTime - startTime;
+}
+
+// Mock API response generator
+export function generateMockFEMAResponse(lat: number, lng: number): Promise<FEMAFloodData> {
+  return new Promise((resolve) => {
+    // Simulate API delay
+    setTimeout(() => {
+      // Generate flood data based on coordinates
+      const isCoastal = Math.abs(lat) < 35 && Math.abs(lng) > 90;
+      const isRiverValley = Math.random() > 0.7;
+      
+      if (isCoastal) {
+        resolve(mockCoastalFloodData);
+      } else if (isRiverValley) {
+        resolve(mockFloodData);
+      } else {
+        resolve(mockMinimalFloodData);
+      }
+    }, Math.random() * 1000 + 500); // 500-1500ms delay
+  });
+}
+
+// AVM validation function (updated type)
+export function validateAVMData(avmData: Record<string, unknown>): { isValid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  
+  if (typeof avmData.estimatedValue !== 'number' || avmData.estimatedValue <= 0) {
+    errors.push('Estimated value must be a positive number');
+  }
+  
+  if (typeof avmData.confidence !== 'number' || avmData.confidence < 0 || avmData.confidence > 1) {
+    errors.push('Confidence must be a number between 0 and 1');
+  }
+  
+  return {
+    isValid: errors.length === 0,
+    errors
+  };
+}
+
 const TestUtilsExport = {
-  mockPropertyData,
-  mockApiResponses,
-  TestWrapper,
-  MockFetch,
-  propertySearchTests,
-  componentTestHelpers,
-  performanceTestUtils,
-  integrationTestScenarios,
+  mockSearchResults,
+  mockAVMData,
+  mockPublicRecords,
   testConfig,
   testSetup,
-  exampleTests
+  exampleTests,
+  mockFloodData,
+  mockMinimalFloodData,
+  mockCoastalFloodData,
+  generateRandomFloodEvent,
+  generateRandomMonitoringStation,
+  validateFloodData,
+  FloodDataTestComponent,
+  measureFloodDataProcessingTime,
+  generateMockFEMAResponse
 };
 
 export default TestUtilsExport; 

@@ -81,6 +81,11 @@ const LazyPropertyDetailsClient = lazy(() =>
   }))
 );
 
+// Enhanced flood risk visualization (Phase 5.1)
+const FloodRiskVisualization = lazy(() => import('./FloodRiskVisualization').then(m => ({ 
+  default: m.FloodRiskVisualization 
+})));
+
 // Chart components (typically heavy)
 const LazyPropertyCharts = lazy(() => 
   Promise.resolve({
@@ -251,7 +256,8 @@ const LazyComponentsExport = {
   InteractiveMap,
   dynamicImport,
   preloadComponent,
-  useIntersectionLazyLoad
+  useIntersectionLazyLoad,
+  FloodRiskVisualization
 };
 
 export default LazyComponentsExport; 
